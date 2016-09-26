@@ -44,4 +44,11 @@ public class IntsTests {
         int ix = Ints.indexOfBinary(v, 1, 1, 2);
         assertTrue(ix < 0);
     }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void indexOfBinary_fromIndex_lower_than_0(){
+        int[] v = {1,2,3};
+        int ix = Ints.indexOfBinary(v, -1, 1, 2);
+        assertTrue(ix < 0);
+    }
 }
