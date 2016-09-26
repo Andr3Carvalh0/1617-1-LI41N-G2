@@ -7,8 +7,6 @@ public class Ints {
 
     public static int indexOfBinary(int[] a, int fromIndex, int toIndex, int n) {
 
-        if(toIndex >= a.length) return -1;
-
         if (fromIndex > toIndex)
             throw new IllegalArgumentException("from(" + fromIndex + ") > to(" + toIndex + ")");
 
@@ -17,7 +15,7 @@ public class Ints {
         int mid;
 
         while(low < high){
-            mid = high + low / 2 + 1;
+            mid = (high + low) / 2 + 1;
             if(n > a[mid]) low = mid + 1;
             else if(n < a[mid]) high = mid - 1;
             else return mid;
