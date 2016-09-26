@@ -7,6 +7,8 @@ public class Ints {
 
     public static int indexOfBinary(int[] a, int fromIndex, int toIndex, int n) {
 
+        if(toIndex >= a.length) return -1;
+
         if (fromIndex > toIndex)
             throw new IllegalArgumentException("from(" + fromIndex + ") > to(" + toIndex + ")");
 

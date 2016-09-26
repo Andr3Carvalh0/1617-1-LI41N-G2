@@ -2,7 +2,7 @@ package pt.isel.ls;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+import pt.isel.ls.Ints;
 
 public class IntsTests {
 
