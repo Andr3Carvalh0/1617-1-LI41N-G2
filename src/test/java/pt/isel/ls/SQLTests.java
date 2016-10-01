@@ -1,8 +1,6 @@
 package pt.isel.ls;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,13 +9,13 @@ import java.sql.*;
 import static org.junit.Assert.assertEquals;
 
 
-/**
- * Created by Andre on 29/09/2016.
- */
 public class SQLTests {
     Connection con = null;
     static SQLServerDataSource src;
 
+    private final static int user = 0;
+    private final static String serverPass[] = {"zaxscdvfbgnhmj", "sa"};
+    private final static String serverName[] = {"WIN-773BLA1UH43", ""};
 
     private String nomes[] = {"Gonçalo Veloso", "André Carvalho"};
     private int numeros[] = {41482, 41839};
@@ -28,17 +26,20 @@ public class SQLTests {
             con = src.getConnection();
             assertEquals(true, con != null);
         } finally {
-            con.close();
+            assert con != null;
+            if (con != null) {
+                con.close();
+            }
         }
     }
 
     @BeforeClass
     public static void newDataSource() {
         src = new SQLServerDataSource();
-        src.setPassword("zaxscdvfbgnhmj");
+        src.setPassword(serverPass[user]);
         src.setUser("sa");
         src.setDatabaseName("LS");
-        src.setServerName("WIN-773BLA1UH43");
+        src.setServerName(serverName[user]);
     }
 
 
@@ -80,6 +81,12 @@ public class SQLTests {
         }
     }
 
+    private void clearDT() throws SQLException {
+        String s1 = "delete from student";
+        PreparedStatement ps = con.prepareStatement(s1);
+        ps.execute();
+
+    }
 
     @Test
     public void insertTest() throws SQLException {
@@ -103,51 +110,62 @@ public class SQLTests {
             assertEquals("Florberto Jacinto", rs.getString(1));
             assertEquals(42069, rs.getInt(2));
 
-        }finally{
-            con.close();
+        } finally {
+            if (con != null) {
+                con.close();
+            }
         }
     }
 
     @Test
-    public void Update_Test () throws SQLException {
-        setup();
+    public void Update_Test() throws SQLException {
+        try {
+            setup();
 
-        String s1 = "update student set nome = 'Gonçalo Leal' where numero = 41482";
-        String s2 = "select * from student where numero = 41482";
+            String s1 = "update student set nome = 'Gonçalo Leal' where numero = 41482";
+            String s2 = "select * from student where numero = 41482";
 
-        PreparedStatement ps = con.prepareStatement(s1);
-        ps.executeUpdate();
-        con.commit();
+            PreparedStatement ps = con.prepareStatement(s1);
+            ps.executeUpdate();
 
-        ps = con.prepareStatement(s2);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        assertEquals("Gonçalo Leal", rs.getString(1));
+            ps = con.prepareStatement(s2);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            assertEquals("Gonçalo Leal", rs.getString(1));
 
-        con.close();
-
+        }finally {
+            if (con != null) {
+                con.close();
+            }
+        }
     }
 
     @Test
-    public void Delete_Test () throws SQLException {
-        setup();
+    public void Delete_Test() throws SQLException {
+        try {
+            setup();
 
-        String s1 = "delete from student where numero = 41839";
-        String s2 = "select * from student";
+            String s1 = "delete from student where numero = 41839";
+            String s2 = "select * from student";
 
-        PreparedStatement ps = con.prepareStatement(s1);
-        ps.execute();
+            PreparedStatement ps = con.prepareStatement(s1);
+            ps.execute();
 
-        ps = con.prepareStatement(s2);
-        ResultSet rs = ps.executeQuery();
+            ps = con.prepareStatement(s2);
+            ResultSet rs = ps.executeQuery();
 
-        int i = 0;
+            int i = 0;
 
-        while (rs.next()) { i++;}
+            while (rs.next()) {
+                i++;
+            }
 
-        assertEquals(1, i);
-
-        con.close();
+            assertEquals(1, i);
+        }
+        finally {
+            if (con != null) {
+                con.close();
+            }
+        }
     }
-
 }
