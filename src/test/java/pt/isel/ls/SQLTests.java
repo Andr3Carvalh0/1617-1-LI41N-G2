@@ -13,12 +13,12 @@ public class SQLTests {
     Connection con = null;
     static SQLServerDataSource src;
 
-    private final static int user = 0;
+    private final static int user = 1;
     private final static String serverPass[] = {"zaxscdvfbgnhmj", "sa"};
     private final static String serverName[] = {"WIN-773BLA1UH43", ""};
 
-    private String nomes[] = {"Gonçalo Veloso", "André Carvalho"};
-    private int numeros[] = {41482, 41839};
+    private final String TESTNAME = "SQLTest";
+    private final int TESTNUMBER = 11111;
 
     @Test
     public void connectionTest() throws SQLException {
@@ -53,11 +53,9 @@ public class SQLTests {
 
         PreparedStatement ps = con.prepareStatement(s1);
 
-        for (int i = 0; i < nomes.length; i++) {
-            ps.setString(1, nomes[i]);
-            ps.setInt(2, numeros[i]);
-            ps.execute();
-        }
+        ps.setString(1, TESTNAME);
+        ps.setInt(2, TESTNUMBER);
+        ps.execute();
 
     }
 
@@ -67,48 +65,19 @@ public class SQLTests {
             setup();
 
             ResultSet rs;
-            String s1 = "select * from student";
+            String s1 = "select * from student where nome = '" + TESTNAME + "' and numero = " + TESTNUMBER;
 
             PreparedStatement ps = con.prepareStatement(s1);
             rs = ps.executeQuery();
 
-            for (int i = 0; rs.next(); i++) {
-                assertEquals(nomes[i], rs.getString(1));
-                assertEquals(numeros[i], rs.getInt(2));
-            }
-        } finally {
-            con.close();
-        }
-    }
-
-    private void clearDT() throws SQLException {
-        String s1 = "delete from student";
-        PreparedStatement ps = con.prepareStatement(s1);
-        ps.execute();
-
-    }
-
-    @Test
-    public void insertTest() throws SQLException {
-        try {
-            con = src.getConnection();
-
-            String s1 = "insert into student(nome, numero)\n" +
-                    "values\n" +
-                    "(?, ?)";
-
-            String s2 = "select * from student where nome = 'Florberto Jacinto' and numero = 42069";
-
-            PreparedStatement ps = con.prepareStatement(s1);
-            ps.setString(1, "Florberto Jacinto");
-            ps.setInt(2, 42069);
+            /* Revert the database to its pre-test state, before asserting the obtained result set.
+             This way, the database will remain untouched, regardless of the assert tests. */
+            ps = con.prepareStatement("delete from student where numero = " + TESTNUMBER);
             ps.execute();
 
-            ps = con.prepareStatement(s2);
-            ResultSet rs = ps.executeQuery();
             rs.next();
-            assertEquals("Florberto Jacinto", rs.getString(1));
-            assertEquals(42069, rs.getInt(2));
+            assertEquals(TESTNAME, rs.getString(1));
+            assertEquals(TESTNUMBER, rs.getInt(2));
 
         } finally {
             if (con != null) {
@@ -118,20 +87,55 @@ public class SQLTests {
     }
 
     @Test
-    public void Update_Test() throws SQLException {
+    public void insertTest() throws SQLException {
+        try {
+            setup();
+            con = src.getConnection();
+
+            String s1 = "select * from student where nome = '" + TESTNAME + "' and numero = " + TESTNUMBER;
+
+            PreparedStatement ps = con.prepareStatement(s1);
+
+            ResultSet rs = ps.executeQuery();
+
+            /* Revert the database to its pre-test state, before asserting the obtained result set.
+             This way, the database will remain untouched, regardless of the assert tests. */
+            ps = con.prepareStatement("delete from student where numero = " + TESTNUMBER);
+            ps.execute();
+
+            rs.next();
+
+            assertEquals(TESTNAME, rs.getString(1));
+            assertEquals(TESTNUMBER, rs.getInt(2));
+
+        } finally {
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+
+    @Test
+    public void updateTest() throws SQLException {
         try {
             setup();
 
-            String s1 = "update student set nome = 'Gonçalo Leal' where numero = 41482";
-            String s2 = "select * from student where numero = 41482";
+            String s1 = "update student set nome = 'SQLUPDATETEST' where numero = " + TESTNUMBER;
+            String s2 = "select * from student where numero = " + TESTNUMBER;
 
             PreparedStatement ps = con.prepareStatement(s1);
             ps.executeUpdate();
 
             ps = con.prepareStatement(s2);
             ResultSet rs = ps.executeQuery();
+
+            /* Revert the database to its pre-test state, before asserting the obtained result set.
+             This way, the database will remain untouched, regardless of the assert tests. */
+            ps = con.prepareStatement("delete from student where numero = " + TESTNUMBER);
+            ps.execute();
+
             rs.next();
-            assertEquals("Gonçalo Leal", rs.getString(1));
+            assertEquals("SQLUPDATETEST", rs.getString(1));
 
         }finally {
             if (con != null) {
@@ -141,26 +145,19 @@ public class SQLTests {
     }
 
     @Test
-    public void Delete_Test() throws SQLException {
+    public void deleteTest() throws SQLException {
         try {
             setup();
 
-            String s1 = "delete from student where numero = 41839";
-            String s2 = "select * from student";
+            String s1 = "delete from student where numero = " + TESTNUMBER;
+            String s2 = "select * from student where numero = " + TESTNUMBER;
 
             PreparedStatement ps = con.prepareStatement(s1);
             ps.execute();
 
             ps = con.prepareStatement(s2);
             ResultSet rs = ps.executeQuery();
-
-            int i = 0;
-
-            while (rs.next()) {
-                i++;
-            }
-
-            assertEquals(1, i);
+            assertEquals(false, rs.isBeforeFirst());
         }
         finally {
             if (con != null) {
