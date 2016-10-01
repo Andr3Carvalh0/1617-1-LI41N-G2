@@ -15,7 +15,7 @@ public class SQLTests {
 
     private final static int user = 1;
     private final static String serverPass[] = {"zaxscdvfbgnhmj", "sa"};
-    private final static String serverName[] = {"WIN-773BLA1UH43", ""};
+    private final static String serverName[] = {"WIN-773BLA1UH43", "user-PC"};
 
     private final String TESTNAME = "SQLTest";
     private final int TESTNUMBER = 11111;
