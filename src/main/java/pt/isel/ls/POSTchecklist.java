@@ -20,8 +20,6 @@ public class PostChecklist {
         ResultSet rs = ps.executeQuery();
         rs.next();
 
-        System.out.println(rs.getInt(1));
-
         return rs.getInt(1);
     }
 
