@@ -19,7 +19,6 @@ public class GetChecklist {
         PreparedStatement ps = con.prepareStatement(s1);
 
         ResultSet rs = ps.executeQuery();
-        rs.next();
 
         while (rs.next()){
             int id = rs.getInt(1);

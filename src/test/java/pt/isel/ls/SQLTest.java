@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
@@ -45,9 +46,25 @@ public class SQLTest {
         src.setServerName(serverName[user]);
     }
 
+    private int getMaxID(Connection con) throws SQLException {
+        String s0 = "select max(Cl_id) from checklist";
+        PreparedStatement ps = con.prepareStatement(s0);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        return rs.getInt(1);
+
+    }
+
     private void setup(Connection con) throws SQLException {
-        String s1 = "insert into checklist(Cl_name, Cl_duedate, Cl_desc) values ('Test', CAST('10-6-2016' as datetime), 'Test')";
+        String s1 = "insert into checklist(Cl_name, Cl_duedate, Cl_desc) values (?, CAST(? as datetime), ?)";
         PreparedStatement ps = con.prepareStatement(s1);
+
+        ps.setString(1, "SQLTEST");
+        ps.setString(2, "06-10-2016");
+        ps.setString(3, "TEST");
+
         ps.execute();
 
     }
@@ -57,10 +74,19 @@ public class SQLTest {
         try {
             con = src.getConnection();
             int result = PostChecklist.postChecklist("SQLTEST", "06-10-2016", "TEST", con);
-            assertEquals(0, result);
+            assertEquals(getMaxID(con), result);
 
         }finally {
             if(con != null){
+
+                int id = getMaxID(con);
+
+                //Delete the test entry
+                String s1 = "delete from checklist where Cl_id = ?";
+                PreparedStatement ps = con.prepareStatement(s1);
+                ps.setInt(1, id);
+
+                ps.execute();
                 con.close();
             }
         }
@@ -78,6 +104,13 @@ public class SQLTest {
 
         }finally {
             if(con != null){
+                int id = getMaxID(con);
+
+                //Delete the test entry
+                String s1 = "delete from checklist where Cl_id = ?";
+                PreparedStatement ps = con.prepareStatement(s1);
+                ps.setInt(1, id);
+                ps.execute();
                 con.close();
             }
         }
