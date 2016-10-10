@@ -17,7 +17,7 @@ public class SQLTest {
     Connection con = null;
     static SQLServerDataSource src;
 
-    private final static int user = 0;
+    private final static int user = 1;
     private final static String serverPass[] = {"zaxscdvfbgnhmj", "sa"};
     private final static String serverName[] = {"WIN-773BLA1UH43", "user-PC"};
 
