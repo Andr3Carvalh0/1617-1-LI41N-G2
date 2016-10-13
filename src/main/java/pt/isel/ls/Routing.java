@@ -51,9 +51,13 @@ public class Routing {
             if(this.getMethod().equals(c.getMethod())) {
                 int i = 1;
                 for (; i < c.getPath().length; i++) {
-                    if (!(this.getPath()[i].equals(c.getPath()[i]))) {
+                    if(!(match(this.getPath()[i], c.getPath()[i]))){
                         break;
                     }
+                    /*
+                    if (!(this.getPath()[i].equals(c.getPath()[i]))) {
+                        break;
+                    }*/
                 }
                 if(this.getPath().length==i){
                     Connection con = GetConnection.connect();
@@ -61,5 +65,14 @@ public class Routing {
                 }
             }
         }
+    }
+
+    private boolean match(String s, String s1) {
+        if(s.equals(s1)) return true;
+        else if(s1.contains("id")) {
+            params.put(s1, s);
+            return true;
+        }
+        return false;
     }
 }
