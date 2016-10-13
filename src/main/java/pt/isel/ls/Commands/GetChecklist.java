@@ -8,13 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetChecklist {
+public class GetChecklist extends Command{
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    private final String method = "GET";
+    private final String[] path = {"", "checklists"};
 
-
-    public static LinkedList getChecklists(Connection con) throws SQLException {
+    @Override
+    public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
         LinkedList<Checklist> list = new LinkedList<>();
 
         String s1 = "select * from checklist";
@@ -35,4 +38,13 @@ public class GetChecklist {
         return list;
     }
 
+    @Override
+    public String getMethod() {
+        return method;
+    }
+
+    @Override
+    public String[] getPath() {
+        return path;
+    }
 }
