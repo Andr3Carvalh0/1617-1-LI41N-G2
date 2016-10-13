@@ -1,9 +1,10 @@
 package pt.isel.ls;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import pt.isel.ls.Commands.GetChecklist;
+import pt.isel.ls.Commands.PostChecklist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -69,7 +70,7 @@ public class SQLTest {
 
     }
 
-    @Test
+   /* @Test
     public void testPostChecklist() throws SQLException {
         try {
             con = src.getConnection();
@@ -114,5 +115,5 @@ public class SQLTest {
                 con.close();
             }
         }
-    }
+    }*/
 }
