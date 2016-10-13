@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PostChecklist {
+public class POSTchecklist {
     public static int postChecklist(String name, String duedate, String description, Connection con) throws SQLException {
         String s1 = "insert into checklist(Cl_name, Cl_duedate, Cl_desc) values (?, CAST(? as datetime), ?)";
         String s2 = "select max(Cl_id) from checklist";
