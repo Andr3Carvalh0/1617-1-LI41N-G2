@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetChecklist extends Command{
+public class GetChecklists extends Command{
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private final String method = "GET";
     private final String[] path = {"", "checklists"};

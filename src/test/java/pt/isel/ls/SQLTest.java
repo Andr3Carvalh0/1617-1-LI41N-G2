@@ -3,7 +3,7 @@ package pt.isel.ls;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import pt.isel.ls.Commands.GetChecklist;
+import pt.isel.ls.Commands.GetChecklists;
 import pt.isel.ls.Commands.PostChecklist;
 
 import java.sql.Connection;
@@ -107,7 +107,7 @@ public class SQLTest {
             con = src.getConnection();
             setup(con);
 
-            LinkedList result = (LinkedList) new GetChecklist().execute(null, con);
+            LinkedList result = (LinkedList) new GetChecklists().execute(null, con);
 
             assertEquals(1, result.size());
 

@@ -9,14 +9,19 @@ public class CommandList {
     public CommandList() {
         commandList = new LinkedList<>();
         commandList.add(new PostChecklist());
-        commandList.add(new PostChecklistCidTasks());
-        commandList.add(new PostChecklistsCidTasksLid());
-        commandList.add(new PostTemplates());
-        commandList.add(new PostTemplatesTidTasks());
-        commandList.add(new PostTemplatesTidCreate());
-        
+        commandList.add(new PostChecklistCidTasks());           //Marcos
+        commandList.add(new PostChecklistsCidTasksLid());       //Gonçalo
+        commandList.add(new PostTemplates());                   //Andre
+        commandList.add(new PostTemplatesTidTasks());           //Marcos
+        commandList.add(new PostTemplatesTidCreate());          //Gonçalo
 
-
+        commandList.add(new GetChecklists());                   //Andre
+        commandList.add(new GetChecklistsCid());                //Marcos
+        commandList.add(new GetTemplates());                    //Gonçalo
+        commandList.add(new GetTemplatesTid());                 //Andre
+        commandList.add(new GetChecklistsClosed());             //Marcos
+        commandList.add(new GetChecklistsOpenSortedDueDate());  //Gonçalo
+        commandList.add(new GetChecklistsOpenSortedNoftasks()); //Andre
 
 
     }
