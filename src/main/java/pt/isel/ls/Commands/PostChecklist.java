@@ -7,25 +7,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostChecklist extends Command{
-    String method = "POST";
-    String[] path = {"", "checklists"};
+    private final String method = "POST";
+    private final String[] path = {"", "checklists"};
 
-   /*public static int postChecklist(String name, String duedate, String description, Connection con) throws SQLException {
-        String s1 =
-        String s2 = "select max(Cl_id) from checklist";
-        PreparedStatement ps = con.prepareStatement(s1);
-
-        ps.setString(1, name);
-        ps.setString(2, duedate);"insert into checklist(Cl_name, Cl_duedate, Cl_desc) values (?, CAST(? as datetime), ?)";
-        ps.setString(3, description);
-        ps.execute();
-
-        ps = con.prepareStatement(s2);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-
-        return rs.getInt(1);
-    }*/
    @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
         String s1;

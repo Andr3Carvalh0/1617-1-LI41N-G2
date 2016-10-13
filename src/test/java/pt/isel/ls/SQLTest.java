@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import static junit.framework.Assert.assertEquals;
@@ -23,7 +24,8 @@ public class SQLTest {
     private final static String serverName[] = {"WIN-773BLA1UH43", "user-PC"};
 
     private final String TESTNAME = "SQLTest";
-    private final int TESTNUMBER = 11111;
+    private final String TESTDESC = "DESCRIPTION";
+    private final String TESTDATE = "06-10-2016";
 
     @Test
     public void connectionTest() throws SQLException {
@@ -62,19 +64,25 @@ public class SQLTest {
         String s1 = "insert into checklist(Cl_name, Cl_duedate, Cl_desc) values (?, CAST(? as datetime), ?)";
         PreparedStatement ps = con.prepareStatement(s1);
 
-        ps.setString(1, "SQLTEST");
-        ps.setString(2, "06-10-2016");
-        ps.setString(3, "TEST");
+        ps.setString(1, TESTNAME);
+        ps.setString(2, TESTDATE);
+        ps.setString(3, TESTDESC);
 
         ps.execute();
 
     }
 
-   /* @Test
+    @Test
     public void testPostChecklist() throws SQLException {
         try {
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TESTNAME);
+            map.put("description", TESTDESC);
+            map.put("dueDate",TESTDATE);
+
             con = src.getConnection();
-            int result = PostChecklist.postChecklist("SQLTEST", "06-10-2016", "TEST", con);
+            int result = (int) new PostChecklist().execute(map, con);
             assertEquals(getMaxID(con), result);
 
         }finally {
@@ -99,7 +107,7 @@ public class SQLTest {
             con = src.getConnection();
             setup(con);
 
-            LinkedList result = GetChecklist.getChecklists(con);
+            LinkedList result = (LinkedList) new GetChecklist().execute(null, con);
 
             assertEquals(1, result.size());
 
@@ -115,5 +123,5 @@ public class SQLTest {
                 con.close();
             }
         }
-    }*/
+    }
 }
