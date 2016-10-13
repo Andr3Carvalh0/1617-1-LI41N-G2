@@ -1,10 +1,13 @@
 package pt.isel.ls;
 
-/**
- * Created by user on 06-10-2016.
- */
 public class App {
     public static void main(String[] args) {
+        try {
+            Routing r = new Routing(args);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }
