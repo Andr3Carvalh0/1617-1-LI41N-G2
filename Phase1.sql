@@ -8,7 +8,7 @@ create table template(Tp_id int, Tp_name varchar(80) NOT NULL, Tp_desc varchar(4
 primary key(Tp_id)
 )
 
-create table checklist(Cl_id int identity (0, 1), Cl_name varchar(80) NOT NULL, Cl_duedate datetime, Cl_closed bit default 0, Cl_desc varchar(4000) NOT NULL, Tp_id int, 
+create table checklist(Cl_id int identity (0, 1), Cl_name varchar(80) NOT NULL, Cl_desc varchar(4000) NOT NULL, Cl_closed bit default 0, Cl_duedate datetime, Tp_id int, 
 primary key(Cl_id),
 foreign key(Tp_id)REFERENCES template(Tp_id)
 )
