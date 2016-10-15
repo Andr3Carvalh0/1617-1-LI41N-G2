@@ -25,4 +25,6 @@ foreign key(Tp_id)REFERENCES template(Tp_id)
 
 insert into checklist(Cl_name, Cl_duedate, Cl_desc) values ('teste', cast('06-10-2016' as datetime), 'jdfklmfgsdnfgsdoijgf')
 select * from checklist
+select * from template
 delete from checklist
+delete from template

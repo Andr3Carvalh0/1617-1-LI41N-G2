@@ -1,6 +1,6 @@
 package pt.isel.ls.Commands;
 
-import pt.isel.ls.DTO.Checklist;
+import pt.isel.ls.Dtos.Checklist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

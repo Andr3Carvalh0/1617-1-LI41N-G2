@@ -72,7 +72,7 @@ public class Routing {
         return false;
     }
 
-    public void run(Command c) {
+    public void run(Command c) throws Exception {
         Connection con = null;
         try {
             con = GetConnection.connect();

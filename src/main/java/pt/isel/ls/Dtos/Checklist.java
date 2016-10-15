@@ -1,4 +1,4 @@
-package pt.isel.ls.DTO;
+package pt.isel.ls.Dtos;
 
 public class Checklist {
     private int id, Tp_id;
@@ -19,9 +19,9 @@ public class Checklist {
     public String toString() {
         return "ID: "+ getId() +"\n"
                 + "Name: "+ getName() +"\n"
-                + "DueDate: "+ getDueDate() +"\n"
-                + "Closed: "+ isClosed() +"\n"
                 + "Description: "+ getDescription() +"\n"
+                + "Closed: "+ isClosed() +"\n"
+                + "DueDate: "+ getDueDate() +"\n"
                 + "Tp_Id: " + getTp_id();
     }
 
