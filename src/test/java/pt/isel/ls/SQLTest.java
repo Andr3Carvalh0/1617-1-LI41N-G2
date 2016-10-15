@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import pt.isel.ls.Commands.GetChecklists;
 import pt.isel.ls.Commands.PostChecklist;
+import pt.isel.ls.DTO.Checklist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ public class SQLTest {
     Connection con = null;
     static SQLServerDataSource src;
 
-    private final static int user = 1;
+    private final static int user = 0;
     private final static String serverPass[] = {"zaxscdvfbgnhmj", "sa"};
     private final static String serverName[] = {"WIN-773BLA1UH43", "user-PC"};
 
@@ -61,12 +62,12 @@ public class SQLTest {
     }
 
     private void setup(Connection con) throws SQLException {
-        String s1 = "insert into checklist(Cl_name, Cl_duedate, Cl_desc) values (?, CAST(? as datetime), ?)";
+        String s1 = "insert into checklist(Cl_name,  Cl_desc, Cl_duedate) values (?, ?, CAST(? as datetime))";
         PreparedStatement ps = con.prepareStatement(s1);
 
         ps.setString(1, TESTNAME);
-        ps.setString(2, TESTDATE);
-        ps.setString(3, TESTDESC);
+        ps.setString(2, TESTDESC);
+        ps.setString(3, TESTDATE);
 
         ps.execute();
 
@@ -110,6 +111,9 @@ public class SQLTest {
             LinkedList result = (LinkedList) new GetChecklists().execute(null, con);
 
             assertEquals(1, result.size());
+            assertEquals(true, ((Checklist)result.get(0)).getName().equals(TESTNAME));
+            assertEquals(true, ((Checklist)result.get(0)).getDescription().equals(TESTDESC));
+            assertEquals(true, ((Checklist)result.get(0)).getDueDate().equals(TESTDATE));
 
         }finally {
             if(con != null){

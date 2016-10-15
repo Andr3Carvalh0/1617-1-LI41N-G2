@@ -1,11 +1,11 @@
-package pt.isel.ls;
+package pt.isel.ls.DTO;
 
 public class Checklist {
     private int id, Tp_id;
     private String name, dueDate, description;
     private boolean closed;
 
-    public Checklist(int id, String name, String dueDate,boolean closed, String description, int Tp_id){
+    public Checklist(int id, String name, String description,boolean closed, String dueDate, int Tp_id){
         this.id = id;
         this.name = name;
         this.dueDate = dueDate;

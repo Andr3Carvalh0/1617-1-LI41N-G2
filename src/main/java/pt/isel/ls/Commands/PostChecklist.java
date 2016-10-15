@@ -27,7 +27,7 @@ public class PostChecklist extends Command{
         }
 
         else {
-            s1 = "insert into checklist(Cl_name, Cl_duedate, Cl_desc) values (?, CAST(? as datetime), ?)";
+            s1 = "insert into checklist(Cl_name, Cl_desc, Cl_duedate) values (? , ?, CAST(? as datetime))";
             ps = con.prepareStatement(s1);
 
             ps.setString(1, params.get("name"));

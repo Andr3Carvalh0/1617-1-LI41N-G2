@@ -1,6 +1,6 @@
 package pt.isel.ls.Commands;
 
-import pt.isel.ls.Checklist;
+import pt.isel.ls.DTO.Checklist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetChecklists extends Command{
-    private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
     private final String method = "GET";
     private final String[] path = {"", "checklists"};
 
@@ -28,11 +28,11 @@ public class GetChecklists extends Command{
         while (rs.next()){
             int id = rs.getInt(1);
             String nome = rs.getString(2);
-            String dueDate = df.format(rs.getDate(3));
+            String description = rs.getString(3);
             boolean closed = rs.getBoolean(4);
-            String description = rs.getString(5);
+            String dueDate = df.format(rs.getDate(5));
             int Tp_id = rs.getInt(6);
-            list.add(new Checklist(id, nome, dueDate, closed, description, Tp_id));
+            list.add(new Checklist(id, nome, description, closed, dueDate, Tp_id));
         }
 
         return list;
