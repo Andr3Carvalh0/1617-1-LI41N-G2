@@ -13,7 +13,7 @@ primary key(Cl_id),
 foreign key(Tp_id)REFERENCES template(Tp_id)
 )
 
-create table checklist_task(Cl_id int, Cl_Task_id int, Cl_Task_index int, Cl_Task_closed bit default 0, Cl_Task_name varchar(80) NOT NULL, Cl_Task_desc varchar(4000) NOT NULL, Cl_Task_duedate datetime,
+create table checklist_task(Cl_Task_id int identity (0, 1), Cl_id int, Cl_Task_index int, Cl_Task_closed bit default 0, Cl_Task_name varchar(80) NOT NULL, Cl_Task_desc varchar(4000) NOT NULL, Cl_Task_duedate datetime,
 primary key(Cl_id, Cl_Task_id),
 foreign key(Cl_id)REFERENCES checklist(Cl_id)
 )
@@ -28,3 +28,11 @@ select * from checklist
 select * from template
 delete from checklist
 delete from template
+drop table checklist_task
+
+select Cl_Task_index from checklist_task order by Cl_Task_index DESC
+select * from checklist
+select * from checklist_task
+select max(Cl_Task_id) from checklist_task
+insert into checklist_task(Cl_id, Cl_Task_index, Cl_Task_name, Cl_Task_desc)
+                    values (0, 1, 'teste', 'desc teste')

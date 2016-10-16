@@ -2,10 +2,12 @@ package pt.isel.ls;
 
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pt.isel.ls.Commands.GetChecklists;
 import pt.isel.ls.Commands.PostChecklist;
+import pt.isel.ls.Commands.PostChecklistCidTasks;
 import pt.isel.ls.Dtos.Checklist;
 
 import java.sql.Connection;
@@ -101,6 +103,45 @@ public class ChecklistTest {
                 con.close();
             }
         }
+    }
+    @Test
+    public void testPostChecklistCidTasks() throws SQLException {
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "TEST_TASK_NAME");
+            map.put("{cid}", "0");
+            map.put("description", "THIS IS A TASK TEST");
+            map.put("dueDate", TEST_DATE);
+
+            con = GetConnection.connect();
+            int result = (int) new PostChecklistCidTasks().execute(map, con);
+            int id = getChecklistMaxID(con);
+            assertEquals(id, result);
+        }finally{
+            if(con != null){
+
+                int id = getChecklistMaxID(con);
+
+                String s1 = "delete from checklist_task where Cl_Task_id = ?";
+                PreparedStatement ps = con.prepareStatement(s1);
+
+                ps.setInt(1, id);
+
+                ps.execute();
+                con.close();
+            }
+        }
+
+    }
+
+    private int getChecklistTaskMaxID(Connection con) throws SQLException {
+        String s0 = "select max(Cl_Task_id) from checklist_task";
+        PreparedStatement ps = con.prepareStatement(s0);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        return rs.getInt(1);
     }
 
 }
