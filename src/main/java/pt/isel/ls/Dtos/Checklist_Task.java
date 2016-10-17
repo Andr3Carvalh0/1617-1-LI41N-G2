@@ -7,7 +7,7 @@ public class Checklist_Task {
     private String Cl_Task_name, Cl_Task_desc, Cl_Task_dueDate;
 
 
-    public Checklist_Task(int Cl_id,int Cl_Task_id, int Cl_Task_index, boolean Cl_isClosed, String Cl_Task_name, String Cl_Task_desc, String Cl_Task_dueDate){
+    public Checklist_Task(int Cl_Task_id, int Cl_id, int Cl_Task_index, boolean Cl_isClosed, String Cl_Task_name, String Cl_Task_desc, String Cl_Task_dueDate){
         this.Cl_id = Cl_id;
         this.Cl_Task_id = Cl_Task_id;
         this.Cl_Task_index = Cl_Task_index;

@@ -19,7 +19,7 @@ public class CommandList {
         commandList.add(new GetChecklists());                   //Andre         Done        Done
         commandList.add(new GetChecklistsCid());                //Marcos
         commandList.add(new GetTemplates());                    //Gonçalo
-        commandList.add(new GetTemplatesTid());                 //Andre         Done
+        commandList.add(new GetTemplatesTid());                 //Andre         Done        Semi-Done(Needs methods from others)
         commandList.add(new GetChecklistsClosed());             //Marcos
         commandList.add(new GetChecklistsOpenSortedDueDate());  //Gonçalo
         commandList.add(new GetChecklistsOpenSortedNoftasks()); //Andre

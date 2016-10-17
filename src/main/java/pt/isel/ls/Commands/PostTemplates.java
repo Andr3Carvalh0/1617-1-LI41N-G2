@@ -1,6 +1,5 @@
 package pt.isel.ls.Commands;
 
-import pt.isel.ls.Dtos.Template;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
