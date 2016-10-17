@@ -106,28 +106,40 @@ public class ChecklistTest {
     }
     @Test
     public void testPostChecklistCidTasks() throws SQLException {
+        int cid = -1, tid = -1;
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("name", "TEST_TASK_NAME");
-            map.put("{cid}", "0");
-            map.put("description", "THIS IS A TASK TEST");
+            // Create test checklist first
+            map.put("name", TEST_NAME);
+            map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
 
             con = GetConnection.connect();
+            cid = (int) new PostChecklist().execute(map, con);
+
+            // Then add checklist task
+            map.put("name", "TEST_TASK_NAME");
+            map.put("{cid}", Integer.toString(cid));
+            map.put("description", "THIS IS A TASK TEST");
+            map.put("dueDate", TEST_DATE);
+
             int result = (int) new PostChecklistCidTasks().execute(map, con);
-            int id = getChecklistMaxID(con);
-            assertEquals(id, result);
+            tid = getChecklistTaskMaxID(con);
+            assertEquals(tid, result);
+
         }finally{
             if(con != null){
 
-                int id = getChecklistMaxID(con);
-
-                String s1 = "delete from checklist_task where Cl_Task_id = ?";
+                // First delete created task
+                String s1 = "delete from checklist_task where Cl_Task_id = " + tid;
                 PreparedStatement ps = con.prepareStatement(s1);
-
-                ps.setInt(1, id);
-
                 ps.execute();
+
+                // Then delete created checklist
+                s1 = "delete from checklist_task where Cl_Task_id = " + cid;
+                ps = con.prepareStatement(s1);
+                ps.execute();
+
                 con.close();
             }
         }

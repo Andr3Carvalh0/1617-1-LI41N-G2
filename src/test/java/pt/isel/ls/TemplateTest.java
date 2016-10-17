@@ -3,6 +3,8 @@ package pt.isel.ls;
 
 import org.junit.Test;
 import pt.isel.ls.Commands.PostTemplates;
+import pt.isel.ls.Commands.PostTemplatesTidCreate;
+
 import static junit.framework.Assert.assertEquals;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,5 +55,24 @@ public class TemplateTest {
             }
         }
     }
+    @Test
+    public void testPostTemplatesTidCreate() throws SQLException {
+        try {
+            con = GetConnection.connect();
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TEST_NAME);
+            map.put("description", TEST_DESC);
+            map.put("{tid}", "0");
+
+            new PostTemplatesTidCreate().execute(map, con);
+
+        }finally {
+            if(con != null){
+                con.close();
+            }
+        }
+    }
+
 
 }

@@ -4,7 +4,7 @@ Tp = Template
 */
 use LS
 
-create table template(Tp_id int, Tp_name varchar(80) NOT NULL, Tp_desc varchar(4000) NOT NULL,
+create table template(Tp_id int identity(0, 1), Tp_name varchar(80) NOT NULL, Tp_desc varchar(4000) NOT NULL,
 primary key(Tp_id)
 )
 
@@ -18,21 +18,28 @@ primary key(Cl_id, Cl_Task_id),
 foreign key(Cl_id)REFERENCES checklist(Cl_id)
 )
 
-create table template_task(Tp_id int, Tp_Task_id int, Tp_Task_name varchar(80) NOT NULL, Tp_Task_desc varchar(4000) NOT NULL,
+create table template_task(Tp_id int, Tp_Task_id int identity(0, 1), Tp_Task_name varchar(80) NOT NULL, Tp_Task_desc varchar(4000) NOT NULL,
 primary key(Tp_id, Tp_Task_id),
 foreign key(Tp_id)REFERENCES template(Tp_id)
 )
 
-insert into checklist(Cl_name, Cl_duedate, Cl_desc) values ('teste', cast('06-10-2016' as datetime), 'jdfklmfgsdnfgsdoijgf')
-select * from checklist
-select * from template
-delete from checklist
-delete from template
+drop table template_task
 drop table checklist_task
+drop table checklist
+drop table template
 
-select Cl_Task_index from checklist_task order by Cl_Task_index DESC
+delete from checklist
+
+select * from template
 select * from checklist
 select * from checklist_task
-select max(Cl_Task_id) from checklist_task
-insert into checklist_task(Cl_id, Cl_Task_index, Cl_Task_name, Cl_Task_desc)
-                    values (0, 1, 'teste', 'desc teste')
+select * from template_task
+
+insert into template(Tp_name, Tp_desc)
+values('TEST_TEMPLATE', 'This is a test')
+
+insert into template_task(Tp_id, Tp_Task_name, Tp_Task_desc)
+values(0, 'TEST_TASK', 'This is a task test')
+
+insert into template_task(Tp_id, Tp_Task_name, Tp_Task_desc)
+values(0, 'TEST_TASK2', 'This is a task test2')
