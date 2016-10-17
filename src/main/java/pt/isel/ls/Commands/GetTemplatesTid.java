@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 public class GetTemplatesTid extends Command {
     private final String method = "GET";
-    private final String[] path = {"", "templates", "tid"};
+    private final String[] path = {"", "templates", "{tid}"};
 
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 
@@ -25,9 +25,9 @@ public class GetTemplatesTid extends Command {
         LinkedList<Checklist> checklists = new LinkedList<>();
         LinkedList<Template_Task> tasks = new LinkedList<>();
 
-        int id = Integer.parseInt(params.get("tid"));
+        int id = Integer.parseInt(params.get("{tid}"));
 
-        String s1 = "select * from templates where Tp_id = ?";
+        String s1 = "select * from template where Tp_id = ?";
         String s2 = "select * from template_task where Tp_id = ?";
         String s3 = "select * from checklist where Tp_id = ?";
 
