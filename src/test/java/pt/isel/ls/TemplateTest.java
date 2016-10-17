@@ -82,6 +82,7 @@ public class TemplateTest {
 
         }finally {
             if(con != null){
+                //TODO
                 con.close();
             }
         }

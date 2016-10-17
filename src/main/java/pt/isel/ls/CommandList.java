@@ -10,11 +10,11 @@ public class CommandList {
         commandList = new LinkedList<>();
                                                                 //              Class       Test
         commandList.add(new PostChecklist());                   //Gonçalo       Done        Done
-        commandList.add(new PostChecklistCidTasks());           //Marcos
-        commandList.add(new PostChecklistsCidTasksLid());       //Gonçalo
+        commandList.add(new PostChecklistCidTasks());           //Marcos        Done        Done
+        commandList.add(new PostChecklistsCidTasksLid());       //Gonçalo       Done
         commandList.add(new PostTemplates());                   //Andre         Done        Done
         commandList.add(new PostTemplatesTidTasks());           //Marcos
-        commandList.add(new PostTemplatesTidCreate());          //Gonçalo
+        commandList.add(new PostTemplatesTidCreate());          //Gonçalo       Done
 
         commandList.add(new GetChecklists());                   //Andre         Done        Done
         commandList.add(new GetChecklistsCid());                //Marcos

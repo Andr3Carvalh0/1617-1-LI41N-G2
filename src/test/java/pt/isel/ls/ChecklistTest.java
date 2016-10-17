@@ -1,13 +1,11 @@
 package pt.isel.ls;
 
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import pt.isel.ls.Commands.GetChecklists;
 import pt.isel.ls.Commands.PostChecklist;
 import pt.isel.ls.Commands.PostChecklistCidTasks;
+import pt.isel.ls.Commands.PostChecklistsCidTasksLid;
 import pt.isel.ls.Dtos.Checklist;
 
 import java.sql.Connection;
@@ -104,6 +102,79 @@ public class ChecklistTest {
             }
         }
     }
+
+    @Test
+    public void testPostChecklistsCidTasksLid() throws SQLException{
+        String cid = "-1", lid = "-1";
+        try{
+            con = GetConnection.connect();
+            cid = InsertChecklist(con);
+            lid = InsertTask(cid, con);
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("isClosed", "true");
+            map.put("{cid}", cid);
+            map.put("{lid}", lid);
+
+            new PostChecklistsCidTasksLid().execute(map, con);
+            assertEquals(true, getTaskIsClosedById(cid, lid, con));
+        }finally{
+            if(con!=null) {
+                //1º - Apagar task criada.
+                String s = "delete from checklist_task where cl_task_id = " + lid;
+                PreparedStatement ps = con.prepareStatement(s);
+                ps.execute();
+
+                //2º - Apagar checklist criada.
+                s = "delete from checklist where cl_id = " + cid;
+                ps = con.prepareStatement(s);
+                ps.execute();
+
+                //3º - Fechar connecção.
+                con.close();
+            }
+        }
+    }
+
+    private String InsertTask(String cid, Connection con) throws SQLException {
+        //1º - Inserir task.
+        String s = "insert into checklist_task(cl_id, cl_task_name, cl_task_desc) values(" + cid + ", ?, ?)";
+        PreparedStatement ps = con.prepareStatement(s);
+        ps.setString(1, TEST_NAME);
+        ps.setString(2, TEST_DESC);
+        ps.execute();
+
+        //2º - Obter id da task criada.
+        s = "select max(cl_task_id) from checklist_task";
+        ps = con.prepareStatement(s);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return Integer.toString(rs.getInt(1));
+    }
+
+    private String InsertChecklist(Connection con) throws SQLException {
+        //1º - Inserir checklist.
+        String s = "insert into checklist(cl_name, cl_desc) values(?, ?)";
+        PreparedStatement ps = con.prepareStatement(s);
+        ps.setString(1, TEST_NAME);
+        ps.setString(2, TEST_DESC);
+        ps.execute();
+
+        //2º - Obter id da checklist criada.
+        s = "select max(cl_id) from checklist";
+        ps = con.prepareStatement(s);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return Integer.toString(rs.getInt(1));
+    }
+
+    private boolean getTaskIsClosedById(String cid, String lid, Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement("select Cl_Task_Closed from checklist_task where Cl_id = " + cid + " and Cl_Task_id = " + lid);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1) == 1;
+    }
+
     @Test
     public void testPostChecklistCidTasks() throws SQLException {
         int cid = -1, tid = -1;
