@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class GetTemplates extends Command {
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
+
         return null;
     }
 

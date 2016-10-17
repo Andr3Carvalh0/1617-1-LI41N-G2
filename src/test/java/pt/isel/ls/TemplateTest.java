@@ -4,8 +4,10 @@ package pt.isel.ls;
 import org.junit.Test;
 import pt.isel.ls.Commands.GetTemplatesTid;
 import pt.isel.ls.Commands.PostTemplates;
+import pt.isel.ls.Commands.PostTemplatesTidCreate;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Template;
+
 
 import static junit.framework.Assert.assertEquals;
 import java.sql.Connection;
@@ -66,6 +68,26 @@ public class TemplateTest {
             }
         }
     }
+    @Test
+    public void testPostTemplatesTidCreate() throws SQLException {
+        try {
+            con = GetConnection.connect();
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TEST_NAME);
+            map.put("description", TEST_DESC);
+            map.put("{tid}", "0");
+
+            new PostTemplatesTidCreate().execute(map, con);
+
+        }finally {
+            if(con != null){
+                //TODO
+                con.close();
+            }
+        }
+    }
+
 
     @Test
     public void testGetTemplatesTid() throws Exception {
