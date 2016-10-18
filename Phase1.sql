@@ -4,7 +4,7 @@ Tp = Template
 */
 use LS
 
-create table template(Tp_id int, Tp_name varchar(80) NOT NULL, Tp_desc varchar(4000) NOT NULL,
+create table template(Tp_id int identity (0, 1), Tp_name varchar(80) NOT NULL, Tp_desc varchar(4000) NOT NULL,
 primary key(Tp_id)
 )
 
