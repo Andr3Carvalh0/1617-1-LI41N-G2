@@ -2,6 +2,7 @@ package pt.isel.ls;
 
 
 import org.junit.Test;
+import pt.isel.ls.Commands.GetTemplates;
 import pt.isel.ls.Commands.GetTemplatesTid;
 import pt.isel.ls.Commands.PostTemplates;
 import pt.isel.ls.Commands.PostTemplatesTidCreate;
@@ -15,9 +16,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class TemplateTest {
-    Connection con = null;
+    private Connection con = null;
 
     private final String TEST_NAME = "SQLTest";
     private final String TEST_DESC = "DESCRIPTION";
@@ -116,6 +118,39 @@ public class TemplateTest {
                 ps.setInt(1, id);
                 ps.execute();
                 con.close();
+            }
+        }
+    }
+
+    @Test
+    public void testGetTemplates() throws Exception {
+        int tid1 = -1, tid2 = -1;
+        try {
+            // 1 - Populate templates.
+            con = GetConnection.connect();
+            tid1 = createTemplate();
+            tid2 = createTemplate();
+
+            // 2 - Get template list.
+            LinkedList<Template> templateLinkedList = (LinkedList)new GetTemplates().execute(null, con);
+
+            // 3 - Find test templates in the obtained list.
+            int testTemplatesFound = 0;
+            for (Template t: templateLinkedList) {
+                if (t.getTp_id() == tid1 || t.getTp_id() == tid2) testTemplatesFound++;
+            }
+            assertEquals(2, testTemplatesFound);
+        } finally {
+            {
+                if(con != null) {
+                    // Delete test templates from database.
+                    PreparedStatement ps = con.prepareStatement("delete from template where Tp_id = ?");
+                    ps.setInt(1, tid1);
+                    ps.execute();
+                    ps.setInt(1, tid2);
+                    ps.execute();
+                    con.close();
+                }
             }
         }
     }
