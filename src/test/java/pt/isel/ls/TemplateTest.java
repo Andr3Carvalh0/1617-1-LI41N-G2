@@ -143,8 +143,12 @@ public class TemplateTest {
             ps.setInt(1, tp_id);
             ps.setInt(2, tp_task_id);
             ResultSet rs = ps.executeQuery();
+            rs.next();
 
-            assertEquals(tt, new Template_Task(rs.getInt(1),rs.getInt(2),rs.getString(2), rs.getString(4)));
+            assertEquals(tt.getTp_id(),rs.getInt(1));
+            assertEquals(tt.getTp_Task_id(),rs.getInt(2));
+            assertEquals(tt.getTp_Task_name(),rs.getString(3));
+            assertEquals(tt.getTp_Task_desc(),rs.getString(4));
         }
         finally {
             if(con != null){
