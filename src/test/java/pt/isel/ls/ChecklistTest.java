@@ -2,10 +2,7 @@ package pt.isel.ls;
 
 
 import org.junit.Test;
-import pt.isel.ls.Commands.GetChecklists;
-import pt.isel.ls.Commands.PostChecklist;
-import pt.isel.ls.Commands.PostChecklistCidTasks;
-import pt.isel.ls.Commands.PostChecklistsCidTasksLid;
+import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Checklist;
 
 import java.sql.Connection;
@@ -225,6 +222,44 @@ public class ChecklistTest {
         rs.next();
 
         return rs.getInt(1);
+    }
+
+    @Test
+    public void testGetChecklistsClosed() throws SQLException{
+        int[] TestChecklistsIds = new int[3];
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TEST_NAME);
+            map.put("description", TEST_DESC);
+            map.put("dueDate", TEST_DATE);
+
+            con = GetConnection.connect();
+            PostChecklist pc = new PostChecklist();
+            for (int i = 0; i < 3; i++) {
+                TestChecklistsIds[i] = (int) pc.execute(map, con);
+            }
+
+            PreparedStatement ps = con.prepareStatement("UPDATE checklist\n" +
+                    "SET Cl_closed = 1\n" +
+                    "WHERE Cl_id = ?;");
+            ps.setInt(1, TestChecklistsIds[1]);
+            ps.executeUpdate();
+            LinkedList<Checklist> list = (LinkedList<Checklist>) new GetChecklistsClosed().execute(map, con);
+            for(Checklist c:list){
+                assertEquals(c.isClosed(), true);
+            }
+        }
+        finally {
+            if(con != null){
+                PreparedStatement dels;
+                for(int i=0; i<3; i++){
+                    dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
+                    dels.setInt(1,TestChecklistsIds[i]);
+                    dels.executeUpdate();
+                }
+                con.close();
+            }
+        }
     }
 
 }

@@ -32,7 +32,7 @@ public class PostChecklistCidTasks extends Command {
             ps = con.prepareStatement(s1);
 
             ps.setString(1, params.get("{cid}"));
-            ps.setString(2, Integer.toString(taskIndex));
+            ps.setString(2, Integer.toString(taskIndex));  //porque não usar ps.setInt(2, taskIndex) ?
             ps.setString(3, params.get("name"));
             ps.setString(4, params.get("description"));
             ps.setString(5, params.get("dueDate"));
