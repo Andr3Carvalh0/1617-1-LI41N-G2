@@ -14,12 +14,13 @@ public class PostTemplates extends Command {
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
         String s1 = "insert into template(Tp_name, Tp_desc) values (?, ?)";
 
-        PreparedStatement ps = con.prepareStatement(s1);
+        PreparedStatement ps = con.prepareStatement(s1, PreparedStatement.RETURN_GENERATED_KEYS);
 
         ps.setString(1, params.get("name"));
         ps.setString(2, params.get("description"));
 
-        ResultSet rs = ps.executeQuery();
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
         rs.next();
 
         return rs.getInt(1);

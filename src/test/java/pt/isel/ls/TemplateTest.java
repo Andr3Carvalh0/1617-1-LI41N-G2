@@ -5,8 +5,10 @@ import org.junit.Test;
 import pt.isel.ls.Commands.GetTemplatesTid;
 import pt.isel.ls.Commands.PostTemplates;
 import pt.isel.ls.Commands.PostTemplatesTidCreate;
+import pt.isel.ls.Commands.PostTemplatesTidTasks;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Template;
+import pt.isel.ls.Dtos.Template_Task;
 
 
 import static junit.framework.Assert.assertEquals;
@@ -118,6 +120,46 @@ public class TemplateTest {
                 con.close();
             }
         }
+    }
+
+    @Test
+    public void PostTemplatesTidTasks() throws SQLException {
+        HashMap<String,String> params = new HashMap<>();
+        int tp_id = -1;
+        int tp_task_id = -1;
+        try{
+            params.put("name","template");
+            params.put("description","template");
+            con = GetConnection.connect();
+            tp_id = (int) new PostTemplates().execute(params, con);
+            params.put("name","template_task");
+            params.put("description","template_task");
+            params.put("tid", Integer.toString(tp_id));
+            tp_task_id = (int) new PostTemplatesTidTasks().execute(params, con);
+
+            Template_Task tt = new Template_Task(tp_id,tp_task_id,params.get("name"), params.get("description"));
+
+            PreparedStatement ps = con.prepareStatement("select * from template_task where Tp_id = ? and Tp_Task_id = ?");
+            ps.setInt(1, tp_id);
+            ps.setInt(2, tp_task_id);
+            ResultSet rs = ps.executeQuery();
+
+            assertEquals(tt, new Template_Task(rs.getInt(1),rs.getInt(2),rs.getString(2), rs.getString(4)));
+        }
+        finally {
+            if(con != null){
+                if(tp_id != -1 && tp_task_id != -1){
+                    PreparedStatement dels = con.prepareStatement("DELETE from template_task where Tp_id = ? and Tp_Task_id = ?");
+                    dels.setInt(1,tp_id);
+                    dels.setInt(2, tp_task_id);
+                    dels.executeUpdate();
+                    dels = con.prepareStatement("DELETE from template where Tp_id = ?");
+                    dels.setInt(1,tp_id);
+                }
+                con.close();
+            }
+        }
+
     }
 
 }
