@@ -17,7 +17,7 @@ public class CommandList {
         commandList.add(new PostTemplatesTidCreate());          //Gonçalo       Done
 
         commandList.add(new GetChecklists());                   //Andre         Done        Done
-        commandList.add(new GetChecklistsCid());                //Marcos
+        commandList.add(new GetChecklistsCid());                //Marcos        Done
         commandList.add(new GetTemplates());                    //Gonçalo
         commandList.add(new GetTemplatesTid());                 //Andre         Done        Semi-Done(Needs methods from others)
         commandList.add(new GetChecklistsClosed());             //Marcos        Done        Done
