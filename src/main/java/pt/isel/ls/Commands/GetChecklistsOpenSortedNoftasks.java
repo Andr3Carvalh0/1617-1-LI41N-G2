@@ -43,7 +43,7 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
-        String s1 = "select * from checklists where Cl_closed = 0";
+        String s1 = "select * from checklist where Cl_closed = 0";
         String s2 = "select * from checklist_task where Cl_id = ? and Cl_Task_closed = 0";
 
         LinkedList<Checklist> checklists = new LinkedList<>();
