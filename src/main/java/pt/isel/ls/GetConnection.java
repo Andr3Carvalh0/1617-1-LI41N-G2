@@ -13,8 +13,8 @@ public class GetConnection {
     private final static String serverName[] = {"WIN-773BLA1UH43", "user-PC", "ASUSTRON"};
 
     public static Connection connect() throws SQLServerException {
-        newDataSource();
-            return src.getConnection();
+        if(src == null) newDataSource();
+        return src.getConnection();
     }
 
     private static void newDataSource() {
