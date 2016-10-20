@@ -226,7 +226,7 @@ public class ChecklistTest {
 
     @Test
     public void testGetChecklistsClosed() throws SQLException{
-        int[] TestChecklistsIds = new int[3];
+        int[] TestChecklistsIds = {-1, -1, -1};
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
@@ -262,4 +262,38 @@ public class ChecklistTest {
         }
     }
 
+    @Test
+    public void testGetChecklistsOpenSortedDuedate() throws SQLException {
+        int[] TestChecklistsIds = {-1, -1, -1, -1};
+        try{
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TEST_NAME);
+            map.put("description", TEST_DESC);
+            String[] dates = {"2016-10-31","2016-10-21", "2017-10-31", "2016-11-4"};
+            con = GetConnection.connect();
+            PostChecklist pc = new PostChecklist();
+            for (int i = 0; i < 4; i++) {
+                map.put("dueDate", dates[i]);
+                TestChecklistsIds[i] = (int) pc.execute(map, con);
+            }
+            LinkedList<Checklist> cl = (LinkedList<Checklist>) new GetChecklistsOpenSortedDueDate().execute(map,con);
+            int[] sortedIds = {1,0,3,2};
+            for(int i=0; i<4; i++){
+                assertEquals(cl.get(i).getId(),TestChecklistsIds[sortedIds[i]]);
+                assertEquals(cl.get(i).isClosed(),false);
+            }
+            assertEquals(cl.size(),4);
+        }
+        finally {
+            if(con != null){
+                PreparedStatement dels;
+                for(int i=0; i<4; i++){
+                    dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
+                    dels.setInt(1,TestChecklistsIds[i]);
+                    dels.executeUpdate();
+                }
+                con.close();
+            }
+        }
+    }
 }

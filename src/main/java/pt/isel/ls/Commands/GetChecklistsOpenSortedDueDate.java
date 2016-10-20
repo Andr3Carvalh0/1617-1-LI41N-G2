@@ -22,10 +22,9 @@ public class GetChecklistsOpenSortedDueDate extends Command {
         String query = "select * from checklist where Cl_closed = 0 order by Cl_duedate";
         PreparedStatement ps = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
-        rs.next();
         while(rs.next()){
             cl.add(new Checklist(rs.getInt(1), rs.getString(2), rs.getString(3),
-                    rs.getBoolean(4),df.format(rs.getString(5)), rs.getInt(6)));
+                    rs.getBoolean(4),df.format(rs.getDate(5)), rs.getInt(6)));
         }
         return cl;
     }
