@@ -72,11 +72,12 @@ public class Routing {
         return false;
     }
 
-    public void run(Command c) throws Exception {
+    public Object run(Command c) throws Exception {
         Connection con = null;
         try {
             con = GetConnection.connect();
-            c.execute(params, con);
+            return c.execute(params, con);
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -87,7 +88,7 @@ public class Routing {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }
+        return null;
     }
 }
