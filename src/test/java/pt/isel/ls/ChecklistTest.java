@@ -4,6 +4,8 @@ package pt.isel.ls;
 import org.junit.Test;
 import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Checklist;
+import pt.isel.ls.Dtos.Checklist_Task;
+import pt.isel.ls.Dtos.DtoWrapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -292,6 +294,48 @@ public class ChecklistTest {
                     dels.setInt(1,TestChecklistsIds[i]);
                     dels.executeUpdate();
                 }
+                con.close();
+            }
+        }
+    }
+
+    @Test
+    public void testGetChecklistsCidNoTemplate() throws SQLException {
+        int TestChecklistId = -1;
+        int[] TestTasksId = {-1, -1};
+        try{
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TEST_NAME);
+            map.put("description", TEST_DESC);
+            map.put("dueDate",TEST_DATE);
+            con = GetConnection.connect();
+            //Create Checklist
+            TestChecklistId = (int) new PostChecklist().execute(map,con);
+            map.put("{cid}", Integer.toString(TestChecklistId));
+            //Create tasks
+            PostChecklistCidTasks pcct = new PostChecklistCidTasks();
+            for (int i = 0; i < 2; i++) {
+                TestTasksId[i] = (int) pcct.execute(map, con);
+            }
+            //Retrieve values
+            DtoWrapper dw = (DtoWrapper) new GetChecklistsCid().execute(map,con);
+            assertEquals(dw.getTemplate(),null);
+            assertEquals(((Checklist)dw.getChecklist()).getId(),TestChecklistId);
+            assertEquals(((LinkedList<Checklist_Task>)dw.getCheclist_Task()).get(0).getCl_Task_id(), TestTasksId[0]);
+            assertEquals(((LinkedList<Checklist_Task>)dw.getCheclist_Task()).get(1).getCl_Task_id(), TestTasksId[1]);
+        }
+        finally {
+            if(con != null){
+                PreparedStatement dels;
+                for(int i=0; i<TestTasksId.length; i++){
+                    dels = con.prepareStatement("DELETE from checklist_task where Cl_id = ? and Cl_Task_id = ?");
+                    dels.setInt(1,TestChecklistId);
+                    dels.setInt(2,TestTasksId[i]);
+                    dels.executeUpdate();
+                }
+                dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
+                dels.setInt(1,TestChecklistId);
+                dels.executeUpdate();
                 con.close();
             }
         }

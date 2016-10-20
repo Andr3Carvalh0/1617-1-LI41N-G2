@@ -83,3 +83,17 @@ insert into template_task values(0, 'task_test', 'task_for_test')
 delete from template
 
 UPDATE checklist SET Cl_closed = 1 WHERE Cl_id = 0
+
+insert into checklist values('one', 'the one', 0, '2016-10-31',null)
+insert into checklist values('two', 'the second', 0, '2016-10-21',null)
+insert into checklist values('three', 'the third', 0, '2017-10-31',null)
+insert into checklist values('four', 'the fourth', 0, '2016-11-4',null)
+
+
+
+select * from checklist
+where Cl_closed = 0
+order by Cl_duedate
+--1032
+
+delete from checklist where Cl_id = -1
