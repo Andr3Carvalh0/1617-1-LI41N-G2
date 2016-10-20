@@ -183,7 +183,6 @@ public class ChecklistTest {
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
-
             con = GetConnection.connect();
             int cid = (int) new PostChecklist().execute(map, con);
 

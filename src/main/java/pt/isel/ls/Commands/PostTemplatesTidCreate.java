@@ -22,7 +22,7 @@ public class PostTemplatesTidCreate extends Command {
         String templateName = rs.getString(2), templateDesc = rs.getString(3);
 
         //2º - Criar a checklist. Alguns dos seus dados podem ser copiados da template, se não forem inseridos como parâmetros.
-        s = "insert into checklist(Cl_name, Cl_desc, Cl_duedate) values(?, ?, CAST(? as datetime))";
+        s = "insert into checklist(Cl_name, Cl_desc, Cl_duedate, Tp_id) values(?, ?, CAST(? as datetime), ?)";
         ps = con.prepareStatement(s);
         if(params.containsKey("name")) ps.setString(1, params.get("name"));
             else ps.setString(1, templateName);
@@ -30,6 +30,7 @@ public class PostTemplatesTidCreate extends Command {
             else ps.setString(2, templateDesc);
         if(params.containsKey("dueDate")) ps.setString(3, params.get("dueDate"));
             else ps.setString(3, null);
+        ps.setString(4, templateId);
         ps.execute();
 
         //3º - Obter id da checklist criada.

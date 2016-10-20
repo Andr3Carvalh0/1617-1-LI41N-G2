@@ -39,6 +39,17 @@ public class TemplateTest {
 
     }
 
+    private int getLastInsertedChecklist(Connection con) throws SQLException {
+        String s0 = "select max(Cl_id) from checklist";
+        PreparedStatement ps = con.prepareStatement(s0);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        return rs.getInt(1);
+
+    }
+
     private void addTemplate(String name, String desc, Connection con) throws SQLException {
 
         String s1 = "insert into template(Tp_name, Tp_desc) values (?, ?)";
@@ -104,19 +115,33 @@ public class TemplateTest {
 
     @Test
     public void testPostTemplatesTidCreate() throws SQLException {
+        int tid = -1, cid = -1;
+        String s;
+        PreparedStatement ps;
+        ResultSet rs;
         try {
             con = GetConnection.connect();
 
+            addTemplate("TEST_TEMPLATE", "This is a test", con);
+            tid = getLastInsertedTemplate(con);
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
-            map.put("{tid}", "0");
+            map.put("{tid}", Integer.toString(tid));
 
             new PostTemplatesTidCreate().execute(map, con);
-
+            cid = getLastInsertedChecklist(con);
+            s = "select Tp_id from checklist where Cl_id = " + cid;
+            ps = con.prepareStatement(s);
+            rs = ps.executeQuery();
+            rs.next();
+            assertEquals(rs.getInt(1), tid);
         } finally {
             if (con != null) {
-                //TODO
+                s = "delete from template where Tp_id = " + tid;
+                ps = con.prepareStatement(s);
+                ps.execute();
+
                 con.close();
             }
         }
