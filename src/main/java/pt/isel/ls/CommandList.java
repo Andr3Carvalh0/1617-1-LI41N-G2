@@ -19,10 +19,10 @@ public class CommandList {
         commandList.add(new GetChecklists());                   //Andre         Done        Done
         commandList.add(new GetChecklistsCid());                //Marcos        Done
         commandList.add(new GetTemplates());                    //Gonçalo
-        commandList.add(new GetTemplatesTid());                 //Andre         Done        Semi-Done(Needs methods from others)
+        commandList.add(new GetTemplatesTid());                 //Andre         Done        Done
         commandList.add(new GetChecklistsClosed());             //Marcos        Done        Done
         commandList.add(new GetChecklistsOpenSortedDueDate());  //Gonçalo*      Done        Done
-        commandList.add(new GetChecklistsOpenSortedNoftasks()); //Andre
+        commandList.add(new GetChecklistsOpenSortedNoftasks()); //Andre         Done        Done
     }
 
     public LinkedList<Command> getCommandList(){

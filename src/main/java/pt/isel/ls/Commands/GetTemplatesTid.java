@@ -66,7 +66,7 @@ public class GetTemplatesTid extends Command {
                 String nome = rs.getString(2);
                 String description = rs.getString(3);
                 boolean closed = rs.getBoolean(4);
-                String dueDate = df.format(rs.getDate(5));
+                String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)): null;
                 int Tp_id = rs.getInt(6);
                 checklists.add(new Checklist(cl_id, nome, description, closed, dueDate, Tp_id));
             }
