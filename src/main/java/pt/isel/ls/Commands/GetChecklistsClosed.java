@@ -30,7 +30,7 @@ public class GetChecklistsClosed extends Command {
             String nome = rs.getString(2);
             String description = rs.getString(3);
             boolean closed = rs.getBoolean(4);
-            String dueDate = df.format(rs.getDate(5));
+            String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
             int Tp_id = rs.getInt(6);
             list.add(new Checklist(id, nome, description, closed, dueDate, Tp_id));
         }

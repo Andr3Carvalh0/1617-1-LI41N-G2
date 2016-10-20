@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -32,7 +31,7 @@ public class GetChecklistsCid extends Command {
         ResultSet rs = ps.executeQuery();
         rs.next();
 
-        String dueDate = df.format(rs.getDate(5));
+        String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
         cl = new Checklist(rs.getInt(1), rs.getString(2), rs.getString(3),
                 rs.getBoolean(4),dueDate, rs.getInt(6));
 
@@ -49,7 +48,7 @@ public class GetChecklistsCid extends Command {
             boolean closed = rs.getBoolean(4);
             String nome = rs.getString(5);
             String description = rs.getString(6);
-            dueDate = df.format(rs.getDate(7));
+            dueDate = (rs.getDate(7) != null) ? df.format(rs.getDate(7)) : null;
             ct.add(new Checklist_Task(Cl_Task_id,Cl_id,Cl_Task_index,closed,nome,description, dueDate));
         }
         //Get template info

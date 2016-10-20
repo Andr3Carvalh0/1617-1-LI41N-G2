@@ -23,8 +23,10 @@ public class GetChecklistsOpenSortedDueDate extends Command {
         PreparedStatement ps = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
         while(rs.next()){
+            String date = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
+
             cl.add(new Checklist(rs.getInt(1), rs.getString(2), rs.getString(3),
-                    rs.getBoolean(4),df.format(rs.getDate(5)), rs.getInt(6)));
+                    rs.getBoolean(4),date, rs.getInt(6)));
         }
         return cl;
     }

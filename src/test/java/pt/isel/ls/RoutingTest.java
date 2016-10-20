@@ -3,6 +3,7 @@ package pt.isel.ls;
 import org.junit.Test;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Commands.GetChecklists;
+import pt.isel.ls.Commands.PostTemplatesTidCreate;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -29,4 +30,15 @@ public class RoutingTest {
 
         assertEquals(true, c == null);
     }
+
+    @Test
+    public void pathWithIDS() throws Exception {
+        String args[] = {"POST", "/templates/1/create"};
+
+        Routing r = new Routing(args);
+        Command c = r.Route();
+        assertEquals(true, c instanceof PostTemplatesTidCreate);
+    }
+
+
 }

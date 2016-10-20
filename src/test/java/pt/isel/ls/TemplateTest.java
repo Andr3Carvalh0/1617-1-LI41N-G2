@@ -37,7 +37,7 @@ public class TemplateTest {
 
     }
 
-    private void addTemplate(String name, String desc) throws SQLException {
+    private void addTemplate(String name, String desc, Connection con) throws SQLException {
 
         String s1 = "insert into template(Tp_name, Tp_desc) values (?, ?)";
         PreparedStatement ps = con.prepareStatement(s1);
@@ -125,7 +125,7 @@ public class TemplateTest {
             con = GetConnection.connect();
 
             //Populate - Template
-            addTemplate("Template1", "Desc");
+            addTemplate("Template1", "Desc", con);
 
             int id = getLastInsertedTemplate(con);
             HashMap<String, String> map = new HashMap<>();
@@ -164,13 +164,15 @@ public class TemplateTest {
         int tp_id = -1;
         int tp_task_id = -1;
         try{
-            params.put("name","template");
-            params.put("description","template");
+
             con = GetConnection.connect();
-            tp_id = (int) new PostTemplates().execute(params, con);
+            addTemplate("template", "template", con);
+
+            tp_id = getLastInsertedTemplate(con);
+
             params.put("name","template_task");
             params.put("description","template_task");
-            params.put("tid", Integer.toString(tp_id));
+            params.put("{tid}", Integer.toString(tp_id));
             tp_task_id = (int) new PostTemplatesTidTasks().execute(params, con);
 
             Template_Task tt = new Template_Task(tp_id,tp_task_id,params.get("name"), params.get("description"));
