@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -23,7 +24,7 @@ public class ChecklistTest {
     private final String TEST_DESC = "DESCRIPTION";
     private final String TEST_DATE = "06-10-2016";
 
-    private int getChecklistMaxID(Connection con) throws SQLException {
+    private int getLastInsertedChecklist(Connection con) throws SQLException {
         String s0 = "select max(Cl_id) from checklist";
         PreparedStatement ps = con.prepareStatement(s0);
 
@@ -46,6 +47,38 @@ public class ChecklistTest {
 
     }
 
+    private int getLastInsertedCL_Task(Connection con) throws SQLException {
+        String s0 = "select max(Cl_Task_id) from checklist_task";
+        PreparedStatement ps = con.prepareStatement(s0);
+
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        return rs.getInt(1);
+    }
+
+    private void generateChecklist_Tasks(int numberOfClosedTasks, int Cl_id, int numberOfTasks, Connection con) throws SQLException {
+        String s1 = "insert into checklist_task(Cl_id ,Cl_Task_index, Cl_Task_Closed, Cl_Task_name, Cl_Task_desc, Cl_Task_duedate) values (?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps = con.prepareStatement(s1);
+        ps.setInt(1, Cl_id);
+        ps.setInt(2, 0); //For now we leave Task_index = 0
+        ps.setInt(3, (numberOfClosedTasks > 0) ? 1 : 0);
+        ps.setString(4, TEST_NAME);
+        ps.setString(5, TEST_DESC);
+        ps.setString(6, TEST_DATE);
+
+        for (int i = 0; i < numberOfClosedTasks; i++) {
+            ps.execute();
+        }
+
+        ps.setInt(3, 0);
+        for (int i = 0; i < numberOfTasks - numberOfClosedTasks; i++) {
+            ps.execute();
+        }
+
+    }
+
     @Test
     public void testGetChecklist() throws SQLException {
         try {
@@ -61,7 +94,7 @@ public class ChecklistTest {
 
         }finally {
             if(con != null){
-                int id = getChecklistMaxID(con);
+                int id = getLastInsertedChecklist(con);
 
                 //Delete the test entry
                 String s1 = "delete from checklist where Cl_id = ?";
@@ -84,12 +117,12 @@ public class ChecklistTest {
 
             con = GetConnection.connect();
             int result = (int) new PostChecklist().execute(map, con);
-            assertEquals(getChecklistMaxID(con), result);
+            assertEquals(getLastInsertedChecklist(con), result);
 
         }finally {
             if(con != null){
 
-                int id = getChecklistMaxID(con);
+                int id = getLastInsertedChecklist(con);
 
                 //Delete the test entry
                 String s1 = "delete from checklist where Cl_id = ?";
@@ -104,11 +137,14 @@ public class ChecklistTest {
 
     @Test
     public void testPostChecklistsCidTasksLid() throws SQLException{
-        String cid = "-1", lid = "-1";
         try{
             con = GetConnection.connect();
-            cid = InsertChecklist(con);
-            lid = InsertTask(cid, con);
+
+            addChecklist(con);
+            String cid = getLastInsertedChecklist(con) + "";
+            int aux = Integer.parseInt(cid);
+            generateChecklist_Tasks(0, aux, 1, con);
+            String lid = getLastInsertedCL_Task(con) + "";
 
             HashMap<String, String> map = new HashMap<>();
             map.put("isClosed", "true");
@@ -120,12 +156,12 @@ public class ChecklistTest {
         }finally{
             if(con!=null) {
                 //1º - Apagar task criada.
-                String s = "delete from checklist_task where cl_task_id = " + lid;
+                String s = "delete from checklist_task where cl_task_id = " + getLastInsertedCL_Task(con);
                 PreparedStatement ps = con.prepareStatement(s);
                 ps.execute();
 
                 //2º - Apagar checklist criada.
-                s = "delete from checklist where cl_id = " + cid;
+                s = "delete from checklist where cl_id = " + getLastInsertedChecklist(con);
                 ps = con.prepareStatement(s);
                 ps.execute();
 
@@ -133,38 +169,6 @@ public class ChecklistTest {
                 con.close();
             }
         }
-    }
-
-    private String InsertTask(String cid, Connection con) throws SQLException {
-        //1º - Inserir task.
-        String s = "insert into checklist_task(cl_id, cl_task_name, cl_task_desc) values(" + cid + ", ?, ?)";
-        PreparedStatement ps = con.prepareStatement(s);
-        ps.setString(1, TEST_NAME);
-        ps.setString(2, TEST_DESC);
-        ps.execute();
-
-        //2º - Obter id da task criada.
-        s = "select max(cl_task_id) from checklist_task";
-        ps = con.prepareStatement(s);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        return Integer.toString(rs.getInt(1));
-    }
-
-    private String InsertChecklist(Connection con) throws SQLException {
-        //1º - Inserir checklist.
-        String s = "insert into checklist(cl_name, cl_desc) values(?, ?)";
-        PreparedStatement ps = con.prepareStatement(s);
-        ps.setString(1, TEST_NAME);
-        ps.setString(2, TEST_DESC);
-        ps.execute();
-
-        //2º - Obter id da checklist criada.
-        s = "select max(cl_id) from checklist";
-        ps = con.prepareStatement(s);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        return Integer.toString(rs.getInt(1));
     }
 
     private boolean getTaskIsClosedById(String cid, String lid, Connection con) throws SQLException {
@@ -176,7 +180,6 @@ public class ChecklistTest {
 
     @Test
     public void testPostChecklistCidTasks() throws SQLException {
-        int cid = -1, tid = -1;
         try {
             HashMap<String, String> map = new HashMap<>();
             // Create test checklist first
@@ -185,7 +188,7 @@ public class ChecklistTest {
             map.put("dueDate", TEST_DATE);
 
             con = GetConnection.connect();
-            cid = (int) new PostChecklist().execute(map, con);
+            int cid = (int) new PostChecklist().execute(map, con);
 
             // Then add checklist task
             map.put("name", "TEST_TASK_NAME");
@@ -194,19 +197,19 @@ public class ChecklistTest {
             map.put("dueDate", TEST_DATE);
 
             int result = (int) new PostChecklistCidTasks().execute(map, con);
-            tid = getChecklistTaskMaxID(con);
+            int tid = getLastInsertedCL_Task(con);
             assertEquals(tid, result);
 
         }finally{
             if(con != null){
 
                 // First delete created task
-                String s1 = "delete from checklist_task where Cl_Task_id = " + tid;
+                String s1 = "delete from checklist_task where Cl_Task_id = " + getLastInsertedCL_Task(con) ;
                 PreparedStatement ps = con.prepareStatement(s1);
                 ps.execute();
 
                 // Then delete created checklist
-                s1 = "delete from checklist_task where Cl_Task_id = " + cid;
+                s1 = "delete from checklist where Cl_id = " + getLastInsertedChecklist(con);
                 ps = con.prepareStatement(s1);
                 ps.execute();
 
@@ -214,16 +217,6 @@ public class ChecklistTest {
             }
         }
 
-    }
-
-    private int getChecklistTaskMaxID(Connection con) throws SQLException {
-        String s0 = "select max(Cl_Task_id) from checklist_task";
-        PreparedStatement ps = con.prepareStatement(s0);
-
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-
-        return rs.getInt(1);
     }
 
     @Test

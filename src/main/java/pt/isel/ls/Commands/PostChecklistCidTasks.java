@@ -12,46 +12,28 @@ public class PostChecklistCidTasks extends Command {
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
-        String s1;
-        String s2 = "select max(Cl_Task_Index) from checklist_task";
+        String s1 = "insert into checklist_task(Cl_id, Cl_Task_index, Cl_Task_name, Cl_Task_desc, Cl_Task_duedate)" +
+                "values (?, ?, ?, ?, CAST(? as datetime))";
 
-        int taskIndex;
+        String s2 = "select max(Cl_Task_id) from checklist_task";
 
-        PreparedStatement ps = null;
+        PreparedStatement ps = con.prepareStatement(s1);
 
-        ps = con.prepareStatement(s2);
-        ResultSet rs = ps.executeQuery();
-
-        rs.next();
-        taskIndex = rs.getInt(1) + 1;
-
-        if(params.containsKey("dueDate")){
-            s1 = "insert into checklist_task(Cl_id, Cl_Task_index, Cl_Task_name, Cl_Task_desc, Cl_Task_duedate)" +
-                    "values (?, ?, ?, ?, CAST(? as datetime))";
-
-            ps = con.prepareStatement(s1);
-
-            ps.setString(1, params.get("{cid}"));
-            ps.setString(2, Integer.toString(taskIndex));  //porque não usar ps.setInt(2, taskIndex) ?
-            ps.setString(3, params.get("name"));
-            ps.setString(4, params.get("description"));
-            ps.setString(5, params.get("dueDate"));
-        }
-
-        else {
-            s1 =  "insert into checklist_task(Cl_id, Cl_Task_index, Cl_Task_name, Cl_Task_desc)" +
-                    "values (?, ?, ?, ?)";
-            ps = con.prepareStatement(s1);
-
-            ps.setString(1, params.get("{cid}"));
-            ps.setString(2, Integer.toString(taskIndex));
-            ps.setString(3, params.get("name"));
-            ps.setString(4, params.get("description"));
-        }
+        ps.setString(1, params.get("{cid}"));
+        ps.setInt(2, 0);
+        ps.setString(3, params.get("name"));
+        ps.setString(4, params.get("description"));
+        ps.setString(5, params.get("dueDate"));
 
         ps.execute();
 
-        return taskIndex;
+        ps = con.prepareStatement(s2);
+
+        ResultSet rs = ps.executeQuery();
+
+        rs.next();
+        return rs.getInt(1);
+
     }
 
     @Override

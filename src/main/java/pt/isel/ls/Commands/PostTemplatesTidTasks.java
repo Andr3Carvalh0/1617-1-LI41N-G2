@@ -13,12 +13,14 @@ public class PostTemplatesTidTasks extends Command {
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
         String query = "insert into template_task values (?, ?, ?)";
-        PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = con.prepareStatement(query);
         ps.setString(1, params.get("tid"));
         ps.setString(2, params.get("name"));
         ps.setString(3, params.get("description"));
-        ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
+
+
+
+        ResultSet rs = ps.executeQuery();
         rs.next();
         return rs.getInt(1);
     }
