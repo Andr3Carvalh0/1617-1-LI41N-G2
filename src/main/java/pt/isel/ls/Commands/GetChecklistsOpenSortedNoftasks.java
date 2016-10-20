@@ -43,7 +43,7 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
-        String s1 = "select * from checklists where Cl_closed = 0";
+        String s1 = "select * from checklist where Cl_closed = 0";
         String s2 = "select * from checklist_task where Cl_id = ? and Cl_Task_closed = 0";
 
         LinkedList<Checklist> checklists = new LinkedList<>();
@@ -78,7 +78,7 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
                 boolean Cl_Task_closed = rs.getBoolean(4);
                 String Cl_Task_name = rs.getString(5);
                 String Cl_Task_desc = rs.getString(6);
-                String Cl_Task_duedate = df.format(rs.getDate(7));
+                String Cl_Task_duedate = (rs.getDate(7) != null) ? df.format(rs.getDate(7)) : null;
 
                 tasks_per_check.add(new Checklist_Task(Cl_Task_id, Cl_id, Cl_Task_index, Cl_Task_closed, Cl_Task_name, Cl_Task_desc, Cl_Task_duedate));
             }

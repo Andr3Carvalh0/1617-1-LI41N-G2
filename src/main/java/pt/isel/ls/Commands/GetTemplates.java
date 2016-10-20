@@ -21,7 +21,7 @@ public class GetTemplates extends Command {
         while(rs.next()){
             templateLinkedList.add(new Template(rs.getInt(1), rs.getString(2), rs.getString(3)));
         }
-        return null;
+        return templateLinkedList;
     }
 
     @Override

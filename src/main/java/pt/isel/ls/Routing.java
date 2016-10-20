@@ -16,9 +16,9 @@ public class Routing {
         if (args.length == 2 || args.length == 3) {
             method = args[0];
             path = args[1].split("/");
+            params = new HashMap<String, String>();
             if (args.length > 2) {
                 String[] paramsArray = args[2].split("&");
-                params = new HashMap<String, String>();
                 String[] aux;
                 for (int i = 0; i < paramsArray.length; i++) {
                     aux = paramsArray[i].split("=");
