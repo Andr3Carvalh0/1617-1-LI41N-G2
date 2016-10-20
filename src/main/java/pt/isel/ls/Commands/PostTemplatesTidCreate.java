@@ -56,7 +56,7 @@ public class PostTemplatesTidCreate extends Command {
             ps.execute();
             taskIndex++;
         }
-        return null;
+        return "POST /templates/{tid}/create... Success";
     }
 
     @Override

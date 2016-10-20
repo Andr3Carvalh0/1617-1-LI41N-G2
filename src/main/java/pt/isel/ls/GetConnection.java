@@ -8,7 +8,7 @@ import java.sql.Connection;
 public class GetConnection {
     static SQLServerDataSource src;
 
-    private final static int user = 1;
+    private final static int user = 0;
     private final static String serverPass[] = {"zaxscdvfbgnhmj", "sa", "sa"};
     private final static String serverName[] = {"WIN-773BLA1UH43", "user-PC", "ASUSTRON"};
 
