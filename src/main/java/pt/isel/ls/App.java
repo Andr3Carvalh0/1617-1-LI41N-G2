@@ -8,7 +8,6 @@ public class App {
             Routing r = new Routing(args);
             Command c = r.Route();
             r.run(c);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
