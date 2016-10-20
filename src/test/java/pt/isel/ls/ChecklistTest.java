@@ -279,7 +279,7 @@ public class ChecklistTest {
         }
     }
 
-    @Test(expected=SQLServerException.class)
+    @Test
     public void testGetChecklistsCidNoTemplate() throws SQLException {
         int TestChecklistId = -1;
         int[] TestTasksId = {-1, -1};

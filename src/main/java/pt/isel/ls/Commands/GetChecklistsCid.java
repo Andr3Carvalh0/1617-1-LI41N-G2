@@ -23,7 +23,7 @@ public class GetChecklistsCid extends Command {
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
         Checklist cl;
         LinkedList<Checklist_Task> ct = new LinkedList<Checklist_Task>();
-        Template tp;
+        Template tp = null;
         //Get Checklist info
         String query = "select * from checklist where Cl_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
@@ -40,7 +40,7 @@ public class GetChecklistsCid extends Command {
         ps = con.prepareStatement(query);
         ps.setInt(1, Integer.parseInt(params.get("{cid}")));
         rs = ps.executeQuery();
-        rs.next();
+        //rs.next();
         while (rs.next()){
             int Cl_Task_id = rs.getInt(1);
             int Cl_id = rs.getInt(2);
@@ -56,8 +56,7 @@ public class GetChecklistsCid extends Command {
         ps = con.prepareStatement(query);
         ps.setInt(1, cl.getTp_id());
         rs = ps.executeQuery();
-        rs.next();
-        tp = new Template(rs.getInt(1), rs.getString(2), rs.getString(3));
+        if(rs.next()) tp = new Template(rs.getInt(1), rs.getString(2), rs.getString(3));
         //Wrap it up
         DtoWrapper dw = new DtoWrapper();
         dw.setChecklist(cl);

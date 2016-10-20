@@ -7,7 +7,8 @@ public class App {
         try {
             Routing r = new Routing(args);
             Command c = r.Route();
-            r.run(c);
+            System.out.println(r.run(c));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -22,7 +22,7 @@ public class Checklist {
                 + "Description: "+ getDescription() +"\n"
                 + "Closed: "+ isClosed() +"\n"
                 + "DueDate: "+ getDueDate() +"\n"
-                + "Tp_Id: " + getTp_id();
+                + "Tp_Id: " + getTp_id()+"\n\n";
     }
 
     public boolean isClosed() {
