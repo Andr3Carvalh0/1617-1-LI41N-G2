@@ -13,6 +13,7 @@ import pt.isel.ls.Dtos.Template_Task;
 
 
 import static junit.framework.Assert.assertEquals;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +49,7 @@ public class TemplateTest {
         ps.execute();
     }
 
-    private void addTemplateTask(int Tp_id,  String Tp_Task_name, String Tp_Task_desc, Connection con) throws SQLException {
+    private void addTemplateTask(int Tp_id, String Tp_Task_name, String Tp_Task_desc, Connection con) throws SQLException {
         String s1 = "insert into template_task(Tp_id, Tp_Task_name, Tp_Task_desc) values (?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(s1);
 
@@ -85,8 +86,8 @@ public class TemplateTest {
             int result = (int) new PostTemplates().execute(map, con);
             assertEquals(getLastInsertedTemplate(con), result);
 
-        }finally {
-            if(con != null){
+        } finally {
+            if (con != null) {
 
                 int id = getLastInsertedTemplate(con);
 
@@ -99,6 +100,7 @@ public class TemplateTest {
             }
         }
     }
+
     @Test
     public void testPostTemplatesTidCreate() throws SQLException {
         try {
@@ -111,8 +113,8 @@ public class TemplateTest {
 
             new PostTemplatesTidCreate().execute(map, con);
 
-        }finally {
-            if(con != null){
+        } finally {
+            if (con != null) {
                 //TODO
                 con.close();
             }
@@ -129,7 +131,7 @@ public class TemplateTest {
 
             int id = getLastInsertedTemplate(con);
             HashMap<String, String> map = new HashMap<>();
-            map.put("{tid}", id+"");
+            map.put("{tid}", id + "");
 
             //Populate - Template_Task
             for (int i = 0; i < 5; i++) {
@@ -140,11 +142,11 @@ public class TemplateTest {
             addChecklistFromTemplate("Check1", "Desc", 0, null, id, con);
 
             DtoWrapper result = (DtoWrapper) new GetTemplatesTid().execute(map, con);
-            assertEquals(id, ((Template)result.getTemplate()).getTp_id());
-            assertEquals(1, ((LinkedList<Checklist>)result.getChecklist()).size());
-            assertEquals("Check1", ((LinkedList<Checklist>)result.getChecklist()).get(0).getName());
-        }finally {
-            if(con != null){
+            assertEquals(id, ((Template) result.getTemplate()).getTp_id());
+            assertEquals(1, ((LinkedList<Checklist>) result.getChecklist()).size());
+            assertEquals("Check1", ((LinkedList<Checklist>) result.getChecklist()).get(0).getName());
+        } finally {
+            if (con != null) {
 
                 int id = getLastInsertedTemplate(con);
 
@@ -160,22 +162,22 @@ public class TemplateTest {
 
     @Test
     public void PostTemplatesTidTasks() throws SQLException {
-        HashMap<String,String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<>();
         int tp_id = -1;
         int tp_task_id = -1;
-        try{
+        try {
 
             con = GetConnection.connect();
             addTemplate("template", "template", con);
 
             tp_id = getLastInsertedTemplate(con);
 
-            params.put("name","template_task");
-            params.put("description","template_task");
+            params.put("name", "template_task");
+            params.put("description", "template_task");
             params.put("{tid}", Integer.toString(tp_id));
             tp_task_id = (int) new PostTemplatesTidTasks().execute(params, con);
 
-            Template_Task tt = new Template_Task(tp_id,tp_task_id,params.get("name"), params.get("description"));
+            Template_Task tt = new Template_Task(tp_id, tp_task_id, params.get("name"), params.get("description"));
 
             PreparedStatement ps = con.prepareStatement("select * from template_task where Tp_id = ? and Tp_Task_id = ?");
             ps.setInt(1, tp_id);
@@ -183,21 +185,18 @@ public class TemplateTest {
             ResultSet rs = ps.executeQuery();
             rs.next();
 
-            assertEquals(tt.getTp_id(),rs.getInt(1));
-            assertEquals(tt.getTp_Task_id(),rs.getInt(2));
-            assertEquals(tt.getTp_Task_name(),rs.getString(3));
-            assertEquals(tt.getTp_Task_desc(),rs.getString(4));
-        }
-        finally {
-            if(con != null){
-                if(tp_id != -1 && tp_task_id != -1){
-                    PreparedStatement dels = con.prepareStatement("DELETE from template where Tp_id = ?");
-                    dels.setInt(1,tp_id);
-                }
+            assertEquals(tt.getTp_id(), rs.getInt(1));
+            assertEquals(tt.getTp_Task_id(), rs.getInt(2));
+            assertEquals(tt.getTp_Task_name(), rs.getString(3));
+            assertEquals(tt.getTp_Task_desc(), rs.getString(4));
+        } finally {
+            if (con != null) {
+                int id = getLastInsertedTemplate(con);
+                PreparedStatement dels = con.prepareStatement("DELETE from template where Tp_id = ?");
+                dels.setInt(1, id);
+                dels.execute();
                 con.close();
             }
         }
-
     }
-
 }

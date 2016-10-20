@@ -19,7 +19,7 @@ create table checklist(
 	Cl_duedate datetime, 
 	Tp_id int, 
 primary key(Cl_id),
-foreign key(Tp_id)REFERENCES template(Tp_id)
+foreign key(Tp_id)REFERENCES template(Tp_id) on delete cascade
 )
 
 create table checklist_task(
@@ -31,7 +31,7 @@ create table checklist_task(
 	Cl_Task_desc varchar(4000) NOT NULL, 
 	Cl_Task_duedate datetime,
 primary key(Cl_id, Cl_Task_id),
-foreign key(Cl_id)REFERENCES checklist(Cl_id)
+foreign key(Cl_id)REFERENCES checklist(Cl_id) on delete cascade
 )
 
 create table template_task(
@@ -40,7 +40,7 @@ create table template_task(
 	Tp_Task_name varchar(80) NOT NULL, 
 	Tp_Task_desc varchar(4000) NOT NULL,
 primary key(Tp_id, Tp_Task_id),
-foreign key(Tp_id)REFERENCES template(Tp_id)
+foreign key(Tp_id)REFERENCES template(Tp_id) on delete cascade
 )
 
 
@@ -49,11 +49,12 @@ insert into checklist(Cl_name, Cl_duedate, Cl_desc) values ('teste', cast('06-10
 select * from checklist
 select * from checklist_task
 select * from template
+select * from template_task
 delete from checklist
 delete from checklist_task
 delete from template_task
 delete from template
-drop table checklist_task
+drop table template
 
 select Cl_Task_index from checklist_task order by Cl_Task_index DESC
 select * from checklist
