@@ -1,8 +1,6 @@
 package pt.isel.ls;
 
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import junit.framework.Assert;
 import org.junit.Test;
 import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Checklist;
@@ -15,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.stream.Stream;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -82,17 +79,17 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testGetChecklist() throws SQLException {
+    public void testGetChecklist() throws Exception {
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             addChecklist(con, TEST_NAME, TEST_DESC, TEST_DATE);
 
             LinkedList result = (LinkedList) new GetChecklists().execute(null, con);
 
-            assertEquals(1, result.size());
-            assertEquals(true, ((Checklist) result.get(0)).getName().equals(TEST_NAME));
-            assertEquals(true, ((Checklist) result.get(0)).getDescription().equals(TEST_DESC));
-            assertEquals(true, ((Checklist) result.get(0)).getDueDate().equals(TEST_DATE));
+            assertEquals(true, result.size()>=1);
+            assertEquals(true, ((Checklist) result.get(result.size()-1)).getName().equals(TEST_NAME));
+            assertEquals(true, ((Checklist) result.get(result.size()-1)).getDescription().equals(TEST_DESC));
+            assertEquals(true, ((Checklist) result.get(result.size()-1)).getDueDate().equals(TEST_DATE));
 
         } finally {
             if (con != null) {
@@ -109,7 +106,7 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testPostChecklist() throws SQLException {
+    public void testPostChecklist() throws Exception {
         try {
 
             HashMap<String, String> map = new HashMap<>();
@@ -117,7 +114,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
 
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             int result = (int) new PostChecklist().execute(map, con);
             assertEquals(getLastInsertedChecklist(con), result);
 
@@ -138,9 +135,9 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testPostChecklistsCidTasksLid() throws SQLException {
+    public void testPostChecklistsCidTasksLid() throws Exception {
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
 
             addChecklist(con, TEST_NAME, TEST_DESC, TEST_DATE);
             String cid = getLastInsertedChecklist(con) + "";
@@ -176,14 +173,14 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testPostChecklistCidTasks() throws SQLException {
+    public void testPostChecklistCidTasks() throws Exception {
         try {
             HashMap<String, String> map = new HashMap<>();
             // Create test checklist first
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             int cid = (int) new PostChecklist().execute(map, con);
 
             // Then add checklist task
@@ -209,7 +206,7 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testGetChecklistsClosed() throws SQLException {
+    public void testGetChecklistsClosed() throws Exception {
         int[] TestChecklistsIds = {-1, -1, -1};
         try {
             HashMap<String, String> map = new HashMap<>();
@@ -217,7 +214,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
 
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 3; i++) {
                 TestChecklistsIds[i] = (int) pc.execute(map, con);
@@ -246,14 +243,14 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testGetChecklistsOpenSortedDuedate() throws SQLException {
+    public void testGetChecklistsOpenSortedDuedate() throws Exception {
         int[] TestChecklistsIds = {-1, -1, -1, -1};
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             String[] dates = {"2016-10-31", "2016-10-21", "2017-10-31", "2016-11-4"};
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 4; i++) {
                 map.put("dueDate", dates[i]);
@@ -280,7 +277,7 @@ public class ChecklistTest {
     }
 
     @Test
-    public void testGetChecklistsCidNoTemplate() throws SQLException {
+    public void testGetChecklistsCidNoTemplate() throws Exception {
         int TestChecklistId = -1;
         int[] TestTasksId = {-1, -1};
         try {
@@ -288,7 +285,7 @@ public class ChecklistTest {
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             //Create Checklist
             TestChecklistId = (int) new PostChecklist().execute(map, con);
             map.put("{cid}", Integer.toString(TestChecklistId));
@@ -301,8 +298,8 @@ public class ChecklistTest {
             DtoWrapper dw = (DtoWrapper) new GetChecklistsCid().execute(map, con);
             assertEquals(dw.getTemplate(), null);
             assertEquals(((Checklist) dw.getChecklist()).getId(), TestChecklistId);
-            assertEquals(((LinkedList<Checklist_Task>) dw.getCheclist_Task()).get(0).getCl_Task_id(), TestTasksId[0]);
-            assertEquals(((LinkedList<Checklist_Task>) dw.getCheclist_Task()).get(1).getCl_Task_id(), TestTasksId[1]);
+            assertEquals(((LinkedList<Checklist_Task>) dw.getChecklist_Task()).get(0).getCl_Task_id(), TestTasksId[0]);
+            assertEquals(((LinkedList<Checklist_Task>) dw.getChecklist_Task()).get(1).getCl_Task_id(), TestTasksId[1]);
         } finally {
             if (con != null) {
                 PreparedStatement dels;
@@ -318,7 +315,7 @@ public class ChecklistTest {
     @Test
     public void testChecklistsOpenSortedNofTasks() throws Exception {
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             addChecklist(con, "TESTE1", TEST_DESC, TEST_DATE);
             int checklist1 = getLastInsertedChecklist(con);
             addChecklist(con, "TESTE2",  TEST_DESC, TEST_DATE);
@@ -331,8 +328,8 @@ public class ChecklistTest {
             checklists = (LinkedList<Checklist>) new GetChecklistsOpenSortedNoftasks().execute(null, con);
 
             if(checklists != null){
-                assertEquals("TESTE2", checklists.get(0).getName());
-                assertEquals("TESTE1", checklists.get(1).getName());
+                assertEquals("TESTE2", checklists.get(checklists.size()-2).getName());
+                assertEquals("TESTE1", checklists.get(checklists.size()-1).getName());
             }
         }finally {
             if (con != null) {

@@ -10,17 +10,19 @@ public class PostTemplatesTidCreate extends Command {
     private final String method = "POST";
     private final String[] path = {"", "templates", "{tid}", "create"};
     @Override
-    public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
+    public Object execute(HashMap<String, String> params, Connection con) throws Exception {
 
         String templateId = (params.get("{tid}")); // O id da template escolhida será utilizado múltiplas vezes.
+        String s;
 
-        // 1º - Obter dados da template escolhida, porque podem ser necessários.
-        String s = "select * from template where Tp_id = " + templateId;
+        // 1 - Check if template exists in database, call appropriate exception if there isn't. Template data can be reused later.
+        s = "select * from template where Tp_id = " + templateId;
         PreparedStatement ps = con.prepareStatement(s);
         ResultSet rs = ps.executeQuery();
+        if (!rs.isBeforeFirst()) throw new Exception("ERROR: Template " + templateId + " does not exist.");
         rs.next();
         String templateName = rs.getString(2), templateDesc = rs.getString(3);
-//TODO Verificar se tem valores
+
         //2º - Criar a checklist. Alguns dos seus dados podem ser copiados da template, se não forem inseridos como parâmetros.
         s = "insert into checklist(Cl_name, Cl_desc, Cl_duedate, Tp_id) values(?, ?, CAST(? as datetime), ?)";
         ps = con.prepareStatement(s);

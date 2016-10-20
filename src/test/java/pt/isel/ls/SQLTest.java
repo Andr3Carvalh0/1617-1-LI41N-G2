@@ -10,9 +10,9 @@ public class SQLTest {
     Connection con = null;
 
     @Test
-    public void connectionTest() throws SQLException {
+    public void connectionTest() throws Exception {
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             assertEquals(true, con != null);
         } finally {
             assert con != null;

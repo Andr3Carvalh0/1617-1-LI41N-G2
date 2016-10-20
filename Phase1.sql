@@ -2,6 +2,7 @@
 Cl = Checklist
 Tp = Template
 */
+use LS_test
 use LS
 
 create table template(
@@ -70,7 +71,7 @@ select COUNT(*) from checklist_task where Cl_id = 17 and Cl_Task_closed = 0
 
 
 
--- Marcos's aux scripts --
+-- aux scripts --
 select * from checklist
 select * from checklist_task
 select * from template_task

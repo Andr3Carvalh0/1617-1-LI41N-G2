@@ -1,11 +1,14 @@
 package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
+import pt.isel.ls.Dtos.Router;
 
 public class App {
     public static void main(String[] args) {
         try {
-            Routing r = new Routing(args);
+            CommandParser cparser = new CommandParser(args);
+
+            Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
             Command c = r.Route();
             System.out.println(r.run(c));
 

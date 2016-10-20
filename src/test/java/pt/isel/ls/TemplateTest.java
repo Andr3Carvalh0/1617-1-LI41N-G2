@@ -87,9 +87,9 @@ public class TemplateTest {
 
 
     @Test
-    public void testPostTemplates() throws SQLException {
+    public void testPostTemplates() throws Exception {
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
 
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
@@ -114,13 +114,13 @@ public class TemplateTest {
     }
 
     @Test
-    public void testPostTemplatesTidCreate() throws SQLException {
+    public void testPostTemplatesTidCreate() throws Exception {
         int tid = -1, cid = -1;
         String s;
         PreparedStatement ps;
         ResultSet rs;
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
 
             addTemplate("TEST_TEMPLATE", "This is a test", con);
             tid = getLastInsertedTemplate(con);
@@ -150,7 +150,7 @@ public class TemplateTest {
     @Test
     public void testGetTemplatesTid() throws Exception {
         try {
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
 
             //Populate - Template
             addTemplate("Template1", "Desc", con);
@@ -191,7 +191,7 @@ public class TemplateTest {
         int tid1 = -1, tid2 = -1;
         try {
             // 1 - Populate templates.
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             addTemplate("TEST_TEMPLATE_1","This is the first test", con);
             tid1 = getLastInsertedTemplate(con);
             addTemplate("TEST_TEMPLATE_2", "This is the second test", con);
@@ -220,13 +220,14 @@ public class TemplateTest {
             }
         }
     }
-    public void PostTemplatesTidTasks() throws SQLException {
+    @Test
+    public void PostTemplatesTidTasks() throws Exception {
         HashMap<String, String> params = new HashMap<>();
         int tp_id = -1;
         int tp_task_id = -1;
         try {
 
-            con = GetConnection.connect();
+            con = GetConnection.connect(true);
             addTemplate("template", "template", con);
 
             tp_id = getLastInsertedTemplate(con);

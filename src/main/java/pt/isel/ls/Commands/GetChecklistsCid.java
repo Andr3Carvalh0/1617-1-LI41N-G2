@@ -60,7 +60,7 @@ public class GetChecklistsCid extends Command {
         //Wrap it up
         DtoWrapper dw = new DtoWrapper();
         dw.setChecklist(cl);
-        dw.setCheclist_Task(ct);
+        dw.setChecklist_Task(ct);
         dw.setTemplate(tp);
 
         return dw;
