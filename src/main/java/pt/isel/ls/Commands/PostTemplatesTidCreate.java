@@ -20,7 +20,7 @@ public class PostTemplatesTidCreate extends Command {
         ResultSet rs = ps.executeQuery();
         rs.next();
         String templateName = rs.getString(2), templateDesc = rs.getString(3);
-
+//TODO Verificar se tem valores
         //2º - Criar a checklist. Alguns dos seus dados podem ser copiados da template, se não forem inseridos como parâmetros.
         s = "insert into checklist(Cl_name, Cl_desc, Cl_duedate, Tp_id) values(?, ?, CAST(? as datetime), ?)";
         ps = con.prepareStatement(s);

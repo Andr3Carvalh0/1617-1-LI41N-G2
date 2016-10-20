@@ -74,6 +74,7 @@ public class Routing {
 
     public Object run(Command c) throws Exception {
         Connection con = null;
+        //todo transacoes
         try {
             con = GetConnection.connect();
             return c.execute(params, con);
