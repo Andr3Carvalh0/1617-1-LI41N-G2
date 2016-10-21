@@ -4,11 +4,10 @@ import org.junit.Test;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Commands.GetChecklists;
 import pt.isel.ls.Commands.PostTemplatesTidCreate;
-import pt.isel.ls.Dtos.Router;
 
 import static junit.framework.Assert.assertEquals;
 
-public class CommandParserTest {
+public class RouterTest {
 
 
     @Test
