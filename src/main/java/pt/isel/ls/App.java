@@ -1,7 +1,6 @@
 package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
-import pt.isel.ls.Dtos.Router;
 
 public class App {
     public static void main(String[] args) {

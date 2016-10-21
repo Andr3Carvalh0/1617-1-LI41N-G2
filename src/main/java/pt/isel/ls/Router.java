@@ -1,4 +1,4 @@
-package pt.isel.ls.Dtos;
+package pt.isel.ls;
 
 import pt.isel.ls.CommandList;
 import pt.isel.ls.CommandParser;
