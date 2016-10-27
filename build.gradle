@@ -6,3 +6,10 @@ dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
+
+task initDb(type:Exec) {
+	def testVars = System.getenv("LS_DBCONN_TEST_SQLSRV")
+	
+	commandLine 'sqlcmd', "-S user-PC -U sa -P sa -d LS_test"
+	commandLine 'sqlcmd', '-q', "create table template(Tp_id int identity (0, 1), Tp_name varchar(80) NOT NULL, Tp_desc varchar(4000) NOT NULL, primary key(Tp_id))"
+}
