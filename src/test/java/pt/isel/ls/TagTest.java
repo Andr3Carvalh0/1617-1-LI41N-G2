@@ -64,7 +64,7 @@ public class TagTest {
     }
 
     @Test
-    public void postAndDeleteTag() throws Exception {
+    public void TestpostAndDeleteTag() throws Exception {
         int result = -1;
         try {
             con = GetConnection.connect(true);
@@ -106,7 +106,7 @@ public class TagTest {
     }
 
     @Test
-    public void TestPostChecklistsCidTags() throws Exception {
+    public void TestPostChecklistsCidTagsAndThenDeletes() throws Exception {
         int cid = -1;
         int gid = -1;
         try{
@@ -130,6 +130,15 @@ public class TagTest {
             rs.next();
             assertEquals(gid, rs.getInt(1));
             assertEquals(cid, rs.getInt(2));
+
+            String dels = (String) new DeleteChecklistsCidTagsGid().execute(map,con);
+            assertEquals(dels, SUCCESS);
+            s = "select * from tag_checklist where Tg_id = ? and Cl_id = ?";
+            ps = con.prepareStatement(s);
+            ps.setInt(1,gid);
+            ps.setInt(2,cid);
+            rs = ps.executeQuery();
+            assertEquals(rs.next(),false);
 
         }
         finally {

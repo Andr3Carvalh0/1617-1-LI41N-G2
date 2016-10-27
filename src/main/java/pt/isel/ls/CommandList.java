@@ -28,7 +28,7 @@ public class CommandList {
         commandList.add(new GetTags());                         //              Done        Done
         commandList.add(new DeleteTagsGid());                   //              Done        Done
         commandList.add(new PostChecklistsCidTags());           //              Done        Done
-        commandList.add(new DeleteChecklistsCidTagsGid());      //              Done
+        commandList.add(new DeleteChecklistsCidTagsGid());      //              Done        Done
         commandList.add(new Options());                         //              Done
 
     }
