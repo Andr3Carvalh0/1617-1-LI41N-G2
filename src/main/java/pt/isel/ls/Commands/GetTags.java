@@ -17,11 +17,11 @@ public class GetTags extends Command {
         String s = "select * from template";
         PreparedStatement ps = con.prepareStatement(s);
         ResultSet rs = ps.executeQuery();
-        LinkedList<Tag> templateLinkedList = new LinkedList<>();
+        LinkedList<Tag> tagLinkedList = new LinkedList<>();
         while(rs.next()){
-            templateLinkedList.add(new Tag(rs.getInt(1), rs.getString(2), rs.getString(3)));
+            tagLinkedList.add(new Tag(rs.getInt(1), rs.getString(2), rs.getString(3)));
         }
-        return templateLinkedList;
+        return tagLinkedList;
     }
 
     @Override

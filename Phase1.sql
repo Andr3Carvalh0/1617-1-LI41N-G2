@@ -54,8 +54,8 @@ create table tag(
 create table tag_checklist(
 	Tg_id int,
 	Cl_id int,
-	foreign key(Tg_id)REFERENCES tag(Tg_id) on delete cascade, --confirmar
-	foreign key(Cl_id)REFERENCES checklist(Cl_id) on delete cascade --confirmar
+	foreign key(Tg_id)REFERENCES tag(Tg_id) ,
+	foreign key(Cl_id)REFERENCES checklist(Cl_id)
 )
 
 
