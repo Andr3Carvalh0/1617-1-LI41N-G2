@@ -44,6 +44,21 @@ primary key(Tp_id, Tp_Task_id),
 foreign key(Tp_id)REFERENCES template(Tp_id) on delete cascade
 )
 
+create table tag(
+	Tg_id int identity (0, 1),
+	Tg_name varchar(80) NOT NULL,
+	Tg_color varchar(10) NOT NULL,
+	primary key(Tg_id)
+)
+
+create table tag_checklist(
+	Tg_id int,
+	Cl_id int,
+	foreign key(Tg_id)REFERENCES tag(Tg_id) on delete cascade, --confirmar
+	foreign key(Cl_id)REFERENCES checklist(Cl_id) on delete cascade --confirmar
+)
+
+
 
 ------------------------------------------------------------------
 insert into checklist(Cl_name, Cl_duedate, Cl_desc) values ('teste', cast('06-10-2016' as datetime), 'jdfklmfgsdnfgsdoijgf')
@@ -51,6 +66,7 @@ select * from checklist
 select * from checklist_task
 select * from template
 select * from template_task
+
 delete from checklist
 delete from checklist_task
 delete from template_task
@@ -76,7 +92,11 @@ select * from checklist
 select * from checklist_task
 select * from template_task
 select * from template
+select * from tag
+select * from tag_checklist
 
+drop table tag_checklist
+drop table tag
 drop table checklist_task
 drop table checklist
 drop table template_task
