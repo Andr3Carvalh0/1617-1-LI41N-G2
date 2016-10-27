@@ -1,10 +1,7 @@
 package pt.isel.ls;
 
 import org.junit.Test;
-import pt.isel.ls.Commands.DeleteTagsGid;
-import pt.isel.ls.Commands.PostChecklistsCidTags;
-import pt.isel.ls.Commands.PostTags;
-import pt.isel.ls.Commands.PostTemplates;
+import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Tag;
 
 import java.sql.Connection;
@@ -12,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -43,7 +41,6 @@ public class TagTest {
         ResultSet rs = ps.getGeneratedKeys();
         rs.next();
         return rs.getInt(1);
-
     }
 
     private int addTag(Connection con, String name, String color) throws SQLException {
@@ -57,7 +54,13 @@ public class TagTest {
         ResultSet rs = ps.getGeneratedKeys();
         rs.next();
         return rs.getInt(1);
+    }
 
+    private void deleteTag(int gid, Connection con) throws SQLException {
+        String s = "delete from tag where Tg_id = ?";
+        PreparedStatement ps = con.prepareStatement(s);
+        ps.setInt(1,gid);
+        ps.execute();
     }
 
     @Test
@@ -95,10 +98,7 @@ public class TagTest {
         finally {
             if (con != null){
                 if (result != -1) {
-                    String dels = "delete from tag where Tg_id = ?";
-                    PreparedStatement ps = con.prepareStatement(dels);
-                    ps.setInt(1, result);
-                    ps.execute();
+                    deleteTag(result,con);
                 }
                 con.close();
             }
@@ -145,15 +145,34 @@ public class TagTest {
                     ps = con.prepareStatement(s);
                     ps.setInt(1,cid);
 
-                    s = "delete from tag where Tg_id = ?";
-                    ps = con.prepareStatement(s);
-                    ps.setInt(1,gid);
+                    deleteTag(gid,con);
                 }
                 con.close();
             }
         }
     }
 
+    @Test
+    public void TestGetTags() throws Exception {
+        int[] gid ={-1,-1,-1};
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            con = GetConnection.connect(true);
+            for(int i = 0; i<gid.length; i++)
+                gid[i] = addTag(con, TAG_NAME+i,TAG_COLOR+i);
 
-   
+            LinkedList<Tag> tl = (LinkedList<Tag>) new GetTags().execute(map,con);
+            for(int i=0; i<gid.length; i++){
+                assertEquals(tl.get(i).getTg_id(),gid[i]);
+            }
+        }
+        finally {
+            if(con!=null) {
+                if (gid[0] != -1) {
+                    for(int i=0; i<gid.length; i++) deleteTag(gid[i],con);
+                }
+            }
+        }
+
+    }
 }

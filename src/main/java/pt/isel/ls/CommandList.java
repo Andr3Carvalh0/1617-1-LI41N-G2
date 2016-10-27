@@ -25,7 +25,7 @@ public class CommandList {
         commandList.add(new GetChecklistsOpenSortedNoftasks()); //Andre         Done        Done
 
         commandList.add(new PostTags());                        //              Done        Done
-        commandList.add(new GetTags());                         //              Done
+        commandList.add(new GetTags());                         //              Done        Done
         commandList.add(new DeleteTagsGid());                   //              Done        Done
         commandList.add(new PostChecklistsCidTags());           //              Done        Done
         commandList.add(new DeleteChecklistsCidTagsGid());      //              Done

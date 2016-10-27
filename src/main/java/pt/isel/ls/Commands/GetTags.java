@@ -14,7 +14,7 @@ public class GetTags extends Command {
     private String[] path = {"", "tags"};
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
-        String s = "select * from template";
+        String s = "select * from tag";
         PreparedStatement ps = con.prepareStatement(s);
         ResultSet rs = ps.executeQuery();
         LinkedList<Tag> tagLinkedList = new LinkedList<>();
