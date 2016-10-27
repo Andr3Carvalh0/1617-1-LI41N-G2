@@ -2,6 +2,7 @@ package pt.isel.ls;
 
 import org.junit.Test;
 import pt.isel.ls.Commands.DeleteTagsGid;
+import pt.isel.ls.Commands.PostChecklistsCidTags;
 import pt.isel.ls.Commands.PostTags;
 import pt.isel.ls.Commands.PostTemplates;
 import pt.isel.ls.Dtos.Tag;
@@ -19,6 +20,9 @@ public class TagTest {
     private Connection con = null;
     private final String TAG_COLOR = "Blood_Red";
     private final String TAG_NAME = "I_am_a_test_tag";
+    private final String CHECKLIST_NAME = "I_am_a_test_checklist";
+    private final String CHECKLIST_DESCRIPTION = "I_am_a_test_checklist";
+    private final String CHECKLIST_DATE = "06-10-2016";
 
     private int getLastInsertedTag(Connection con) throws SQLException {
         String s = "select max(Tg_id) from tag";
@@ -26,6 +30,34 @@ public class TagTest {
         ResultSet rs = ps.executeQuery();
         rs.next();
         return rs.getInt(1);
+    }
+
+    private int addChecklist(Connection con, String name, String desc, String date) throws SQLException {
+        String s1 = "insert into checklist(Cl_name,  Cl_desc, Cl_duedate) values (?, ?, CAST(? as datetime))";
+        PreparedStatement ps = con.prepareStatement(s1, PreparedStatement.RETURN_GENERATED_KEYS);
+
+        ps.setString(1, name);
+        ps.setString(2, desc);
+        ps.setString(3, date);
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        rs.next();
+        return rs.getInt(1);
+
+    }
+
+    private int addTag(Connection con, String name, String color) throws SQLException {
+        String s1 = "insert into tag values (?, ?)";
+        PreparedStatement ps = con.prepareStatement(s1, PreparedStatement.RETURN_GENERATED_KEYS);
+
+        ps.setString(1, name);
+        ps.setString(2, color);
+
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        rs.next();
+        return rs.getInt(1);
+
     }
 
     @Test
@@ -73,7 +105,55 @@ public class TagTest {
         }
     }
 
-    /*@Test
-    public void*/
+    @Test
+    public void TestPostChecklistsCidTags() throws Exception {
+        int cid = -1;
+        int gid = -1;
+        try{
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TAG_NAME);
+            map.put("color", TAG_COLOR);
+            con = GetConnection.connect(true);
+            cid = addChecklist(con, CHECKLIST_NAME,CHECKLIST_DESCRIPTION, CHECKLIST_DATE);
+            gid = addTag(con, TAG_NAME, TAG_COLOR);
+            map.put("cid", Integer.toString(cid));
+            map.put("gid", Integer.toString(gid));
 
+            String result = (String) new PostChecklistsCidTags().execute(map,con);
+            assertEquals(SUCCESS, result);
+
+            String s = "select * from tag_checklist where Tg_id = ? and Cl_id = ?";
+            PreparedStatement ps = con.prepareStatement(s);
+            ps.setInt(1,gid);
+            ps.setInt(2,cid);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            assertEquals(gid, rs.getInt(1));
+            assertEquals(cid, rs.getInt(2));
+
+        }
+        finally {
+            if(con!=null){
+                if(cid != -1){
+                    String s = "delete from tag_checklist where Tg_id = ? and Cl_id = ?";
+                    PreparedStatement ps = con.prepareStatement(s);
+                    ps.setInt(1,gid);
+                    ps.setInt(2,cid);
+                    ps.execute();
+
+                    s = "delete from checklist where Cl_id = ?";
+                    ps = con.prepareStatement(s);
+                    ps.setInt(1,cid);
+
+                    s = "delete from tag where Tg_id = ?";
+                    ps = con.prepareStatement(s);
+                    ps.setInt(1,gid);
+                }
+                con.close();
+            }
+        }
+    }
+
+
+   
 }
