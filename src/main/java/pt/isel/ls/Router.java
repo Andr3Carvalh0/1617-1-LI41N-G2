@@ -47,7 +47,7 @@ public class Router {
     }
 
     public Object run(Command c) throws Exception {
-        Connection con = EnvVars.connect(false);
+        Connection con = GetConnection.connect(false);
         con.setAutoCommit(false);
         Object obj = null;
         try {

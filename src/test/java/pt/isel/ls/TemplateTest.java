@@ -89,7 +89,7 @@ public class TemplateTest {
     @Test
     public void testPostTemplates() throws Exception {
         try {
-            con = EnvVars.connect(true);
+            con = GetConnection.connect(true);
 
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
@@ -120,7 +120,7 @@ public class TemplateTest {
         PreparedStatement ps;
         ResultSet rs;
         try {
-            con = EnvVars.connect(true);
+            con = GetConnection.connect(true);
 
             addTemplate("TEST_TEMPLATE", "This is a test", con);
             tid = getLastInsertedTemplate(con);
@@ -150,7 +150,7 @@ public class TemplateTest {
     @Test
     public void testGetTemplatesTid() throws Exception {
         try {
-            con = EnvVars.connect(true);
+            con = GetConnection.connect(true);
 
             //Populate - Template
             addTemplate("Template1", "Desc", con);
@@ -191,7 +191,7 @@ public class TemplateTest {
         int tid1 = -1, tid2 = -1;
         try {
             // 1 - Populate templates.
-            con = EnvVars.connect(true);
+            con = GetConnection.connect(true);
             addTemplate("TEST_TEMPLATE_1","This is the first test", con);
             tid1 = getLastInsertedTemplate(con);
             addTemplate("TEST_TEMPLATE_2", "This is the second test", con);
@@ -227,7 +227,7 @@ public class TemplateTest {
         int tp_task_id = -1;
         try {
 
-            con = EnvVars.connect(true);
+            con = GetConnection.connect(true);
             addTemplate("template", "template", con);
 
             tp_id = getLastInsertedTemplate(con);

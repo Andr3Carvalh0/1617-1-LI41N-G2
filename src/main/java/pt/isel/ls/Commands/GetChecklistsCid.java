@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetChecklistsCid extends Command {
+public class GetChecklistsCid extends Command implements Get_Command{
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
     private final String method = "GET";
     private final String[] path = {"", "checklists", "{cid}"};
@@ -72,5 +72,10 @@ public class GetChecklistsCid extends Command {
     @Override
     public String[] getPath() {
         return path;
+    }
+
+    @Override
+    public LinkedList<HashMap<String, String[]>> prepareForTransformartion() {
+        return null;
     }
 }

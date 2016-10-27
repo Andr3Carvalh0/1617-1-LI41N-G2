@@ -1,0 +1,15 @@
+{
+  "class": [<<class_types>>],
+  "properties":{
+    "count": [<<count_number>>]
+  },
+  "entities": [
+    {
+      "class": [<<class_name>>],
+      "properties":
+      [<<#FOR_M>>]{
+        <<#FOR>><<Prop_Name>> : <<Prop_Value>>
+      }[<<#END_M>>]
+    }
+  ]
+}

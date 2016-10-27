@@ -4,7 +4,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 import java.sql.Connection;
 
-public class EnvVars {
+public class GetConnection {
     static SQLServerDataSource src;
 
     // Environment variables

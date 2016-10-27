@@ -1,7 +1,6 @@
 package pt.isel.ls.Commands;
 
 import pt.isel.ls.Dtos.Tag;
-import pt.isel.ls.Dtos.Template;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +8,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetTags extends Command {
+public class GetTags extends Command implements Get_Command{
     private String method = "GET";
     private String[] path = {"", "tags"};
     @Override
@@ -30,5 +29,10 @@ public class GetTags extends Command {
     @Override
     public String[] getPath() {
         return path;
+    }
+
+    @Override
+    public LinkedList<HashMap<String, String[]>> prepareForTransformartion() {
+        return null;
     }
 }

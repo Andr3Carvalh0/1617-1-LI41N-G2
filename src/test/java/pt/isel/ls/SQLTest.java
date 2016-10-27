@@ -11,7 +11,7 @@ public class SQLTest {
     @Test
     public void connectionTest() throws Exception {
         try {
-            con = EnvVars.connect(true);
+            con = GetConnection.connect(true);
             assertEquals(true, con != null);
         } finally {
             assert con != null;

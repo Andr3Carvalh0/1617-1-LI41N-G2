@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 
-public class GetTemplatesTid extends Command {
+public class GetTemplatesTid extends Command implements Get_Command{
     private final String method = "GET";
     private final String[] path = {"", "templates", "{tid}"};
 
@@ -88,5 +88,10 @@ public class GetTemplatesTid extends Command {
     @Override
     public String[] getPath() {
         return path;
+    }
+
+    @Override
+    public LinkedList<HashMap<String, String[]>> prepareForTransformartion() {
+        return null;
     }
 }
