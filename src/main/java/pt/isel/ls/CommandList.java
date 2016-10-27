@@ -23,6 +23,14 @@ public class CommandList {
         commandList.add(new GetChecklistsClosed());             //Marcos        Done        Done
         commandList.add(new GetChecklistsOpenSortedDueDate());  //Gonçalo*      Done        Done
         commandList.add(new GetChecklistsOpenSortedNoftasks()); //Andre         Done        Done
+
+        commandList.add(new PostTags());                        //              Done
+        commandList.add(new GetTags());                         //              Done
+        commandList.add(new DeleteTagsGid());                   //              Done?
+        commandList.add(new PostChecklistsCidTags());           //              Done?
+        commandList.add(new DeleteChecklistsCidTagsGid());      //              Done?
+        commandList.add(new Options());                         //              Done?
+
     }
 
     public LinkedList<Command> getCommandList(){
