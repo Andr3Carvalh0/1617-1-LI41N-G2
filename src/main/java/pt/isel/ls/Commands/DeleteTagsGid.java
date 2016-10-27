@@ -18,7 +18,7 @@ public class DeleteTagsGid extends Command {
         ps = con.prepareStatement(s1);
         ps.setString(1, params.get("gid"));
         ps.executeUpdate();
-        return null;
+        return "Success!";
     }
 
     @Override

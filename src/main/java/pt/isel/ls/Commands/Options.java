@@ -30,8 +30,7 @@ public class Options extends Command {
                 "OPTIONS / \n" +
                 "EXIT /"+
                 "------------- \n";
-        System.out.println(commandList);
-        return null;
+        return commandList;
     }
 
     @Override

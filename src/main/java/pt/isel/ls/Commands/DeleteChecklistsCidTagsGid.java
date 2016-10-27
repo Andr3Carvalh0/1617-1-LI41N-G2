@@ -14,7 +14,7 @@ public class DeleteChecklistsCidTagsGid extends Command {
         ps.setString(1, params.get("gid"));
         ps.setString(1, params.get("cid"));
         ps.executeUpdate();
-        return null;
+        return "Success!";
     }
 
     @Override

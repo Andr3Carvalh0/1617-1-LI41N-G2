@@ -1,6 +1,7 @@
 package pt.isel.ls;
 
 import org.junit.Test;
+import pt.isel.ls.Commands.DeleteTagsGid;
 import pt.isel.ls.Commands.PostTags;
 import pt.isel.ls.Commands.PostTemplates;
 import pt.isel.ls.Dtos.Tag;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import static junit.framework.Assert.assertEquals;
 
 public class TagTest {
+    private static final String SUCCESS = "Success!" ;
     private Connection con = null;
     private final String TAG_COLOR = "Blood_Red";
     private final String TAG_NAME = "I_am_a_test_tag";
@@ -27,7 +29,7 @@ public class TagTest {
     }
 
     @Test
-    public void postAndGetTag() throws Exception {
+    public void postAndDeleteTag() throws Exception {
         int result = -1;
         try {
             con = GetConnection.connect(true);
@@ -45,6 +47,18 @@ public class TagTest {
             assertEquals(result, rs.getInt(1));
             assertEquals(TAG_NAME, rs.getString(2));
             assertEquals(TAG_COLOR, rs.getString(3));
+
+            String r = (String) new DeleteTagsGid().execute(map,con);
+            assertEquals(SUCCESS, r);
+
+            s = "select * from tag where Tg_id = ?";
+            ps = con.prepareStatement(s);
+            ps.setInt(1,result);
+            rs = ps.executeQuery();
+            rs.next();
+            int d = 0;
+            while(rs.next())d++;
+            assertEquals(0,d);
         }
         finally {
             if (con != null){
@@ -58,5 +72,8 @@ public class TagTest {
             }
         }
     }
+
+    /*@Test
+    public void*/
 
 }
