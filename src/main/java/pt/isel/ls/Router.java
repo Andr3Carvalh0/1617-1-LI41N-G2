@@ -1,9 +1,6 @@
 package pt.isel.ls;
 
-import pt.isel.ls.CommandList;
-import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
-import pt.isel.ls.GetConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -50,7 +47,7 @@ public class Router {
     }
 
     public Object run(Command c) throws Exception {
-        Connection con = GetConnection.connect(false);
+        Connection con = EnvVars.connect(false);
         con.setAutoCommit(false);
         Object obj = null;
         try {

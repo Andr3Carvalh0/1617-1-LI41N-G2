@@ -81,7 +81,7 @@ public class ChecklistTest {
     @Test
     public void testGetChecklist() throws Exception {
         try {
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             addChecklist(con, TEST_NAME, TEST_DESC, TEST_DATE);
 
             LinkedList result = (LinkedList) new GetChecklists().execute(null, con);
@@ -114,7 +114,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
 
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             int result = (int) new PostChecklist().execute(map, con);
             assertEquals(getLastInsertedChecklist(con), result);
 
@@ -137,7 +137,7 @@ public class ChecklistTest {
     @Test
     public void testPostChecklistsCidTasksLid() throws Exception {
         try {
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
 
             addChecklist(con, TEST_NAME, TEST_DESC, TEST_DATE);
             String cid = getLastInsertedChecklist(con) + "";
@@ -180,7 +180,7 @@ public class ChecklistTest {
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             int cid = (int) new PostChecklist().execute(map, con);
 
             // Then add checklist task
@@ -214,7 +214,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
 
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 3; i++) {
                 TestChecklistsIds[i] = (int) pc.execute(map, con);
@@ -250,7 +250,7 @@ public class ChecklistTest {
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             String[] dates = {"2016-10-31", "2016-10-21", "2017-10-31", "2016-11-4"};
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 4; i++) {
                 map.put("dueDate", dates[i]);
@@ -285,7 +285,7 @@ public class ChecklistTest {
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             //Create Checklist
             TestChecklistId = (int) new PostChecklist().execute(map, con);
             map.put("{cid}", Integer.toString(TestChecklistId));
@@ -315,7 +315,7 @@ public class ChecklistTest {
     @Test
     public void testChecklistsOpenSortedNofTasks() throws Exception {
         try {
-            con = GetConnection.connect(true);
+            con = EnvVars.connect(true);
             addChecklist(con, "TESTE1", TEST_DESC, TEST_DATE);
             int checklist1 = getLastInsertedChecklist(con);
             addChecklist(con, "TESTE2",  TEST_DESC, TEST_DATE);
