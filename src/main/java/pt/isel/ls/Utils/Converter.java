@@ -17,7 +17,7 @@ public class Converter{
     private final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>","<<#FOR_M>>","<<#END_M>>"};
 
     public Converter(String out, String baseFile){
-        outputName = (out != null) ? out : "index.html";
+        outputName = out;
         this.baseFile = baseFile;
     }
 
@@ -47,7 +47,12 @@ public class Converter{
     // 3rd - Concatunate everything to make a valid html file
     // 4rd - Search for not applyed marks, and try to change them
     // 5th - Remove not used marks 
-    public void compileHTML(LinkedList<HashMap<String, String[]>> list){
+    public void compile(LinkedList<HashMap<String, String[]>> list, boolean isHTML){
+        //Make this the generic-ist way possible
+        String[] marks = isHTML ? SUPPORTED_MARKERS_HTML : SUPPORTED_MARKERS_JSON;
+        String marker_begin = isHTML ? lookFor_begin_HTML : lookFor_begin_JSON;
+        String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
+
 		for(int i = 0; i < message.size(); i++){
             String line = message.get(i);
 
@@ -58,15 +63,15 @@ public class Converter{
                 int initial_pos = i;
                 int end_pos = 0;
 
-                if(line.contains(SUPPORTED_MARKERS_HTML[1])){
+                if(line.contains(marks[1]) ){
 
                     //1st step
-                	for(int k = i; k < message.size() && !(line = message.get(k)).contains(SUPPORTED_MARKERS_HTML[2]); k++, i++){
+                	for(int k = i; k < message.size() && !(line = message.get(k)).contains(marks[2]); k++, i++){
                     	//Remove Special Chars		                
-                        for (String marks : SUPPORTED_MARKERS_HTML) {
-                            line = line.replace(marks, "");
+                        for (String mark : marks) {
+                            line = line.replace(mark, "");
                         }
-	                    line = line.replace(lookFor_begin_HTML + lookFor_end_HTML, "");
+	                    line = line.replace(marker_begin + marker_end, "");
 
                     	aux.add(line);
                     	end_pos = k;
@@ -75,26 +80,20 @@ public class Converter{
                  	LinkedList<String> last = new LinkedList<>();
 
                     //2nd
-                    for (HashMap<String, String[]> aList : list) {
+                    for (HashMap<String, String[]> current_map : list) {
                         for (String aux_values : aux) {
                             line = aux_values;
                             result = "";
 
-                            map = aList;
-
-                            for (String key : map.keySet()) {
-                                String flag = lookFor_begin_HTML + key + lookFor_end_HTML;
+                            for (String key : current_map.keySet()) {
+                                String flag = marker_begin + key + marker_end;
 
                                 if (line.contains(flag)) {
-                                    result += copyValues(line, flag, map.get(key));
+                                    result += copyValues(line, flag, current_map.get(key));
                                 }
 
                             }
-                            if (!result.equals("")) {
-                                last.add(result);
-                            } else {
-                                last.add(aux_values);
-                            }
+                            last.add((!result.equals("")) ?result : aux_values);
                         }
                     }
 
@@ -112,8 +111,8 @@ public class Converter{
             }
         }
 
-        checkLostIDs(list);
-        removeNotUsedMarkers();
+        checkLostIDs(list, isHTML);
+        removeNotUsedMarkers(isHTML);
     }
 
     // Saves the string message into the outputName file
@@ -137,24 +136,31 @@ public class Converter{
         return res;
     }
 
-    private void checkLostIDs(LinkedList<HashMap<String, String[]>> list){
+    private void checkLostIDs(LinkedList<HashMap<String, String[]>> list, boolean isHTML){
+        String marker_begin = isHTML ? lookFor_begin_HTML : lookFor_begin_JSON;
+        String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
+
         for(int i = 0; i < message.size(); i++){
             String line = message.get(i);
 
             for (HashMap<String, String[]> map : list) {
                 for (String key : map.keySet()) {
-                    String flag = lookFor_begin_HTML + key + lookFor_end_HTML;
+                    String flag = marker_begin + key + marker_end;
                     if (line.contains(flag)) {
                         message.set(i, copyValues(line, flag, map.get(key)));
+                        if(!isHTML){ //Add "," to json
+                        }
                     }
                 }
             }   
         }
     }
 
-    private void removeNotUsedMarkers(){
+    private void removeNotUsedMarkers(boolean isHTML){
+        String[] marks = isHTML ? SUPPORTED_MARKERS_HTML : SUPPORTED_MARKERS_JSON;
+
         for(int i = 0; i < message.size(); i++){
-            for (String mark : SUPPORTED_MARKERS_HTML) {
+            for (String mark : marks) {
                 if (message.get(i).contains(mark)) {
                     message.set(i, message.get(i).replace(mark, ""));
                 }
