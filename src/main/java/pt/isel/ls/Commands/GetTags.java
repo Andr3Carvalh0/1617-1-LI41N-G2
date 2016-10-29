@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetTags extends Command implements Get_Command{
+public class GetTags extends Command implements GetCommand {
     private String method = "GET";
     private String[] path = {"", "tags"};
     @Override
@@ -32,7 +32,7 @@ public class GetTags extends Command implements Get_Command{
     }
 
     @Override
-    public LinkedList<HashMap<String, String[]>> prepareForTransformartion() {
+    public LinkedList<HashMap<String, String[]>> prepareForTransformartion(Boolean isHTML, Object obj) {
         return null;
     }
 }

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetChecklistsOpenSortedDueDate extends Command implements Get_Command{
+public class GetChecklistsOpenSortedDueDate extends Command implements GetCommand {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
     private final String method = "GET";
     private final String[] path = {"", "checklists", "open", "sorted", "duedate"};
@@ -42,7 +42,7 @@ public class GetChecklistsOpenSortedDueDate extends Command implements Get_Comma
     }
 
     @Override
-    public LinkedList<HashMap<String, String[]>> prepareForTransformartion() {
+    public LinkedList<HashMap<String, String[]>> prepareForTransformartion(Boolean isHTML, Object obj) {
         return null;
     }
 }

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetChecklists extends Command implements Get_Command{
+public class GetChecklists extends Command implements GetCommand {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
     private final String method = "GET";
     private final String[] path = {"", "checklists"};
@@ -49,7 +49,19 @@ public class GetChecklists extends Command implements Get_Command{
     }
 
     @Override
-    public LinkedList<HashMap<String, String[]>> prepareForTransformartion() {
-        return null;
+    public LinkedList<HashMap<String, String[]>> prepareForTransformartion(Boolean isHTML, Object obj) {
+        LinkedList<HashMap<String, String[]>> list = new LinkedList<>();
+        HashMap<String, String[]> map = new HashMap<>();
+
+
+        if(isHTML){
+
+
+
+        }else{
+
+
+        }
+        return list;
     }
 }

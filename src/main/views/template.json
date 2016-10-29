@@ -1,15 +1,19 @@
 {
-  "class": [<<class_types>>],
+  "class": [
+    <<class_types>>
+  ],
   "properties":{
-    <<#FOR>><<Prop_Name_Header>> : <<Prop_Value_Header>>
+    <<#FOR>><<prop_header>>
   },
   "entities": [
-    {
-      "class": [<<class_name>>],
-      "properties":
-      [<<#FOR_M>>]{
-      <<#FOR>><<Prop_Name>> : <<Prop_Value>>
-    }[<<#END_M>>]
-  }
+    <<#FOR_M>>{
+      "class": [
+        <<#FOR>><<class_name>>
+      ],
+      "properties":{
+        <<#FOR>><<prop_body>>
+      }
+    },
+  <<#END_M>>
   ]
 }

@@ -12,10 +12,12 @@ public class App {
             if(args.length == 0){
                 enterInteractiveMode();
             }
-            else  if (args.length >= 2 && args.length <= 4){
+            else if (args.length >= 2 && args.length <= 4){
                 CommandParser cparser = new CommandParser(args);
                 Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
                 Command c = r.Route();
+
+
                 System.out.println(r.run(c));
             } else throw new Exception("Invalid number of arguments.");
         } catch (Exception e) {
