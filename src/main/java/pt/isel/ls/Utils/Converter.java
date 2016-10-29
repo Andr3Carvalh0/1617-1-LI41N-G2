@@ -24,7 +24,7 @@ public class Converter{
     }
 
     //Reads file to memory
-    public void allocate() throws Exception{
+    private void allocate() throws Exception{
         Scanner io = null;
         try{
             io = new Scanner(new File(baseFile));
@@ -38,11 +38,13 @@ public class Converter{
         }finally{ if(io != null){ io.close(); }}
     }
 
-    public void compile(LinkedList<HashMap<String, String[]>> list){
+    public void compile(LinkedList<HashMap<String, String[]>> list) throws Exception {
         //Make this the generic-ist way possible
         String[] marks = isHTML ? SUPPORTED_MARKERS_HTML : SUPPORTED_MARKERS_JSON;
         String marker_begin = isHTML ? lookFor_begin_HTML : lookFor_begin_JSON;
         String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
+
+        allocate();
 
         lookForFor_M(list, marks, marker_begin, marker_end);
 
@@ -50,10 +52,13 @@ public class Converter{
 
         //Cleanup
         removeNotUsedMarkers(marks);
+
+        commit();
+
     }
 
     // Saves the string message into the outputName file
-    public void commit() throws Exception{
+    private void commit() throws Exception{
         try{
             PrintWriter writer = new PrintWriter(outputName, "UTF-8");
             writer.println(generateMessage());

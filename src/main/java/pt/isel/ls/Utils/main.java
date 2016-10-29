@@ -8,6 +8,7 @@
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
 *
 */
+
 package pt.isel.ls.Utils;
 
 import java.util.*;
@@ -90,15 +91,11 @@ public class main{
             /*
             System.out.println("<---- BEGIN HTML TEST ---->");
             Converter c = new Converter("index.html", main.class.getClassLoader().getResource("main/views/template.html").getPath(), true);
-            c.allocate();
             c.compile(listHTML);
-            c.commit();
 
             System.out.println("<---- BEGIN JSON TEST ---->");
                 Converter c1 = new Converter("index.json",null, false);
-                c1.allocate();
                 c1.compile(listJSON);
-                c1.commit();
             */
         }catch(Exception e){
             e.printStackTrace();
