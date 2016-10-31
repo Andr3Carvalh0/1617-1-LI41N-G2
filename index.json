@@ -4,8 +4,7 @@
     "collection"
   ],
   "properties":{
-    "name" : "LS Phase 2",
-    "description" : "complete LS phase 2"
+    "count" : "2"
   },
   "entities": [
     {

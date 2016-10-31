@@ -55,7 +55,8 @@ public class main{
         String class_types[] = {"\"checklist\"", "\"collection\""};
         map.put("class_types", class_types);
 
-        String props[] = {"\"name\" : \"LS Phase 2\"", "\"description\" : \"complete LS phase 2\""};
+       // String props[] = {"\"name\" : \"LS Phase 2\"", "\"description\" : \"complete LS phase 2\""};
+        String props[] = {"\"count\" : \"2\""};
         map.put("prop_header", props);
 
 
@@ -80,15 +81,12 @@ public class main{
 
         try{
             System.out.println("<---- BEGIN HTML TEST ---->");
-
-            System.out.println(main.class.getClassLoader().getResource("./").getPath());
-
             Converter c = new Converter("index.html", main.class.getClassLoader().getResource("template.html").getPath(), true);
             c.compile(listHTML);
 
 
             System.out.println("<---- BEGIN JSON TEST ---->");
-                Converter c1 = new Converter("index.json",main.class.getClassLoader().getResource("template.json    ").getPath(), false);
+                Converter c1 = new Converter("index.json",main.class.getClassLoader().getResource("template.json").getPath(), false);
                 c1.compile(listJSON);
 
         }catch(Exception e){

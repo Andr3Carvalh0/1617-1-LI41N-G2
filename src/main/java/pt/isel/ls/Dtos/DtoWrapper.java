@@ -1,11 +1,13 @@
 package pt.isel.ls.Dtos;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 public class DtoWrapper {
     private Object Checklist;
     private Object Checklist_Task;
     private Object Template;
     private Object Template_Task;
-
 
     public Object getChecklist() {
         return Checklist;
@@ -55,7 +57,20 @@ public class DtoWrapper {
         if(Template_Task != null){
             res += "Template's Tasks Information:\n" + Template_Task.toString();
         }
-
         return res;
+    }
+
+    public LinkedList<HashMap<String, String[]>> toHTML(){
+
+
+
+
+        return null;
+    }
+
+    public LinkedList<HashMap<String, String[]>> toJSON(){
+
+
+        return null;
     }
 }
