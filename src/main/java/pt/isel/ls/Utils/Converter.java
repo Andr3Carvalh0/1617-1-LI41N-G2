@@ -57,8 +57,16 @@ public class Converter{
 
     }
 
+    public String generateMessage(){
+        String res = "";
+
+        for(String line : message){ res += line; }
+
+        return res;
+    }
+
     // Saves the string message into the outputName file
-    private void commit() throws Exception{
+    public void commit() throws Exception{
         try{
             PrintWriter writer = new PrintWriter(outputName, "UTF-8");
             writer.println(generateMessage());
@@ -198,13 +206,5 @@ public class Converter{
                 }
             }
         }
-    }
-
-    private String generateMessage(){
-        String res = "";
-
-        for(String line : message){ res += line; }
-
-        return res;
     }
 }

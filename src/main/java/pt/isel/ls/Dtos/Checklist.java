@@ -48,4 +48,30 @@ public class Checklist {
     public String getDescription() {
         return description;
     }
+
+    public String[] getHTMLHeaders(){
+        String ret[] = {"ID", "Name", "Description", "Closed", "DueDate", "Tp_Id"};
+        return ret;
+    }
+
+    public String[] getHTMLBody(){
+        String ret[] = {getId() + "", getName(), getDescription(), isClosed() ? "true" : "false", getDueDate(), getTp_id() + ""};
+        return ret;
+    }
+
+    public String[] getJsonBody(){
+
+        String ret[] = {"\"ID\" : + \"" + getId() + "\"",
+                        "\"Name\" : + \"" + getName() + "\"",
+                        "\"Description\" : + \"" + getDescription() + "\"",
+                        "\"Closed\" : + \"" + isClosed() + "\"",
+                        "\"DueDate\" : + \"" + getDueDate() + "\"",
+                        "\"Tp_Id\" : + \"" + getTp_id() + "\""};
+        return ret;
+    }
+
+    public String[] getJsonClassName(){
+        String ret[] = {"\"Checklist\""};
+        return ret;
+    }
 }
