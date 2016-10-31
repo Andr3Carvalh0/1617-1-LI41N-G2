@@ -8,8 +8,11 @@ dependencies {
 }
 
 task initDb(type:Exec) {
-	def testVars = System.getenv("LS_DBCONN_TEST_SQLSRV")
+	def varsArray = System.getenv("LS_DBCONN_TEST_SQLSRV").split(";")
+	def credentials = new String[4]
+	for(def i = 0; i < 4; i++){
+		credentials.putAt(i, varsArray[i].split("=")[1])
+	}
 	
-	commandLine 'sqlcmd', "-S user-PC -U sa -P sa -d LS_test"
-	commandLine 'sqlcmd', '-q', "create table template(Tp_id int identity (0, 1), Tp_name varchar(80) NOT NULL, Tp_desc varchar(4000) NOT NULL, primary key(Tp_id))"
+	commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./Table_Creation_Script.sql"
 }
