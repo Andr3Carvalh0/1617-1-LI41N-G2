@@ -1,11 +1,15 @@
 /*
 **
+* SPANISH INQUISITION
+* 666
+*
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
 * DONT USE THIS CLASS.THIS WAS JUST FOR THE DEVELOPMENT OF THE CONVERTER CLASS!
+*
 *
 */
 
@@ -75,28 +79,18 @@ public class main{
 
 
         try{
-
-
-
-
-            InputStream a = main.class.getClassLoader().getResourceAsStream("./main/views/template.html");
-
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(a));
-            String line = null;
-            while ( (line = reader.readLine()) != null) {
-                // do something with the line here
-                System.out.println("Line read: " + line);
-            }
-            /*
             System.out.println("<---- BEGIN HTML TEST ---->");
-            Converter c = new Converter("index.html", main.class.getClassLoader().getResource("main/views/template.html").getPath(), true);
+
+            System.out.println(main.class.getClassLoader().getResource("./").getPath());
+
+            Converter c = new Converter("index.html", main.class.getClassLoader().getResource("template.html").getPath(), true);
             c.compile(listHTML);
 
+
             System.out.println("<---- BEGIN JSON TEST ---->");
-                Converter c1 = new Converter("index.json",null, false);
+                Converter c1 = new Converter("index.json",main.class.getClassLoader().getResource("template.json    ").getPath(), false);
                 c1.compile(listJSON);
-            */
+
         }catch(Exception e){
             e.printStackTrace();
         }
