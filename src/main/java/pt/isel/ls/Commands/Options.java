@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Options extends Command {
     private final String method = "OPTIONS";
-    private final String[] path = {"", "/"};
+    private final String[] path = {};
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
         String commandList =
@@ -28,7 +28,7 @@ public class Options extends Command {
                 "POST /checklists/{cid}/tags  gid={gid} \n" +
                 "DELETE /checklists/{cid}/tags/{gid} \n" +
                 "OPTIONS / \n" +
-                "EXIT /"+
+                "EXIT /\n"+
                 "------------- \n";
         return commandList;
     }

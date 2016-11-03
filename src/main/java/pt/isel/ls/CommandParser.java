@@ -27,6 +27,7 @@ public class CommandParser {
                     headers.put(headersArray[i].split(":")[0],headersArray[i].split(":")[1]);
                 }
             }
+
     }
 
     public String getMethod() {
