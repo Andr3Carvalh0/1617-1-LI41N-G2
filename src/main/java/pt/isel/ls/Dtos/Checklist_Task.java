@@ -57,7 +57,7 @@ public class Checklist_Task implements BaseDTO{
     }
 
     @Override
-    public String[] getProperties() {
+    public String[] getPropertiesNames() {
         String ret[] = {"Cl_Task_id", "Cl_id", "Cl_Task_index", "Cl_isClosed", "Cl_Task_name", "Cl_Task_desc", "Cl_Task_dueDate"};
         return ret;
     }
@@ -70,6 +70,6 @@ public class Checklist_Task implements BaseDTO{
 
     @Override
     public String getDTOName() {
-        return "Checklist_Task";
+        return "Checklist Task";
     }
 }

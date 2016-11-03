@@ -51,7 +51,7 @@ public class Checklist implements BaseDTO{
 
 
     @Override
-    public String[] getProperties() {
+    public String[] getPropertiesNames() {
         String ret[] = {"ID", "Name", "Description", "Closed", "DueDate", "Tp_Id"};
         return ret;
     }
@@ -66,21 +66,4 @@ public class Checklist implements BaseDTO{
     public String getDTOName() {
         return "Checklist";
     }
-
-    public String[] getJsonBody(){
-
-        String ret[] = {"\"ID\" : + \"" + getId() + "\"",
-                "\"Name\" : + \"" + getName() + "\"",
-                "\"Description\" : + \"" + getDescription() + "\"",
-                "\"Closed\" : + \"" + isClosed() + "\"",
-                "\"DueDate\" : + \"" + getDueDate() + "\"",
-                "\"Tp_Id\" : + \"" + getTp_id() + "\""};
-        return ret;
-    }
-
-    public String[] getJsonClassName(){
-        String ret[] = {"\"Checklist\""};
-        return ret;
-    }
-
 }

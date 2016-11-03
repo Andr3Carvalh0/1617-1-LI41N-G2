@@ -4,7 +4,7 @@ import pt.isel.ls.Commands.Command;
 
 import java.util.Scanner;
 
-//java -cp build/classes/main; vendor/main/* pt.isel.ls.App
+//java -cp build/classes/Printer; vendor/Printer/* pt.isel.ls.App
 public class App {
     public static void main(String[] args) {
         Scanner io;
