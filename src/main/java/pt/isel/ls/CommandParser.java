@@ -18,7 +18,9 @@ public class CommandParser {
                 String[] aux;
                 for (int i = 0; i < paramsArray.length; i++) {
                     aux = paramsArray[i].split("=");
-                    aux[1] = aux[1].replace('+', ' ');
+                    if(aux[1].contains("+")){
+                        aux[1] = aux[1].replace('+', ' ');
+                    }
                     params.put(aux[0], aux[1]);
                 }
                 if (args.length == 4 && method.equals("GET"))
@@ -27,7 +29,6 @@ public class CommandParser {
                     headers.put(headersArray[i].split(":")[0],headersArray[i].split(":")[1]);
                 }
             }
-
     }
 
     public String getMethod() {

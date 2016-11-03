@@ -73,7 +73,8 @@ public class Converter {
             System.out.println(msg);
         } else {
             try {
-                PrintWriter writer = new PrintWriter(outputName, "UTF-8");
+                File file = new File(outputName);
+                PrintWriter writer = new PrintWriter(file, "UTF-8");
                 writer.println(msg);
                 writer.close();
             } catch (FileNotFoundException e) {
