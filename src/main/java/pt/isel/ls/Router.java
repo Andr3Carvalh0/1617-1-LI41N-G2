@@ -29,7 +29,7 @@ public class Router {
                         break;
                     }
                 }
-                if (path.length == i) {
+                if (path.length == i || method.equals("OPTIONS")) {
                     return c;
                 }
             }
