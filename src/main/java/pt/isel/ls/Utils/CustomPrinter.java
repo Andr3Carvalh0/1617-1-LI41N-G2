@@ -1,5 +1,6 @@
 package pt.isel.ls.Utils;
 
+<<<<<<< HEAD
 import pt.isel.ls.Dtos.BaseDTO;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -106,3 +107,11 @@ public class CustomPrinter {
     }
 
 }
+=======
+import java.util.HashMap;
+
+public class CustomPrinter {
+    public static void print(Object run, HashMap<String, String> headers) {
+    }
+}
+>>>>>>> refs/remotes/origin/master

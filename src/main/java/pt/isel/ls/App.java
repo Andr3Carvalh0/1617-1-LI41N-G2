@@ -1,6 +1,7 @@
 package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
+import pt.isel.ls.Utils.CustomPrinter;
 
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class App {
                 Command c = r.Route();
 
 
-                System.out.println(r.run(c));
+                CustomPrinter.print(r.run(c), cparser.getHeaders());
             } else throw new Exception("Invalid number of arguments.");
         } catch (Exception e) {
             e.printStackTrace();
