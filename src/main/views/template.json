@@ -6,14 +6,14 @@
     <<#FOR>><<prop_header>>
   },
   "entities": [
-    <<#FOR_M>>{
-      "class": [
-        <<#FOR>><<class_name>>
-      ],
-      "properties":{
-        <<#FOR>><<prop_body>>
-      }
-    },
+  <<#FOR_M>>{
+    "class": [
+      <<#FOR>><<class_name>>
+    ],
+    "properties":{
+      <<#FOR>><<prop_body>>
+    }
+  },
   <<#END_M>>
   ]
 }

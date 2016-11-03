@@ -1,9 +1,11 @@
 package pt.isel.ls.Dtos;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class DtoWrapper {
+public class DtoWrapper implements BaseDTO{
     private Object Checklist;
     private Object Checklist_Task;
     private Object Template;
@@ -60,17 +62,21 @@ public class DtoWrapper {
         return res;
     }
 
-    public LinkedList<HashMap<String, String[]>> toHTML(){
 
-
-
-
-        return null;
+    @Override
+    public String[] getProperties() {
+       // String ret[] = {"Cl_Task_id", "Cl_id", "Cl_Task_index", "Cl_isClosed", "Cl_Task_name", "Cl_Task_desc", "Cl_Task_dueDate"};
+        throw new NotImplementedException();
     }
 
-    public LinkedList<HashMap<String, String[]>> toJSON(){
+    @Override
+    public String[] getPropertiesValues() {
+        //String ret[] = {getCl_Task_id() + "" , getCl_id() + "", getCl_Task_index() + "", Cl_isClosed ? "true" : "false", getCl_Task_name(), getCl_Task_desc(), getCl_Task_dueDate()};
+        throw new NotImplementedException();
+    }
 
-
-        return null;
+    @Override
+    public String getDTOName() {
+        return "DTOWrapper";
     }
 }

@@ -1,31 +1,51 @@
 {
   "class": [
-    "checklist",
-    "collection"
+    "Checklist",
+    "Collections"
   ],
   "properties":{
-    "count" : "2"
+    "count" : 2
   },
   "entities": [
-    {
-      "class": [
-        "checklist0",
-        "collection"
-      ],
-      "properties":{
-        "name" : "LS Phase 2",
-        "description" : "complete LS phase 2"
-      }
-    },
-    {
-      "class": [
-        "checklist1"
-      ],
-      "properties":{
-        "nome" : "Fase 2 LS",
-        "descricao" : "Fase 2 de LS Completa"
-      }
+  {
+    "class": [
+      "Checklist"
+    ],
+    "properties":{
+      "ID" : 46,
+      "Name" : "create+tag",
+      "Description" : "create+git+tag+on+the+last+commit",
+      "Closed" : false,
+      "DueDate" : "null",
+      "Tp_Id" : 0
     }
+  },
+  {
+    "class": [
+      "Checklist"
+    ],
+    "properties":{
+      "ID" : 47,
+      "Name" : "create+tag",
+      "Description" : "create+git+tag+on+the+last+commit",
+      "Closed" : false,
+      "DueDate" : "null",
+      "Tp_Id" : 0
+    }
+  },
+  {
+    "class": [
+      "Checklist"
+    ],
+    "properties":{
+      "ID" : 48,
+      "Name" : "create+tag",
+      "Description" : "create+git+tag+on+the+last+commit",
+      "Closed" : false,
+      "DueDate" : "null",
+      "Tp_Id" : 0
+    }
+  }
   ]
 }
 

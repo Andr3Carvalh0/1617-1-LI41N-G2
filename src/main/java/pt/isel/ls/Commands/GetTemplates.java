@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GetTemplates extends Command implements GetCommand {
+public class GetTemplates extends Command {
     private String method = "GET";
     private String[] path = {"", "templates"};
     @Override
@@ -34,8 +34,4 @@ public class GetTemplates extends Command implements GetCommand {
         return path;
     }
 
-    @Override
-    public LinkedList<HashMap<String, String[]>> prepareForTransformartion(Boolean isHTML, Object obj) {
-        return null;
-    }
 }

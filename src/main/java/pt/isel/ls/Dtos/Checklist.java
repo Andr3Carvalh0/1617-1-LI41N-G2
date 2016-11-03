@@ -1,6 +1,6 @@
 package pt.isel.ls.Dtos;
 
-public class Checklist {
+public class Checklist implements BaseDTO{
     private int id, Tp_id;
     private String name, dueDate, description;
     private boolean closed;
@@ -49,24 +49,32 @@ public class Checklist {
         return description;
     }
 
-    public String[] getHTMLHeaders(){
+
+    @Override
+    public String[] getProperties() {
         String ret[] = {"ID", "Name", "Description", "Closed", "DueDate", "Tp_Id"};
         return ret;
     }
 
-    public String[] getHTMLBody(){
+    @Override
+    public String[] getPropertiesValues() {
         String ret[] = {getId() + "", getName(), getDescription(), isClosed() ? "true" : "false", getDueDate(), getTp_id() + ""};
         return ret;
+    }
+
+    @Override
+    public String getDTOName() {
+        return "Checklist";
     }
 
     public String[] getJsonBody(){
 
         String ret[] = {"\"ID\" : + \"" + getId() + "\"",
-                        "\"Name\" : + \"" + getName() + "\"",
-                        "\"Description\" : + \"" + getDescription() + "\"",
-                        "\"Closed\" : + \"" + isClosed() + "\"",
-                        "\"DueDate\" : + \"" + getDueDate() + "\"",
-                        "\"Tp_Id\" : + \"" + getTp_id() + "\""};
+                "\"Name\" : + \"" + getName() + "\"",
+                "\"Description\" : + \"" + getDescription() + "\"",
+                "\"Closed\" : + \"" + isClosed() + "\"",
+                "\"DueDate\" : + \"" + getDueDate() + "\"",
+                "\"Tp_Id\" : + \"" + getTp_id() + "\""};
         return ret;
     }
 
@@ -74,4 +82,5 @@ public class Checklist {
         String ret[] = {"\"Checklist\""};
         return ret;
     }
+
 }

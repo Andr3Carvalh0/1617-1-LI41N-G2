@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 
-public class GetTemplatesTid extends Command implements GetCommand {
+public class GetTemplatesTid extends Command {
     private final String method = "GET";
     private final String[] path = {"", "templates", "{tid}"};
 
@@ -90,8 +90,4 @@ public class GetTemplatesTid extends Command implements GetCommand {
         return path;
     }
 
-    @Override
-    public LinkedList<HashMap<String, String[]>> prepareForTransformartion(Boolean isHTML, Object obj) {
-        return null;
-    }
 }

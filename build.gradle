@@ -4,9 +4,16 @@ version = '1.0'
 
 sourceSets.main.resources.srcDirs = ["src/main/views/"]
 
+task copyTask(type: Copy) {
+	from 'src/main/views'
+	into 'build/classes/main/views'
+}
+
+
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
+	tasks.copyTask.execute()
 }
 
 task initDb(type:Exec) {

@@ -1,6 +1,6 @@
 package pt.isel.ls.Dtos;
 
-public class Template {
+public class Template implements BaseDTO{
 
     private int Tp_id;
     private String Tp_name, Tp_desc;
@@ -30,5 +30,22 @@ public class Template {
 
     public String getTp_desc() {
         return Tp_desc;
+    }
+
+    @Override
+    public String[] getProperties() {
+        String ret[] = {"Tp_id", "Tp_name", "Tp_desc"};
+        return ret;
+    }
+
+    @Override
+    public String[] getPropertiesValues() {
+        String ret[] = {getTp_id() + "" , getTp_name(), getTp_desc()};
+        return ret;
+    }
+
+    @Override
+    public String getDTOName() {
+        return "Template";
     }
 }

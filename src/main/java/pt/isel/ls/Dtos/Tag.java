@@ -1,7 +1,7 @@
 package pt.isel.ls.Dtos;
 
 
-public class Tag {
+public class Tag implements BaseDTO{
     private int Tg_id;
     private String Tg_name, Tg_color;
 
@@ -24,4 +24,21 @@ public class Tag {
     public String getTg_color() { return Tg_color; }
 
     public String getTg_name() { return Tg_name; }
+
+    @Override
+    public String[] getProperties() {
+        String ret[] = {"Tg_id", "Tg_name", "Tg_color"};
+        return ret;
+    }
+
+    @Override
+    public String[] getPropertiesValues() {
+        String ret[] = {getTg_id() + "" , getTg_color(), getTg_name()};
+        return ret;
+    }
+
+    @Override
+    public String getDTOName() {
+        return "Tag";
+    }
 }
