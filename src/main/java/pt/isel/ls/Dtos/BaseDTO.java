@@ -1,7 +1,7 @@
 package pt.isel.ls.Dtos;
 
 public interface BaseDTO {
-    String[] getProperties();
+    String[] getPropertiesNames();
     String[] getPropertiesValues();
     String   getDTOName();
 }

@@ -33,7 +33,7 @@ public class Template implements BaseDTO{
     }
 
     @Override
-    public String[] getProperties() {
+    public String[] getPropertiesNames() {
         String ret[] = {"Tp_id", "Tp_name", "Tp_desc"};
         return ret;
     }

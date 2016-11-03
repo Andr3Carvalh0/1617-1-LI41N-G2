@@ -2,17 +2,18 @@
 <html>
     <head>
         <title>{{page_title}}</title>
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
     </head>
     <body>
-        {{#FOR_M}}<table cellpadding="3" border="1">
+        <table cellpadding="3" border="1">
             <tr>
                 {{#FOR}}<th>{{table_header}}</th>
             </tr>
+            {{#FOR_M}}
             <tr>
                 {{#FOR}}<td>{{table_value}}</td>
             </tr>
+            {{#END_M}}
         </table>
-        {{#END_M}}
     </body>
 </html>

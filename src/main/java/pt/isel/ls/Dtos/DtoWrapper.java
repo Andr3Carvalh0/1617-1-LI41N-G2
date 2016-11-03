@@ -35,10 +35,6 @@ public class DtoWrapper implements BaseDTO{
         Template = template;
     }
 
-    public Object getTemplate_Task() {
-        return Template_Task;
-    }
-
     public void setTemplate_Task(Object template_Task) {
         Template_Task = template_Task;
     }
@@ -64,7 +60,7 @@ public class DtoWrapper implements BaseDTO{
 
 
     @Override
-    public String[] getProperties() {
+    public String[] getPropertiesNames() {
        // String ret[] = {"Cl_Task_id", "Cl_id", "Cl_Task_index", "Cl_isClosed", "Cl_Task_name", "Cl_Task_desc", "Cl_Task_dueDate"};
         throw new NotImplementedException();
     }

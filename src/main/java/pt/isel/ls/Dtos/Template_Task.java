@@ -37,7 +37,7 @@ public class Template_Task implements BaseDTO{
     }
 
     @Override
-    public String[] getProperties() {
+    public String[] getPropertiesNames() {
         String ret[] = {"Tp_id", "Tp_Task_id", "Tp_Task_name", "Tp_Task_desc"};
         return ret;
     }
@@ -50,6 +50,6 @@ public class Template_Task implements BaseDTO{
 
     @Override
     public String getDTOName() {
-        return "Template_Task";
+        return "Template Task";
     }
 }

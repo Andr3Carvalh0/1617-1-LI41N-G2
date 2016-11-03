@@ -8,39 +8,31 @@ public class GetConnection {
     static SQLServerDataSource src;
 
     // Environment variables
-    private static String server;
-    private static String database;
-    private static String user;
-    private static String password;
+    private final static String SERVER = System.getenv("ls_machine_name");
+    private final static String PASSWORD = System.getenv("ls_password");
+    private final static String USERNAME = System.getenv("ls_username");
+    private static String DB_NAME;
 
     public static Connection connect(boolean debug) throws Exception {
-        setEnvironmentVariables(debug);
-        if (src == null) {
-            if (server == null || password == null || user == null || database == null)
+        if (src == null || (debug && DB_NAME.equals(System.getenv("ls_db"))) || (!debug && DB_NAME.equals(System.getenv("ls_db_test")))) {
+            DB_NAME = (debug) ? System.getenv("ls_db_test") : System.getenv("ls_db");
+            if (SERVER == null || PASSWORD == null || USERNAME == null || DB_NAME == null)
                 throw new Exception("ERROR: Environment variables not properly set. Please set them as follows:\n" +
-                        "LS_DBCONN_APP_SQLSRV - properties for the application database - SQL Server.\n" +
-                        "LS_DBCONN_TEST_SQLSRV - properties for the test database - SQL Server.\n" +
-                        "\n" +
-                        "The properties are represented as a sequence of name value pairs (name=pair) separated by ';'. E.g. server=myServerAddress;database=myDataBase;user=myUsername;password=myPassword;");
+                        "ls_machine_name: Your machine's name.\n" +
+                        "ls_password: Your SQL password.\n" +
+                        "ls_username: Your SQL username.\n" +
+                        "ls_db: Your CustomPrinter SQL database.\n" +
+                        "ls_db_test: Your test SQL database.\n");
             newDataSource();
         }
         return src.getConnection();
     }
 
-    private static void setEnvironmentVariables(boolean debug) {
-        String EnvVars = debug ? System.getenv("LS_DBCONN_TEST_SQLSRV") : System.getenv("LS_DBCONN_APP_SQLSRV");
-        String[] EnvVarsArray = EnvVars.split(";");
-        server = EnvVarsArray[0].split("=")[1];
-        database = EnvVarsArray[1].split("=")[1];
-        user = EnvVarsArray[2].split("=")[1];
-        password = EnvVarsArray[3].split("=")[1];
-    }
-
     private static void newDataSource() {
         src = new SQLServerDataSource();
-        src.setPassword(password);
-        src.setUser(user);
-        src.setDatabaseName(database);
-        src.setServerName(server);
+        src.setPassword(PASSWORD);
+        src.setUser(USERNAME);
+        src.setDatabaseName(DB_NAME);
+        src.setServerName(SERVER);
     }
 }
