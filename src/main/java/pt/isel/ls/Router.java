@@ -52,6 +52,7 @@ public class Router {
         Object obj = null;
         try {
             obj = c.execute(params, con);
+            //if(obj == null) throw new Exception("Comman")
             con.commit();
         } catch (SQLException e) {
             con.rollback();
