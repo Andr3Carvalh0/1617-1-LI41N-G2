@@ -6,7 +6,8 @@ public class CommandParser {
     private String method;
     private String[] path;
     private HashMap<String, String> params;
-    private String[] headers;
+    private HashMap<String, String> headers;
+    private String[] headersArray;
 
     public CommandParser(String[] args) throws Exception {
             method = args[0];
@@ -21,7 +22,10 @@ public class CommandParser {
                     params.put(aux[0], aux[1]);
                 }
                 if (args.length == 4 && method.equals("GET"))
-                    headers = args[2].split("|");
+                    headersArray = args[2].split("|");
+                for (int i = 0; i < headersArray.length; i++) {
+                    headers.put(headersArray[i].split(":")[0],headersArray[i].split(":")[1]);
+                }
             }
     }
 
@@ -35,5 +39,9 @@ public class CommandParser {
 
     public HashMap<String, String> getParams() {
         return params;
+    }
+
+    public HashMap<String, String> getHeaders() {
+        return headers;
     }
 }
