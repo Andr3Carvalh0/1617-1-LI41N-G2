@@ -3,48 +3,47 @@ package pt.isel.ls.Utils;
 import java.util.*;
 import java.io.*;
 
-public class Converter{
-    private String outputName;
-    private String baseFile;
-    private boolean isHTML;
+public class Converter {
+
     private LinkedList<String> message = new LinkedList<>();
+    private boolean isHTML;
 
-    private final String lookFor_begin_HTML = "{{";
-    private final String lookFor_end_HTML = "}}";
-    private final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}","{{#FOR_M}}","{{#END_M}}"};
+    private static final String lookFor_begin_HTML = "{{";
+    private static final String lookFor_end_HTML = "}}";
+    private static final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}", "{{#FOR_M}}", "{{#END_M}}"};
 
-    private final String lookFor_begin_JSON = "<<";
-    private final String lookFor_end_JSON = ">>";
-    private final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>","<<#FOR_M>>","<<#END_M>>"};
+    private static final String lookFor_begin_JSON = "<<";
+    private static final String lookFor_end_JSON = ">>";
+    private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#FOR_M>>", "<<#END_M>>"};
 
-    public Converter(String out, String baseFile, boolean isHTML){
-        outputName = out;
-        this.baseFile = baseFile;
-        this.isHTML = isHTML;
-    }
 
     //Reads file to memory
-    private void allocate() throws Exception{
+    private void allocate(String baseFile) throws Exception {
         Scanner io = null;
-        try{
+        try {
             io = new Scanner(new File(baseFile));
 
-            while(io.hasNextLine( )){
+            while (io.hasNextLine()) {
                 message.add(io.nextLine() + "\n");
             }
 
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             throw new Exception("Cannot read file!");
-        }finally{ if(io != null){ io.close(); }}
+        } finally {
+            if (io != null) {
+                io.close();
+            }
+        }
     }
 
-    public void compile(LinkedList<HashMap<String, String[]>> list) throws Exception {
+    public void compile(LinkedList<HashMap<String, String[]>> list, String outputName, boolean isHTML, String baseFile) throws Exception {
         //Make this the generic-ist way possible
+        this.isHTML = isHTML;
         String[] marks = isHTML ? SUPPORTED_MARKERS_HTML : SUPPORTED_MARKERS_JSON;
         String marker_begin = isHTML ? lookFor_begin_HTML : lookFor_begin_JSON;
         String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
 
-        allocate();
+        allocate(baseFile);
 
         lookForFor_M(list, marks, marker_begin, marker_end);
 
@@ -53,34 +52,41 @@ public class Converter{
         //Cleanup
         removeNotUsedMarkers(marks);
 
-        commit();
+        commit(generateMessage(), outputName);
 
     }
 
-    public String generateMessage(){
+    public String generateMessage() {
         String res = "";
 
-        for(String line : message){ res += line; }
+        for (String line : message) {
+            res += line;
+        }
 
         return res;
     }
 
     // Saves the string message into the outputName file
-    public void commit() throws Exception{
-        try{
-            PrintWriter writer = new PrintWriter(outputName, "UTF-8");
-            writer.println(generateMessage());
-            writer.close();
-        }catch(FileNotFoundException e){
-            throw new Exception("Cannot save file!");
+    public void commit(String msg, String outputName) throws Exception {
+
+        if (outputName == null) {
+            System.out.println(msg);
+        } else {
+            try {
+                PrintWriter writer = new PrintWriter(outputName, "UTF-8");
+                writer.println(msg);
+                writer.close();
+            } catch (FileNotFoundException e) {
+                throw new Exception("Cannot save file!");
+            }
         }
     }
 
-    private String copyValues(String line, String flag, String... values){
+    private String copyValues(String line, String flag, String... values) {
         String res = "";
-        String value = "";
+        String value;
 
-        if(values == null) return res;
+        if (values == null) return res;
 
         for (int i = 0; i < values.length; i++) {
             value = values[i];
@@ -103,19 +109,19 @@ public class Converter{
     //
     // 3rd - Concatunate everything to make a valid html file
     private void lookForFor_M(LinkedList<HashMap<String, String[]>> list, String[] marks, String marker_begin, String marker_end) {
-        for(int i = 0; i < message.size(); i++){
+        for (int i = 0; i < message.size(); i++) {
             String line = message.get(i);
 
-            for(int j = 0; j < list.size(); j++){
+            for (int j = 0; j < list.size(); j++) {
                 String result;
                 LinkedList<String> aux = new LinkedList<>();
                 int initial_pos = i;
                 int end_pos = 0;
 
-                if(line.contains(marks[1]) ){
+                if (line.contains(marks[1])) {
 
                     //1st step
-                    for(int k = i; k < message.size() && !(line = message.get(k)).contains(marks[2]); k++, i++){
+                    for (int k = i; k < message.size() && !(line = message.get(k)).contains(marks[2]); k++, i++) {
                         //Remove Special Chars
                         for (String mark : marks) {
                             line = line.replace(mark, "");
@@ -144,10 +150,10 @@ public class Converter{
 
                             }
 
-                            last.add((!result.equals("")) ?result : aux_values);
+                            last.add((!result.equals("")) ? result : aux_values);
                         }
                     }
-                    if(!isHTML){
+                    if (!isHTML) {
                         String tmp = last.getLast();
                         last.removeLast();
                         last.add(tmp.replace(",", ""));
@@ -155,11 +161,17 @@ public class Converter{
                     //3rd - Concatonate
                     aux = new LinkedList<>();
 
-                    for(int p = 0; p < initial_pos; p++){ aux.add(message.get(p)); }
+                    for (int p = 0; p < initial_pos; p++) {
+                        aux.add(message.get(p));
+                    }
 
-                    for(String par : last){ aux.add(par); }
+                    for (String par : last) {
+                        aux.add(par);
+                    }
 
-                    for(int w = end_pos + 2; w < message.size(); w++){ aux.add(message.get(w)); }
+                    for (int w = end_pos + 2; w < message.size(); w++) {
+                        aux.add(message.get(w));
+                    }
 
                     message = aux;
                 }
@@ -168,8 +180,8 @@ public class Converter{
     }
 
     //Search for not applyed marks, and try to change them
-    private void lookOutsideTheFor_MBody(LinkedList<HashMap<String, String[]>> list, String marker_begin, String marker_end, String[] marks){
-        for(int i = 0; i < message.size(); i++){
+    private void lookOutsideTheFor_MBody(LinkedList<HashMap<String, String[]>> list, String marker_begin, String marker_end, String[] marks) {
+        for (int i = 0; i < message.size(); i++) {
             String line = message.get(i);
 
             for (HashMap<String, String[]> map : list) {
@@ -178,18 +190,19 @@ public class Converter{
                     String flag = marker_begin + key + marker_end;
                     if (line.contains(flag)) {
 
-                        if(line.contains(marks[0])){
+                        if (line.contains(marks[0])) {
                             String res = "";
 
-                            for(int j = 0; j < list.size(); j++){
+                            for (int j = 0; j < list.size(); j++) {
                                 HashMap<String, String[]> map1 = list.get(j);
 
                                 res += copyValues(line, flag, map1.get(key));
                             }
                             message.set(i, res);
 
+                        } else {
+                            message.set(i, copyValues(line, flag, map.get(key)));
                         }
-                        else{message.set(i, copyValues(line, flag, map.get(key)));}
                     }
                 }
             }
@@ -197,9 +210,9 @@ public class Converter{
     }
 
     //Remove not used marks
-    private void removeNotUsedMarkers(String[] marks){
+    private void removeNotUsedMarkers(String[] marks) {
 
-        for(int i = 0; i < message.size(); i++){
+        for (int i = 0; i < message.size(); i++) {
             for (String mark : marks) {
                 if (message.get(i).contains(mark)) {
                     message.set(i, message.get(i).replace(mark, ""));

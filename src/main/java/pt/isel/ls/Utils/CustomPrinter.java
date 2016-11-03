@@ -1,19 +1,40 @@
 package pt.isel.ls.Utils;
 
-<<<<<<< HEAD
 import pt.isel.ls.Dtos.BaseDTO;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class CustomPrinter {
 
-    public static void print(Object obj, HashMap<String, String> map){
+    Converter converter = new Converter();
+    private final String path = "./views/";
+
+    public void print(Object obj, HashMap<String, String> map){
+        String file_type = map.get("accept");
+        String file_location = map.get("file-name");
+
+        if(file_type == null){
+            toHTML(obj instanceof LinkedList ? ((LinkedList)obj) : obj, file_location);
+        }else{
+            if(file_type.contains("plain")){
+                toPlain(obj, file_location);
+            }else if(file_type.contains("html")){
+                toHTML(obj instanceof LinkedList ? ((LinkedList)obj) : obj, file_location);
+            }else {
+                toJSON(obj instanceof LinkedList ? ((LinkedList)obj) : obj, file_location);
+            }
 
 
-
+        }
     }
 
-    private static void toJSON(Object obj) {
+    private void toPlain(Object obj, String file_location) {
+        run(obj.toString(), file_location);
+    }
+
+    private void toJSON(Object obj, String file_location) {}
+
+    private void toJSON(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
         //JSON
         //Since we know that the result was a linkedlist we add the Collection attribute
@@ -26,7 +47,7 @@ public class CustomPrinter {
         map.put("prop_header", props);
 
         //listJSON.add(map);
-        for (Object e : (LinkedList) obj) {
+        for (Object e : obj) {
             int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
 
             props = new String[numberOfProperties];
@@ -55,14 +76,16 @@ public class CustomPrinter {
             map = new HashMap<>();
         }
 
-        run(listJSON);
+        run(listJSON, file_location,false, path + "template.json");
     }
 
-    private static void toHTML(Object obj) {
+    private void toHTML(Object obj, String file_location) {}
+
+    private void toHTML(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
         //HTML
         int j = 0;
-        for (Object e : (LinkedList) obj) {
+        for (Object e : obj) {
             HashMap<String, String[]> map = new HashMap<>();
             String title[] = {"Result"};
             map.put("page_title", title);
@@ -75,14 +98,26 @@ public class CustomPrinter {
             j++;
         }
 
-        run(listHTML);
+        run(listHTML, file_location, true, path + "template_list");
     }
 
 
-    private static void run(LinkedList<HashMap<String, String[]>> list){
+    private void run(LinkedList<HashMap<String, String[]>> list, String file_location,boolean isHTML, String template){
+        try {
+            converter.compile(list, file_location, isHTML, template);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
+    }
 
+    private void run(String text, String file_location){
+        try {
+            converter.commit(text, file_location);
+        } catch (Exception e) {
+            System.out.println();
+        }
     }
 
     private static boolean isInteger(String s, int radix) {
@@ -107,11 +142,3 @@ public class CustomPrinter {
     }
 
 }
-=======
-import java.util.HashMap;
-
-public class CustomPrinter {
-    public static void print(Object run, HashMap<String, String> headers) {
-    }
-}
->>>>>>> refs/remotes/origin/master
