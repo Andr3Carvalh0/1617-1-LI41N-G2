@@ -18,7 +18,8 @@ public class App {
                 Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
                 Command c = r.Route();
 
-                CustomPrinter.print(r.run(c), cparser.getHeaders());
+                CustomPrinter cPrinter = new CustomPrinter();
+                cPrinter.print(r.run(c), cparser.getHeaders());
             } else throw new Exception("Invalid number of arguments.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,7 +37,9 @@ public class App {
                 CommandParser cparser = new CommandParser(input);
                 Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
                 Command c = r.Route();
-                System.out.println(r.run(c));
+
+                CustomPrinter cPrinter = new CustomPrinter();
+                cPrinter.print(r.run(c), cparser.getHeaders());
             }
         }
     }

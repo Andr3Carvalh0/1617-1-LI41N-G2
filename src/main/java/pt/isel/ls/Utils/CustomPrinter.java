@@ -76,7 +76,7 @@ public class CustomPrinter {
             map = new HashMap<>();
         }
 
-        run(listJSON, file_location,false, path + "template.json");
+        run(listJSON, file_location,false, path + "template_wrapper.json");
     }
 
     private void toHTML(Object obj, String file_location) {}
@@ -102,7 +102,7 @@ public class CustomPrinter {
     }
 
 
-    private void run(LinkedList<HashMap<String, String[]>> list, String file_location,boolean isHTML, String template){
+    private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template){
         try {
             converter.compile(list, file_location, isHTML, template);
         } catch (Exception e) {
