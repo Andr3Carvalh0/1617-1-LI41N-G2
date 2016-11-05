@@ -6,7 +6,7 @@ public class CommandParser {
     private String method;
     private String[] path;
     private HashMap<String, String> params;
-    private HashMap<String, String> headers;
+    private HashMap<String, String> headers = new HashMap<>();
     private String[] headersArray;
 
     public CommandParser(String[] args) throws Exception {

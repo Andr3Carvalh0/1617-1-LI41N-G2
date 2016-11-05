@@ -45,9 +45,14 @@ public class Converter {
 
         allocate(baseFile);
 
-        lookForFor_M(list, marks, marker_begin, marker_end);
+        int[] l = {0};
+        message = replaceFOR_M(list, l, message.size(), message, new LinkedList<>(), marks, marker_begin, marker_end, 0);
 
-        lookOutsideTheFor_MBody(list, marker_begin, marker_end, marks);
+        l[0] = 0;
+        message = replaceFOR(list, l, message.size(), message, new LinkedList<>(), marks[0], marker_begin, marker_end);
+
+        l[0] = 0;
+        message = replaceFlag(list, l, message.size(), message, new LinkedList<>(), marker_begin, marker_end);
 
         //Cleanup
         removeNotUsedMarkers(marks);
@@ -56,7 +61,7 @@ public class Converter {
 
     }
 
-    public String generateMessage() {
+    private String generateMessage() {
         String res = "";
 
         for (String line : message) {
@@ -83,131 +88,130 @@ public class Converter {
         }
     }
 
-    private String copyValues(String line, String flag, String... values) {
-        String res = "";
-        String value;
-
-        if (values == null) return res;
-
-        for (int i = 0; i < values.length; i++) {
-            value = values[i];
-
-            value += (!isHTML && i < values.length - 1) ? "," : "";
-
-            res += line.replace(flag, value);
-
+    private LinkedList<String> replaceFOR_M(LinkedList<HashMap<String, String[]>> list, int[] l, int r, LinkedList<String> msg, LinkedList<String> res, String marks[], String leftDelimiter, String rightDelimiter, int forID){
+        if (l[0] >= r) {
+            return res;
         }
 
-        return res;
+        String line = msg.get(l[0]);
+        LinkedList<String> tmp = new LinkedList<>();
+        int numberLine2Delete = 0;
+
+        if (msg.get(l[0]).contains(marks[1]) && msg.get(l[0]).contains(leftDelimiter + "" + forID + rightDelimiter)) {
+            for (int k = l[0]+1;!message.get(k).contains(marks[2]) && !message.get(k).contains(leftDelimiter + "" + forID + rightDelimiter); k++, numberLine2Delete++) {
+                line = message.get(k);
+
+                //Remove the identifiers
+                if(line.contains(marks[1])) {
+                    line = line.replace(marks[1], "");
+                    line = line.replace(leftDelimiter + "" + forID + rightDelimiter, "");
+                }
+                tmp.add(line);
+            }
+            int left[] = {0};
+            tmp = replaceFOR_M(list, left, tmp.size(), tmp, new LinkedList<>(), marks, leftDelimiter, rightDelimiter, forID+1);
+
+            LinkedList<String> tmp1 = new LinkedList<>();
+
+            for (int k = 0; k < list.size(); k++) {
+                LinkedList<HashMap<String, String[]>> map = new LinkedList<>();
+                map.add(list.get(k));
+
+                left[0] = 0;
+                for(String text : replaceFOR(map, left, tmp.size(), tmp, new LinkedList<>(), marks[0], leftDelimiter, rightDelimiter)){
+                    tmp1.add(text);
+                }
+                /*
+                left[0] = 0;
+                for(String text : replaceFlag(map, left, tmp.size(), tmp, new LinkedList<>(), leftDelimiter, rightDelimiter)){
+                    tmp1.add(text);
+                }*/
+            }
+
+            tmp = tmp1;
+
+            //Concatunate the list with values with the template
+            LinkedList<String> proccessed = new LinkedList<>();
+            for(int k = 0; k < l[0]; k++){
+                proccessed.add(msg.get(k));
+            }
+            for (int k = 0; k < tmp.size(); k++) {
+                proccessed.add(tmp.get(k));
+            }
+
+            //Remove the last ","
+            if(!isHTML){
+                proccessed.set(proccessed.size()-1, proccessed.getLast().substring(0, proccessed.getLast().length() -2)  + "\n");
+            }
+
+            for (int k = l[0] + numberLine2Delete+1; k < msg.size(); k++) {
+                proccessed.add(msg.get(k));
+            }
+
+            msg = proccessed;
+            return msg;
+        } else {
+            res.add(line);
+        }
+
+        ++l[0];
+        return replaceFOR_M(list, l, r, msg, res, marks, leftDelimiter, rightDelimiter, forID);
     }
 
-    //How do this work?
-    // 1st - Search the template for the Mark {{#FOR_M}}
-    // if we find it...Try to locate the {{#END_M}} mark
-    // in beetween save the text form the {{#FOR_M}} until the {{#END_M}} line.
-    //
-    // 2nd - The string we saved will be repeated multiple times, so we clone it x times, and populate the values depending on the list values
-    //
-    // 3rd - Concatunate everything to make a valid html file
-    private void lookForFor_M(LinkedList<HashMap<String, String[]>> list, String[] marks, String marker_begin, String marker_end) {
-        for (int i = 0; i < message.size(); i++) {
-            String line = message.get(i);
+    private LinkedList<String> replaceFlag(LinkedList<HashMap<String, String[]>> list, int[] l, int r, LinkedList<String> msg, LinkedList<String> res, String leftDelimiter, String rightDelimiter) {
+        if (l[0] >= r) {
+            return res;
+        }
+        String line = msg.get(l[0]);
+        if(line.contains(leftDelimiter) && line.contains(rightDelimiter)){
+             String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
+
+            String tmp[];
+            if ((tmp = list.get(0).get(key)) != null) {
+                res.add(line.replace(leftDelimiter + key + rightDelimiter, tmp[0]));
+            }
+        } else {
+            res.add(line);
+        }
+
+        ++l[0];
+        return replaceFlag(list, l, r, msg, res, leftDelimiter, rightDelimiter);
+    }
+
+    private LinkedList<String> replaceFOR(LinkedList<HashMap<String, String[]>> list, int[] l, int r, LinkedList<String> msg, LinkedList<String> res, String mark, String leftDelimiter, String rightDelimiter) {
+        if (l[0] >= r) {
+            return res;
+        }
+
+        String line = msg.get(l[0]);
+
+        if (msg.get(l[0]).contains(mark)) {
+            line = line.replace(mark, "");
+
+            String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
 
             for (int j = 0; j < list.size(); j++) {
-                String result;
-                LinkedList<String> aux = new LinkedList<>();
-                int initial_pos = i;
-                int end_pos = 0;
+                String tmp[];
 
-                if (line.contains(marks[1])) {
+                if ((tmp = list.get(j).get(key)) != null) {
+                    for (int k = 0; k < tmp.length; k++) {
+                        String aux = line;
 
-                    //1st step
-                    for (int k = i; k < message.size() && !(line = message.get(k)).contains(marks[2]); k++, i++) {
-                        //Remove Special Chars
-                        for (String mark : marks) {
-                            line = line.replace(mark, "");
+                        aux = (!isHTML && k != tmp.length-1) ? aux.substring(0, aux.length()-1) + ",\n" : aux;
+
+                        if(aux.contains(leftDelimiter + key + rightDelimiter)){
+                            aux = aux.replace(leftDelimiter + key + rightDelimiter, tmp[k] + "");
                         }
-                        line = line.replace(marker_begin + marker_end, "");
-
-                        aux.add(line);
-                        end_pos = k;
-                    }
-
-                    LinkedList<String> last = new LinkedList<>();
-
-                    //2nd
-                    for (HashMap<String, String[]> current_map : list) {
-                        for (int l = 0; l < aux.size(); l++) {
-                            String aux_values = aux.get(l);
-                            line = aux_values;
-                            result = "";
-
-                            for (String key : current_map.keySet()) {
-                                String flag = marker_begin + key + marker_end;
-
-                                if (line.contains(flag)) {
-                                    result += copyValues(line, flag, current_map.get(key));
-                                }
-
-                            }
-
-                            last.add((!result.equals("")) ? result : aux_values);
-                        }
-                    }
-                    if (!isHTML) {
-                        String tmp = last.getLast();
-                        last.removeLast();
-                        last.add(tmp.replace(",", ""));
-                    }
-                    //3rd - Concatonate
-                    aux = new LinkedList<>();
-
-                    for (int p = 0; p < initial_pos; p++) {
-                        aux.add(message.get(p));
-                    }
-
-                    for (String par : last) {
-                        aux.add(par);
-                    }
-
-                    for (int w = end_pos + 2; w < message.size(); w++) {
-                        aux.add(message.get(w));
-                    }
-
-                    message = aux;
-                }
-            }
-        }
-    }
-
-    //Search for not applyed marks, and try to change them
-    private void lookOutsideTheFor_MBody(LinkedList<HashMap<String, String[]>> list, String marker_begin, String marker_end, String[] marks) {
-        for (int i = 0; i < message.size(); i++) {
-            String line = message.get(i);
-
-            for (HashMap<String, String[]> map : list) {
-                for (String key : map.keySet()) {
-
-                    String flag = marker_begin + key + marker_end;
-                    if (line.contains(flag)) {
-
-                        if (line.contains(marks[0])) {
-                            String res = "";
-
-                            for (int j = 0; j < list.size(); j++) {
-                                HashMap<String, String[]> map1 = list.get(j);
-
-                                res += copyValues(line, flag, map1.get(key));
-                            }
-                            message.set(i, res);
-
-                        } else {
-                            message.set(i, copyValues(line, flag, map.get(key)));
-                        }
+                        res.add(aux);
                     }
                 }
             }
+        } else {
+            res.add(line);
         }
+
+        ++l[0];
+        return replaceFOR(list, l, r, msg, res, mark, leftDelimiter, rightDelimiter);
     }
 
     //Remove not used marks
