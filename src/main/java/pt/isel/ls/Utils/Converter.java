@@ -112,7 +112,8 @@ public class Converter {
             tmp = replaceFOR_M(list, left, tmp.size(), tmp, new LinkedList<>(), marks, leftDelimiter, rightDelimiter, forID+1);
 
             LinkedList<String> tmp1 = new LinkedList<>();
-
+            LinkedList<String> tmp2 = new LinkedList<>();
+            int tmp1_size = 0;
             for (int k = 0; k < list.size(); k++) {
                 LinkedList<HashMap<String, String[]>> map = new LinkedList<>();
                 map.add(list.get(k));
@@ -121,14 +122,19 @@ public class Converter {
                 for(String text : replaceFOR(map, left, tmp.size(), tmp, new LinkedList<>(), marks[0], leftDelimiter, rightDelimiter)){
                     tmp1.add(text);
                 }
-                /*
-                left[0] = 0;
-                for(String text : replaceFlag(map, left, tmp.size(), tmp, new LinkedList<>(), leftDelimiter, rightDelimiter)){
-                    tmp1.add(text);
-                }*/
+
+                left[0] = tmp1_size * k;
+                if(containsFlag(left[0], tmp1_size == 0 ? tmp1.size() : tmp1_size * (k+1),tmp1, leftDelimiter, rightDelimiter, marks[0])){
+                    for(String text : replaceFlag(map, left, tmp1_size == 0 ? tmp1.size() : tmp1_size * (k+1), tmp1, new LinkedList<>(), leftDelimiter, rightDelimiter)){
+                        tmp2.add(text);
+                    }
+                    if(tmp1_size == 0){
+                        tmp1_size = tmp2.size();
+                    }
+                }
             }
 
-            tmp = tmp1;
+            tmp = tmp2.size() == 0 ? tmp1 : tmp2;
 
             //Concatunate the list with values with the template
             LinkedList<String> proccessed = new LinkedList<>();
@@ -156,6 +162,13 @@ public class Converter {
 
         ++l[0];
         return replaceFOR_M(list, l, r, msg, res, marks, leftDelimiter, rightDelimiter, forID);
+    }
+
+    private boolean containsFlag(int left, int size, LinkedList<String> tmp,String leftDelimiter,String rightDelimiter, String FORMark) {
+        for (int i = left; i < size; i++) {
+            if(tmp.get(i).contains(leftDelimiter) && tmp.get(i).contains(rightDelimiter) && !tmp.get(i).contains(FORMark)) return true;
+        }
+        return false;
     }
 
     private LinkedList<String> replaceFlag(LinkedList<HashMap<String, String[]>> list, int[] l, int r, LinkedList<String> msg, LinkedList<String> res, String leftDelimiter, String rightDelimiter) {
