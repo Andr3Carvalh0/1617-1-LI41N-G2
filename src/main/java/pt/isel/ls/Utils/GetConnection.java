@@ -1,4 +1,4 @@
-package pt.isel.ls;
+package pt.isel.ls.Utils;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 

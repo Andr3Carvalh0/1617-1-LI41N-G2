@@ -6,6 +6,7 @@ import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Checklist;
 import pt.isel.ls.Dtos.Checklist_Task;
 import pt.isel.ls.Dtos.DtoWrapper;
+import pt.isel.ls.Utils.GetConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

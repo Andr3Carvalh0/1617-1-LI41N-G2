@@ -1,6 +1,8 @@
 package pt.isel.ls.Utils;
 
 import pt.isel.ls.Dtos.BaseDTO;
+import pt.isel.ls.Dtos.DtoWrapper;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -14,17 +16,27 @@ public class CustomPrinter {
         String file_location = map.get("file-name");
 
         if(file_type == null){
-            toHTML(obj instanceof LinkedList ? ((LinkedList)obj) : obj, file_location);
+            if(obj instanceof LinkedList){
+                toHTML((LinkedList) obj, file_location);
+            }else{
+                toHTML((DtoWrapper)obj, file_location);
+            }
         }else{
             if(file_type.contains("plain")){
                 toPlain(obj, file_location);
             }else if(file_type.contains("html")){
-                toHTML(obj instanceof LinkedList ? ((LinkedList)obj) : obj, file_location);
+                if(obj instanceof LinkedList){
+                    toHTML((LinkedList) obj, file_location);
+                }else{
+                    toHTML((DtoWrapper)obj, file_location);
+                }
             }else {
-                toJSON(obj instanceof LinkedList ? ((LinkedList)obj) : obj, file_location);
+                if(obj instanceof LinkedList){
+                    toJSON((LinkedList) obj, file_location);
+                }else{
+                    toJSON((DtoWrapper)obj, file_location);
+                }
             }
-
-
         }
     }
 
@@ -32,7 +44,7 @@ public class CustomPrinter {
         run(obj.toString(), file_location);
     }
 
-    private void toJSON(Object obj, String file_location) {}
+    private void toJSON(DtoWrapper obj, String file_location) {}
 
     private void toJSON(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
@@ -76,10 +88,10 @@ public class CustomPrinter {
             map = new HashMap<>();
         }
 
-        run(listJSON, file_location,false, path + "template_wrapper.json");
+        run(listJSON, file_location,false, Converter.class.getClassLoader().getResource("./views/template_list.json").getPath());
     }
 
-    private void toHTML(Object obj, String file_location) {}
+    private void toHTML(DtoWrapper obj, String file_location) {}
 
     private void toHTML(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
@@ -98,7 +110,7 @@ public class CustomPrinter {
             j++;
         }
 
-        run(listHTML, file_location, true, path + "template_list");
+        run(listHTML, file_location, true, Converter.class.getClassLoader().getResource("./views/template_list.html").getPath());
     }
 
 
@@ -108,8 +120,6 @@ public class CustomPrinter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void run(String text, String file_location){

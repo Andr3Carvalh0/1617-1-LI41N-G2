@@ -11,6 +11,7 @@ import pt.isel.ls.Dtos.Checklist;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Template;
 import pt.isel.ls.Dtos.Template_Task;
+import pt.isel.ls.Utils.GetConnection;
 
 
 import static junit.framework.Assert.assertEquals;

@@ -1,6 +1,8 @@
 package pt.isel.ls;
 
 import org.junit.Test;
+import pt.isel.ls.Utils.GetConnection;
+
 import java.sql.Connection;
 
 import static junit.framework.Assert.assertEquals;

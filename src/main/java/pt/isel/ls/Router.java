@@ -1,6 +1,7 @@
 package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
+import pt.isel.ls.Utils.GetConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

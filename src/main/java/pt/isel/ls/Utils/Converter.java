@@ -1,5 +1,7 @@
 package pt.isel.ls.Utils;
 
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -28,7 +30,8 @@ public class Converter {
             }
 
         } catch (FileNotFoundException e) {
-            throw new Exception("Cannot read file!");
+            e.printStackTrace();
+           // throw new Exception("Cannot read file!");
         } finally {
             if (io != null) {
                 io.close();

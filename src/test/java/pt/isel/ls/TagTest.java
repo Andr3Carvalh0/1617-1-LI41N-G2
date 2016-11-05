@@ -3,6 +3,7 @@ package pt.isel.ls;
 import org.junit.Test;
 import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Tag;
+import pt.isel.ls.Utils.GetConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

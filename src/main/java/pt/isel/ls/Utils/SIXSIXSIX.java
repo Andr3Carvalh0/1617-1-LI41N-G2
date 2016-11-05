@@ -8,6 +8,14 @@ import pt.isel.ls.Router;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/*
+*
+* This is just a test class.
+* If this class remains in the delivered version, please ignore it!
+*
+ */
+
+
 public class SIXSIXSIX {
 
     public static void main(String args[]) throws Exception {

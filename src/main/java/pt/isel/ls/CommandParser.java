@@ -28,8 +28,9 @@ public class CommandParser {
     }
 
     private void setHeaders(String[] args) {
-        headersArray = args[2].split("|");
+        headersArray = args[2].split("\\|");
         headers = new HashMap<String, String>();
+
         for (int i = 0; i < headersArray.length; i++) {
             headers.put(headersArray[i].split(":")[0], headersArray[i].split(":")[1]);
         }
