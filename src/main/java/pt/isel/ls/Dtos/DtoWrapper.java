@@ -1,5 +1,7 @@
 package pt.isel.ls.Dtos;
 
+import java.util.LinkedList;
+
 public class DtoWrapper{
     private Object Checklist;
     private Object Checklist_Task;
@@ -53,4 +55,14 @@ public class DtoWrapper{
         return res;
     }
 
+    public LinkedList<Object> getWrapperObjects(){
+        LinkedList<Object> list = new LinkedList<>();
+
+        if(Checklist != null) list.add(Checklist);
+        if(Checklist_Task != null) list.add(Checklist_Task);
+        if(Template != null) list.add(Template);
+        if(Template_Task != null) list.add(Template_Task);
+
+        return list;
+    }
 }

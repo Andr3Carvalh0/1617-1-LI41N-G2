@@ -1,7 +1,5 @@
 package pt.isel.ls.Utils;
 
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -39,7 +37,7 @@ public class Converter {
         }
     }
 
-    public void compile(LinkedList<HashMap<String, String[]>> list, String outputName, boolean isHTML, String baseFile) throws Exception {
+    public void compile(LinkedList<HashMap<String, String[]>> list, boolean isHTML, String baseFile) throws Exception {
         //Make this the generic-ist way possible
         this.isHTML = isHTML;
         String[] marks = isHTML ? SUPPORTED_MARKERS_HTML : SUPPORTED_MARKERS_JSON;
@@ -59,9 +57,6 @@ public class Converter {
 
         //Cleanup
         removeNotUsedMarkers(marks);
-
-        commit(generateMessage(), outputName);
-
     }
 
     private String generateMessage() {
@@ -76,7 +71,6 @@ public class Converter {
 
     // Saves the string message into the outputName file
     public void commit(String msg, String outputName) throws Exception {
-
         if (outputName == null) {
             System.out.println(msg);
         } else {
@@ -230,7 +224,6 @@ public class Converter {
         return replaceFOR(list, l, r, msg, res, mark, leftDelimiter, rightDelimiter);
     }
 
-    //Remove not used marks
     private void removeNotUsedMarkers(String[] marks) {
 
         for (int i = 0; i < message.size(); i++) {
@@ -241,4 +234,9 @@ public class Converter {
             }
         }
     }
+
+    public String getMessage(){
+        return generateMessage();
+    }
+
 }

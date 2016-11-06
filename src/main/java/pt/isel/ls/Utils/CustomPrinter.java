@@ -11,7 +11,7 @@ public class CustomPrinter {
     Converter converter = new Converter();
     private final String path = "./views/";
 
-    public void print(Object obj, HashMap<String, String> map){
+    public void print(Object obj, HashMap<String, String> map) throws Exception {
         String file_type = map.get("accept");
         String file_location = map.get("file-name");
 
@@ -44,12 +44,35 @@ public class CustomPrinter {
         run(obj.toString(), file_location);
     }
 
-    private void toJSON(DtoWrapper obj, String file_location) {}
+    private void toJSON(DtoWrapper obj, String file_location) {
+
+    }
+
+    private void toHTML(DtoWrapper obj, String file_location) throws Exception {
+        LinkedList<HashMap<String, String[]>> result = new LinkedList<>();
+        HashMap<String, String[]> map = new HashMap<>();
+
+        for(Object e : obj.getWrapperObjects()){
+            LinkedList<HashMap<String, String[]>> listHTML = processWrapperObject(e);
+
+            converter.compile(listHTML, true, Converter.class.getClassLoader().getResource("./views/wrapper_element.html").getPath());
+
+            String[] arr = new String[1];
+            arr[0] = converter.getMessage();
+            map.put("table", arr);
+            result.add(map);
+
+            map = new HashMap<>();
+        }
+
+        run(result, file_location, true, Converter.class.getClassLoader().getResource("./views/template_wrapper.html").getPath());
+    }
 
     private void toJSON(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
-        //JSON
-        //Since we know that the result was a linkedlist we add the Collection attribute
+        /*JSON
+        *Since we know that the result was a linkedlist we add the Collection attribute
+        */
         HashMap<String, String[]> map = new HashMap<>();
         String class_types[] = {"\"" + ((BaseDTO) ((LinkedList) obj).getFirst()).getDTOName() + "\"", "\"Collections\""};
         map.put("class_types", class_types);
@@ -91,32 +114,29 @@ public class CustomPrinter {
         run(listJSON, file_location,false, Converter.class.getClassLoader().getResource("./views/template_list.json").getPath());
     }
 
-    private void toHTML(DtoWrapper obj, String file_location) {}
-
     private void toHTML(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
         //HTML
-        int j = 0;
-        for (Object e : obj) {
-            HashMap<String, String[]> map = new HashMap<>();
-            String title[] = {"Result"};
-            map.put("page_title", title);
-            if(j == 0) {
-                map.put("table_header", ((BaseDTO) e).getPropertiesNames());
-            }
-            map.put("table_value", ((BaseDTO) e).getPropertiesValues());
+        HashMap<String, String[]> map = new HashMap<>();
+        String title[] = {"Result"};
+        map.put("page_title", title);
 
+        map.put("table_header", ((BaseDTO) ((LinkedList)obj).get(0)).getPropertiesNames());
+
+        for (Object e : (LinkedList)obj) {
+
+            map.put("table_value", ((BaseDTO) e).getPropertiesValues());
             listHTML.add(map);
-            j++;
+            map = new HashMap<>();
         }
 
         run(listHTML, file_location, true, Converter.class.getClassLoader().getResource("./views/template_list.html").getPath());
     }
 
-
     private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template){
         try {
-            converter.compile(list, file_location, isHTML, template);
+            converter.compile(list, isHTML, template);
+            converter.commit(converter.getMessage(), file_location);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,4 +171,27 @@ public class CustomPrinter {
         return s.equals("true") || s.equals("false");
     }
 
+    private LinkedList<HashMap<String, String[]>> processWrapperObject(Object obj){
+        LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
+
+        HashMap<String, String[]> map = new HashMap<>();
+        String title[] = {"Result"};
+        map.put("page_title", title);
+
+        if(obj instanceof LinkedList){
+            map.put("table_header", ((BaseDTO) ((LinkedList)obj).get(0)).getPropertiesNames());
+
+            for (Object e : (LinkedList)obj) {
+
+                map.put("table_value", ((BaseDTO) e).getPropertiesValues());
+                listHTML.add(map);
+                map = new HashMap<>();
+            }
+        }else{
+            map.put("table_header", ((BaseDTO) obj).getPropertiesNames());
+            map.put("table_value", ((BaseDTO) obj).getPropertiesValues());
+            listHTML.add(map);
+        }
+        return listHTML;
+    }
 }

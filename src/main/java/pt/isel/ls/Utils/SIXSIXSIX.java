@@ -2,6 +2,7 @@ package pt.isel.ls.Utils;
 
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Commands.GetChecklists;
+import pt.isel.ls.Commands.GetChecklistsCid;
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Router;
 
@@ -20,7 +21,7 @@ public class SIXSIXSIX {
 
     public static void main(String args[]) throws Exception {
         Router r = new Router(null, null, null);
-        Command gc = new GetChecklists();
+        Command gc = new GetChecklistsCid();
 
         Object obj = r.run(gc);
 
@@ -90,13 +91,13 @@ public class SIXSIXSIX {
             System.out.println("<---- BEGIN HTML TEST ---->");
 
             Converter c = new Converter();
-            c.compile(listHTML, "index.html", true, SIXSIXSIX.class.getClassLoader().getResource("./views/template_list.html").getPath());
-
+            c.compile(listHTML, true, SIXSIXSIX.class.getClassLoader().getResource("./views/template_list.html").getPath());
+            c.commit(c.getMessage(), "index.html");
 
             System.out.println("<---- BEGIN JSON TEST ---->");
             Converter c1 = new Converter();
-            c1.compile(listJSON, "index.json",false, SIXSIXSIX.class.getClassLoader().getResource("./views/template_list.json").getPath());
-
+            //c1.compile(listJSON,false, SIXSIXSIX.class.getClassLoader().getResource("./views/template_list.json").getPath());
+            //c.commit(c.getMessage(), "index.json");
 
 
         } catch (Exception e) {

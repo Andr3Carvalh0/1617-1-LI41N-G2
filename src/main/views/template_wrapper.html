@@ -5,17 +5,6 @@
         <meta charset="UTF-8">
     </head>
     <body>
-        {{#FOR_M}}{{0}}
-        <table cellpadding="3" border="1">
-            <tr>
-                {{#FOR}}<th>{{table_header}}</th>
-            </tr>
-            {{#FOR_M}}{{1}}
-            <tr>
-                {{#FOR}}<td>{{table_value}}</td>
-            </tr>
-            {{#END_M}}{{1}}
-        </table>
-        {{#END_M}}{{0}}
+    {{#FOR}}{{table}}
     </body>
 </html>
