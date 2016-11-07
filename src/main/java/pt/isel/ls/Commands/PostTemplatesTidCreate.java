@@ -47,7 +47,7 @@ public class PostTemplatesTidCreate extends Command {
         ps = con.prepareStatement(s);
         rs = ps.executeQuery();
 
-        int taskIndex = 1; // Índice que incrementa com cada task adicionada.
+        int taskIndex = 1; // indice que incrementa com cada task adicionada.
         s = "insert into checklist_task(Cl_id, Cl_Task_index, Cl_Task_name, Cl_Task_desc)values(?, ?, ?, ?)";
         ps = con.prepareStatement(s);
         while(rs.next()){

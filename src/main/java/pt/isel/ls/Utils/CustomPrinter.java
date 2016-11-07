@@ -54,12 +54,12 @@ public class CustomPrinter {
         else {
             String types = "";
             int count = 0;
-            if(obj.getChecklist() != null) types += "\"" + "Checklist" + "\"," ; count++;
-            if(obj.getChecklist_Task() != null) types += "\"" + "Checklist Task" + "\",";count++;
-            if(obj.getTemplate() != null) types += "\"" + "Template" + "\",";count++;
-            if(obj.getTemplate_Task() != null) types += "\"" + "Template Task" + "\",";count++;
+            if(obj.getChecklist() != null) { types += "\"" + "Checklist" + "\"," ; count++; }
+            if(obj.getChecklist_Task() != null) { types += "\"" + "Checklist Task" + "\",";count++; }
+            if(obj.getTemplate() != null) { types += "\"" + "Template" + "\",";count++; }
+            if(obj.getTemplate_Task() != null){  types += "\"" + "Template Task" + "\",";count++; }
 
-            if(count > 0) types += "\"" + "Collections" + "\"";
+            if(count > 0){ types += "\"" + "Collections" + "\""; count++; }
             //Since we have more than 1 type, the prop_header will only have the count attribute
 
 
