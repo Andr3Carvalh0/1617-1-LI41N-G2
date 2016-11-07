@@ -21,6 +21,7 @@ public class Converter {
     private void allocate(String baseFile) throws Exception {
         Scanner io = null;
         try {
+            message = new LinkedList<>();
             io = new Scanner(new File(baseFile));
 
             while (io.hasNextLine()) {
