@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class CustomPrinter {
 
-    Converter converter = new Converter();
+    private Converter converter = new Converter();
     private final String path = "./views/";
 
     public void print(Object obj, HashMap<String, String> map) throws Exception {
@@ -66,7 +66,7 @@ public class CustomPrinter {
             for (Object e : obj.getWrapperObjects()) {
 
                 LinkedList<HashMap<String, String[]>> listJSON = processWrapperToJSON(e);
-                converter.compile(listJSON, false, Converter.class.getClassLoader().getResource("./views/wrapper_element.json").getPath());
+                converter.compile(listJSON, false, Converter.class.getClassLoader().getResource(path +"wrapper_element.json").getPath());
 
                 String[] arr = new String[1];
                 arr[0] = converter.getMessage();
@@ -84,8 +84,8 @@ public class CustomPrinter {
 
             result.getFirst().put("prop_header", new String[]{"\"count\" : " + count + ""});
             result.getFirst().put("class_types", new String[]{types});
-            
-            run(result, file_location, false, Converter.class.getClassLoader().getResource("./views/template_wrapper.json").getPath());
+
+            run(result, file_location, false, Converter.class.getClassLoader().getResource(path +"template_wrapper.json").getPath());
         }
     }
 
@@ -97,7 +97,7 @@ public class CustomPrinter {
         else {
             for (Object e : obj.getWrapperObjects()) {
                 LinkedList<HashMap<String, String[]>> listHTML = processWrapperToHTML(e);
-                converter.compile(listHTML, true, Converter.class.getClassLoader().getResource("./views/wrapper_element.html").getPath());
+                converter.compile(listHTML, true, Converter.class.getClassLoader().getResource(path +"wrapper_element.html").getPath());
 
                 String[] arr = new String[1];
                 arr[0] = converter.getMessage();
@@ -107,7 +107,7 @@ public class CustomPrinter {
                 map = new HashMap<>();
             }
             result.get(0).put("page_title", new String[]{"Results"});
-            run(result, file_location, true, Converter.class.getClassLoader().getResource("./views/template_wrapper.html").getPath());
+            run(result, file_location, true, Converter.class.getClassLoader().getResource(path +"template_wrapper.html").getPath());
         }
     }
 
@@ -117,7 +117,7 @@ public class CustomPrinter {
         *Since we know that the result was a linkedlist we add the Collection attribute
         */
         HashMap<String, String[]> map = new HashMap<>();
-        String class_types[] = {"\"" + ((BaseDTO) ((LinkedList) obj).getFirst()).getDTOName() + "\"", "\"Collections\""};
+        String class_types[] = {"\"" + ((BaseDTO) obj.getFirst()).getDTOName() + "\"", "\"Collections\""};
         map.put("class_types", class_types);
 
         //Since we have more than 1 type, the prop_header will only have the count attribute
@@ -154,7 +154,7 @@ public class CustomPrinter {
             map = new HashMap<>();
         }
 
-        run(listJSON, file_location, false, Converter.class.getClassLoader().getResource("./views/template_list.json").getPath());
+        run(listJSON, file_location, false, Converter.class.getClassLoader().getResource(path +"template_list.json").getPath());
     }
 
     private void toHTML(LinkedList obj, String file_location) {
@@ -164,16 +164,16 @@ public class CustomPrinter {
         String title[] = {"Result"};
         map.put("page_title", title);
 
-        map.put("table_header", ((BaseDTO) ((LinkedList) obj).get(0)).getPropertiesNames());
+        map.put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
 
-        for (Object e : (LinkedList) obj) {
+        for (Object e : obj) {
 
             map.put("table_value", ((BaseDTO) e).getPropertiesValues());
             listHTML.add(map);
             map = new HashMap<>();
         }
 
-        run(listHTML, file_location, true, Converter.class.getClassLoader().getResource("./views/template_list.html").getPath());
+        run(listHTML, file_location, true, Converter.class.getClassLoader().getResource(path + "template_list.html").getPath());
     }
 
     private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template) {
@@ -208,10 +208,8 @@ public class CustomPrinter {
     }
 
     private static boolean isBoolean(String s) {
-        if (s == null) return false;
-        if (s.isEmpty()) return false;
+        return s != null && (s.equals("true") || s.equals("false"));
 
-        return s.equals("true") || s.equals("false");
     }
 
     private LinkedList<HashMap<String, String[]>> processWrapperToHTML(Object obj) {
@@ -273,8 +271,6 @@ public class CustomPrinter {
                 map = new HashMap<>();
             }
         }else{
-            props = new String[1];
-
             int numberOfProperties = ((BaseDTO) obj).getPropertiesNames().length;
             props = new String[numberOfProperties];
 
@@ -299,7 +295,6 @@ public class CustomPrinter {
             map.put("prop_body", props);
 
             listJSON.add(map);
-            map = new HashMap<>();
         }
         return listJSON;
     }
