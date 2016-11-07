@@ -46,8 +46,47 @@ public class CustomPrinter {
         run(obj.toString(), file_location);
     }
 
-    private void toJSON(DtoWrapper obj, String file_location) {
+    private void toJSON(DtoWrapper obj, String file_location) throws Exception {
+        LinkedList<HashMap<String, String[]>> result = new LinkedList<>();
+        HashMap<String, String[]> map = new HashMap<>();
 
+        if (obj.getWrapperObjects().size() == 0) System.out.println("The query didnt return any object!");
+        else {
+            String types = "";
+            int count = 0;
+            if(obj.getChecklist() != null) types += "\"" + "Checklist" + "\"," ; count++;
+            if(obj.getChecklist_Task() != null) types += "\"" + "Checklist Task" + "\",";count++;
+            if(obj.getTemplate() != null) types += "\"" + "Template" + "\",";count++;
+            if(obj.getTemplate_Task() != null) types += "\"" + "Template Task" + "\",";count++;
+
+            if(count > 0) types += "\"" + "Collections" + "\"";
+            //Since we have more than 1 type, the prop_header will only have the count attribute
+
+
+            for (Object e : obj.getWrapperObjects()) {
+
+                LinkedList<HashMap<String, String[]>> listJSON = processWrapperToJSON(e);
+                converter.compile(listJSON, false, Converter.class.getClassLoader().getResource("./views/wrapper_element.json").getPath());
+
+                String[] arr = new String[1];
+                arr[0] = converter.getMessage();
+                map.put("table", arr);
+                result.add(map);
+
+                map = new HashMap<>();
+            }
+            //Remove the "," from the last one
+            String tmp[] = result.getLast().get("table");
+            String msg = tmp[tmp.length-1];
+            msg = msg.substring(0, msg.length() - 2);
+            result.getLast().remove("table");
+            result.getLast().put("table", new String[]{msg});
+
+            result.getFirst().put("prop_header", new String[]{"\"count\" : " + count + ""});
+            result.getFirst().put("class_types", new String[]{types});
+            
+            run(result, file_location, false, Converter.class.getClassLoader().getResource("./views/template_wrapper.json").getPath());
+        }
     }
 
     private void toHTML(DtoWrapper obj, String file_location) throws Exception {
@@ -200,26 +239,68 @@ public class CustomPrinter {
     }
 
     private LinkedList<HashMap<String, String[]>> processWrapperToJSON(Object obj) {
-        LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
-
+        LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
+        String props[];
         HashMap<String, String[]> map = new HashMap<>();
-
         if (obj instanceof LinkedList) {
-            map.put("table_header", ((BaseDTO) ((LinkedList) obj).get(0)).getPropertiesNames());
-            map.put("table_name", new String[]{((BaseDTO) ((LinkedList) obj).get(0)).getDTOName()});
 
-            for (Object e : (LinkedList) obj) {
 
-                map.put("table_value", ((BaseDTO) e).getPropertiesValues());
-                listHTML.add(map);
+            for (Object e :(LinkedList)obj) {
+                int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
+                props = new String[numberOfProperties];
+
+                String name[] = {"\"" + ((BaseDTO) e).getDTOName() + "\""};
+                map.put("class_name", name);
+
+                for (int i = 0; i < numberOfProperties; i++) {
+
+                    String begin = "\"" + ((BaseDTO) e).getPropertiesNames()[i] + "\" : ";
+
+                    if (isInteger((((BaseDTO) e).getPropertiesValues()[i]), 10) || isBoolean((((BaseDTO) e).getPropertiesValues()[i]))) {
+                        begin += ((BaseDTO) e).getPropertiesValues()[i];
+
+                    } else {
+                        begin += "\"" + ((BaseDTO) e).getPropertiesValues()[i] + "\"";
+
+                    }
+
+                    props[i] = begin;
+
+                }
+                map.put("prop_body", props);
+
+                listJSON.add(map);
                 map = new HashMap<>();
             }
-        } else {
-            map.put("table_name", new String[]{((BaseDTO) obj).getDTOName()});
-            map.put("table_header", ((BaseDTO) obj).getPropertiesNames());
-            map.put("table_value", ((BaseDTO) obj).getPropertiesValues());
-            listHTML.add(map);
+        }else{
+            props = new String[1];
+
+            int numberOfProperties = ((BaseDTO) obj).getPropertiesNames().length;
+            props = new String[numberOfProperties];
+
+            String name[] = {"\"" + ((BaseDTO) obj).getDTOName() + "\""};
+            map.put("class_name", name);
+
+            for (int i = 0; i < numberOfProperties; i++) {
+
+                String begin = "\"" + ((BaseDTO) obj).getPropertiesNames()[i] + "\" : ";
+
+                if (isInteger((((BaseDTO) obj).getPropertiesValues()[i]), 10) || isBoolean((((BaseDTO) obj).getPropertiesValues()[i]))) {
+                    begin += ((BaseDTO) obj).getPropertiesValues()[i];
+
+                } else {
+                    begin += "\"" + ((BaseDTO) obj).getPropertiesValues()[i] + "\"";
+
+                }
+
+                props[i] = begin;
+
+            }
+            map.put("prop_body", props);
+
+            listJSON.add(map);
+            map = new HashMap<>();
         }
-        return listHTML;
+        return listJSON;
     }
 }

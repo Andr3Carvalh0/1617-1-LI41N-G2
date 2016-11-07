@@ -3,7 +3,7 @@
     <<class_types>>
   ],
   "properties":{
-    <<#FOR>><<prop_header>>
+    <<prop_header>>
   },
   "entities": [
     <<#FOR>><<table>>

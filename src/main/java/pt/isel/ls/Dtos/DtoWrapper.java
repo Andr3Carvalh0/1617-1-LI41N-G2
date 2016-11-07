@@ -35,6 +35,9 @@ public class DtoWrapper{
     public void setTemplate_Task(Object template_Task) {
         Template_Task = template_Task;
     }
+    public Object getTemplate_Task() {
+        return Template_Task;
+    }
 
     @Override
     public String toString(){
