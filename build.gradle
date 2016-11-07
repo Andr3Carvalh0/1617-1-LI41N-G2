@@ -9,13 +9,6 @@ task copyTask(type: Copy) {
 	into 'build/classes/main/views'
 }
 
-
-dependencies {
-    compile fileTree(dir: 'vendor/main', include: '*.jar')
-    testCompile fileTree(dir: 'vendor/test', include: '*.jar')
-	tasks.copyTask.execute()
-}
-
 task initDb(type:Exec) {
 	def varsArray = System.getenv("LS_DBCONN_TEST_SQLSRV").split(";")
 	def credentials = new String[4]
@@ -24,4 +17,11 @@ task initDb(type:Exec) {
 	}
 	
 	commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./Table_Creation_Script.sql"
+}
+
+dependencies {
+    compile fileTree(dir: 'vendor/main', include: '*.jar')
+    testCompile fileTree(dir: 'vendor/test', include: '*.jar')
+	tasks.copyTask.execute()
+	tasks.initDb.execute()
 }
