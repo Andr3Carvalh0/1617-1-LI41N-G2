@@ -19,7 +19,8 @@ public class App {
                 Command c = r.Route();
 
                 CustomPrinter cPrinter = new CustomPrinter();
-                cPrinter.print(r.run(c), cparser.getHeaders());
+                Object obj = r.run(c);
+                cPrinter.print(obj, cparser.getHeaders());
             } else throw new Exception("Invalid number of arguments.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,7 +40,8 @@ public class App {
                 Command c = r.Route();
 
                 CustomPrinter cPrinter = new CustomPrinter();
-                cPrinter.print(r.run(c), cparser.getHeaders());
+                Object obj = r.run(c);
+                cPrinter.print(obj, cparser.getHeaders());
             }
         }
     }
