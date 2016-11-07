@@ -15,26 +15,28 @@ public class CustomPrinter {
         String file_type = map.get("accept");
         String file_location = map.get("file-name");
 
-        if(file_type == null){
-            if(obj instanceof LinkedList){
+        if (file_type == null) {
+            if (obj instanceof LinkedList) {
                 toHTML((LinkedList) obj, file_location);
-            }else{
-                toHTML((DtoWrapper)obj, file_location);
+            } else if (obj instanceof String) {
+                run((String)obj, null);
+            } else {
+                toHTML((DtoWrapper) obj, file_location);
             }
-        }else{
-            if(file_type.contains("plain")){
+        } else {
+            if (file_type.contains("plain")) {
                 toPlain(obj, file_location);
-            }else if(file_type.contains("html")){
-                if(obj instanceof LinkedList){
+            } else if (file_type.contains("html")) {
+                if (obj instanceof LinkedList) {
                     toHTML((LinkedList) obj, file_location);
-                }else{
-                    toHTML((DtoWrapper)obj, file_location);
+                } else {
+                    toHTML((DtoWrapper) obj, file_location);
                 }
-            }else {
-                if(obj instanceof LinkedList){
+            } else {
+                if (obj instanceof LinkedList) {
                     toJSON((LinkedList) obj, file_location);
-                }else{
-                    toJSON((DtoWrapper)obj, file_location);
+                } else {
+                    toJSON((DtoWrapper) obj, file_location);
                 }
             }
         }
@@ -52,7 +54,7 @@ public class CustomPrinter {
         LinkedList<HashMap<String, String[]>> result = new LinkedList<>();
         HashMap<String, String[]> map = new HashMap<>();
 
-        for(Object e : obj.getWrapperObjects()){
+        for (Object e : obj.getWrapperObjects()) {
             LinkedList<HashMap<String, String[]>> listHTML = processWrapperObject(e);
 
             converter.compile(listHTML, true, Converter.class.getClassLoader().getResource("./views/wrapper_element.html").getPath());
@@ -111,7 +113,7 @@ public class CustomPrinter {
             map = new HashMap<>();
         }
 
-        run(listJSON, file_location,false, Converter.class.getClassLoader().getResource("./views/template_list.json").getPath());
+        run(listJSON, file_location, false, Converter.class.getClassLoader().getResource("./views/template_list.json").getPath());
     }
 
     private void toHTML(LinkedList obj, String file_location) {
@@ -121,9 +123,9 @@ public class CustomPrinter {
         String title[] = {"Result"};
         map.put("page_title", title);
 
-        map.put("table_header", ((BaseDTO) ((LinkedList)obj).get(0)).getPropertiesNames());
+        map.put("table_header", ((BaseDTO) ((LinkedList) obj).get(0)).getPropertiesNames());
 
-        for (Object e : (LinkedList)obj) {
+        for (Object e : (LinkedList) obj) {
 
             map.put("table_value", ((BaseDTO) e).getPropertiesValues());
             listHTML.add(map);
@@ -133,7 +135,7 @@ public class CustomPrinter {
         run(listHTML, file_location, true, Converter.class.getClassLoader().getResource("./views/template_list.html").getPath());
     }
 
-    private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template){
+    private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template) {
         try {
             converter.compile(list, isHTML, template);
             converter.commit(converter.getMessage(), file_location);
@@ -142,7 +144,7 @@ public class CustomPrinter {
         }
     }
 
-    private void run(String text, String file_location){
+    private void run(String text, String file_location) {
         try {
             converter.commit(text, file_location);
         } catch (Exception e) {
@@ -171,23 +173,23 @@ public class CustomPrinter {
         return s.equals("true") || s.equals("false");
     }
 
-    private LinkedList<HashMap<String, String[]>> processWrapperObject(Object obj){
+    private LinkedList<HashMap<String, String[]>> processWrapperObject(Object obj) {
         LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
 
         HashMap<String, String[]> map = new HashMap<>();
         String title[] = {"Result"};
         map.put("page_title", title);
 
-        if(obj instanceof LinkedList){
-            map.put("table_header", ((BaseDTO) ((LinkedList)obj).get(0)).getPropertiesNames());
+        if (obj instanceof LinkedList) {
+            map.put("table_header", ((BaseDTO) ((LinkedList) obj).get(0)).getPropertiesNames());
 
-            for (Object e : (LinkedList)obj) {
+            for (Object e : (LinkedList) obj) {
 
                 map.put("table_value", ((BaseDTO) e).getPropertiesValues());
                 listHTML.add(map);
                 map = new HashMap<>();
             }
-        }else{
+        } else {
             map.put("table_header", ((BaseDTO) obj).getPropertiesNames());
             map.put("table_value", ((BaseDTO) obj).getPropertiesValues());
             listHTML.add(map);

@@ -12,6 +12,7 @@ public class CommandParser {
     public CommandParser(String[] args) throws Exception {
         method = args[0];
         path = args[1].split("/");
+        params = new HashMap<String, String>();
         if (args.length > 2) {
             if(args[2].contains("=") && args[2].contains(":")) throw new Exception("Não sao permitidos parâmetros com ':' ou headers com '='");
 
@@ -37,7 +38,6 @@ public class CommandParser {
     }
 
     private void setParams(String[] args, int n) {
-        params = new HashMap<String, String>();
         String[] paramsArray = args[n].split("&");
         String[] aux;
         for (int i = 0; i < paramsArray.length; i++) {
