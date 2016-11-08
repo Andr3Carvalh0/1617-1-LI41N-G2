@@ -10,6 +10,7 @@ public class CustomPrinter {
 
     private Converter converter = new Converter();
     private final String path = "./views/";
+    private final String quoutes = "\"";
 
     public void print(Object obj, HashMap<String, String> map) throws Exception {
         String file_type = map.get("accept");
@@ -54,16 +55,11 @@ public class CustomPrinter {
         else {
             String types = "";
             int count = 0;
-            if(obj.getChecklist() != null) { types += "\"" + "Checklist" + "\"," ; count++; }
-            if(obj.getChecklist_Task() != null) { types += "\"" + "Checklist Task" + "\",";count++; }
-            if(obj.getTemplate() != null) { types += "\"" + "Template" + "\",";count++; }
-            if(obj.getTemplate_Task() != null){  types += "\"" + "Template Task" + "\",";count++; }
-
-            if(count > 0){ types += "\"" + "Collections" + "\""; count++; }
-            //Since we have more than 1 type, the prop_header will only have the count attribute
-
 
             for (Object e : obj.getWrapperObjects()) {
+
+                types += transformToJSON(e) + ",";
+                count++;
 
                 LinkedList<HashMap<String, String[]>> listJSON = processWrapperToJSON(e);
                 converter.compile(listJSON, false, Converter.class.getClassLoader().getResource(path +"wrapper_element.json").getPath());
@@ -81,6 +77,8 @@ public class CustomPrinter {
             msg = msg.substring(0, msg.length() - 2);
             result.getLast().remove("table");
             result.getLast().put("table", new String[]{msg});
+
+            if(count > 0){ types += "\"" + "Collections" + "\""; count++; }
 
             result.getFirst().put("prop_header", new String[]{"\"count\" : " + count + ""});
             result.getFirst().put("class_types", new String[]{types});
@@ -111,67 +109,28 @@ public class CustomPrinter {
         }
     }
 
-    private void toJSON(LinkedList obj, String file_location) {
-        LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
-        /*JSON
-        *Since we know that the result was a linkedlist we add the Collection attribute
-        */
-        HashMap<String, String[]> map = new HashMap<>();
-        String class_types[] = {"\"" + ((BaseDTO) obj.getFirst()).getDTOName() + "\"", "\"Collections\""};
-        map.put("class_types", class_types);
+    private void toJSON(LinkedList obj, String file_location) throws Exception {
+        LinkedList<HashMap<String, String[]>> listJSON;
+
+        String class_types[] = {transformToJSON((BaseDTO) obj.getFirst()) + ", " + quoutes + "Collections" + quoutes};
 
         //Since we have more than 1 type, the prop_header will only have the count attribute
-        String props[] = {"\"count\" : " + class_types.length + ""};
-        map.put("prop_header", props);
+        listJSON = processWrapperToJSON(obj);
 
-        //listJSON.add(map);
-        for (Object e : obj) {
-            int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
-
-            props = new String[numberOfProperties];
-
-            String name[] = {"\"" + ((BaseDTO) e).getDTOName() + "\""};
-            map.put("class_name", name);
-
-            for (int i = 0; i < numberOfProperties; i++) {
-
-                String begin = "\"" + ((BaseDTO) e).getPropertiesNames()[i] + "\" : ";
-
-                if (isInteger((((BaseDTO) e).getPropertiesValues()[i]), 10) || isBoolean((((BaseDTO) e).getPropertiesValues()[i]))) {
-                    begin += ((BaseDTO) e).getPropertiesValues()[i];
-
-                } else {
-                    begin += "\"" + ((BaseDTO) e).getPropertiesValues()[i] + "\"";
-
-                }
-
-                props[i] = begin;
-
-            }
-            map.put("prop_body", props);
-
-            listJSON.add(map);
-            map = new HashMap<>();
-        }
+        listJSON.getFirst().put("prop_header", new String[]{"\"count\" : " + 2 + ""});
+        listJSON.getFirst().put("class_types", class_types);
 
         run(listJSON, file_location, false, Converter.class.getClassLoader().getResource(path +"template_list.json").getPath());
     }
 
     private void toHTML(LinkedList obj, String file_location) {
-        LinkedList<HashMap<String, String[]>> listHTML = new LinkedList<>();
-        //HTML
-        HashMap<String, String[]> map = new HashMap<>();
+        LinkedList<HashMap<String, String[]>> listHTML;
+
         String title[] = {"Result"};
-        map.put("page_title", title);
 
-        map.put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
-
-        for (Object e : obj) {
-
-            map.put("table_value", ((BaseDTO) e).getPropertiesValues());
-            listHTML.add(map);
-            map = new HashMap<>();
-        }
+        listHTML = processWrapperToHTML(obj);
+        listHTML.getFirst().put("page_title", title);
+        listHTML.getFirst().put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
 
         run(listHTML, file_location, true, Converter.class.getClassLoader().getResource(path + "template_list.html").getPath());
     }
@@ -189,27 +148,8 @@ public class CustomPrinter {
         try {
             converter.commit(text, file_location);
         } catch (Exception e) {
-            System.out.println();
+            System.out.println("PARABENS: Acabaste de conseguir provocar um....Erro!");
         }
-    }
-
-    private static boolean isInteger(String s, int radix) {
-        if (s == null) return false;
-
-        if (s.isEmpty()) return false;
-        for (int i = 0; i < s.length(); i++) {
-            if (i == 0 && s.charAt(i) == '-') {
-                if (s.length() == 1) return false;
-                else continue;
-            }
-            if (Character.digit(s.charAt(i), radix) < 0) return false;
-        }
-        return true;
-    }
-
-    private static boolean isBoolean(String s) {
-        return s != null && (s.equals("true") || s.equals("false"));
-
     }
 
     private LinkedList<HashMap<String, String[]>> processWrapperToHTML(Object obj) {
@@ -236,7 +176,7 @@ public class CustomPrinter {
         return listHTML;
     }
 
-    private LinkedList<HashMap<String, String[]>> processWrapperToJSON(Object obj) {
+    private LinkedList<HashMap<String, String[]>> processWrapperToJSON(Object obj) throws Exception {
         LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
         String props[];
         HashMap<String, String[]> map = new HashMap<>();
@@ -247,18 +187,18 @@ public class CustomPrinter {
                 int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
                 props = new String[numberOfProperties];
 
-                String name[] = {"\"" + ((BaseDTO) e).getDTOName() + "\""};
+                String name[] = new String[]{transformToJSON((BaseDTO) e)};
                 map.put("class_name", name);
 
                 for (int i = 0; i < numberOfProperties; i++) {
 
-                    String begin = "\"" + ((BaseDTO) e).getPropertiesNames()[i] + "\" : ";
+                    String begin = quoutes + ((BaseDTO) e).getPropertiesNames()[i] + quoutes + ": ";
 
                     if (isInteger((((BaseDTO) e).getPropertiesValues()[i]), 10) || isBoolean((((BaseDTO) e).getPropertiesValues()[i]))) {
                         begin += ((BaseDTO) e).getPropertiesValues()[i];
 
                     } else {
-                        begin += "\"" + ((BaseDTO) e).getPropertiesValues()[i] + "\"";
+                        begin += quoutes + ((BaseDTO) e).getPropertiesValues()[i] + quoutes;
 
                     }
 
@@ -297,5 +237,40 @@ public class CustomPrinter {
             listJSON.add(map);
         }
         return listJSON;
+    }
+
+
+    /*UTILS*/
+    private static boolean isInteger(String s, int radix) {
+        if (s == null) return false;
+
+        if (s.isEmpty()) return false;
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1) return false;
+                else continue;
+            }
+            if (Character.digit(s.charAt(i), radix) < 0) return false;
+        }
+        return true;
+    }
+
+    private static boolean isBoolean(String s) {
+        return s != null && (s.equals("true") || s.equals("false"));
+
+    }
+
+    private String transformToJSON(Object e) throws Exception {
+        String tmp = "";
+        if(e instanceof LinkedList){
+           tmp = quoutes + ((BaseDTO)((LinkedList)e).get(0)).getDTOName() + quoutes;
+        }
+        else if(e instanceof BaseDTO){
+            tmp = quoutes + ((BaseDTO)e).getDTOName() + quoutes;
+        }else{
+            throw new Exception("Object not supported!");
+        }
+
+        return tmp;
     }
 }
