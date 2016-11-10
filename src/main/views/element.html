@@ -1,20 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{{page_title}}</title>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
-    </head>
-    <body>
+    <h2>{{table_name}}</h2>
         <table class="table">
+            <thead>
             <tr>
                 {{#FOR}}<th>{{table_header}}</th>
             </tr>
+            </thead>
+            <tbody>
             {{#FOR_M}}{{0}}
             <tr>
                 {{#FOR}}<td>{{table_value}}</td>
             </tr>
             {{#END_M}}{{0}}
+            </tbody>
         </table>
-    </body>
-</html>

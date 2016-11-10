@@ -123,7 +123,7 @@ public class TemplateTest {
         try {
             con = GetConnection.connect(true);
 
-            addTemplate("TEST_TEMPLATE", "This is a test", con);
+            addTemplate("TEST_TEMPLATE", "This is Tree_Commands test", con);
             tid = getLastInsertedTemplate(con);
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
