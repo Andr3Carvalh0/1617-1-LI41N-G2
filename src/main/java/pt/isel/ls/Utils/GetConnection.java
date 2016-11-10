@@ -21,7 +21,7 @@ public class GetConnection {
                         "LS_DBCONN_APP_SQLSRV - properties for the application database - SQL Server.\n" +
                         "LS_DBCONN_TEST_SQLSRV - properties for the test database - SQL Server.\n" +
                         "\n" +
-                        "The properties are represented as Tree_Commands sequence of name value pairs (name=pair) separated by ';'. E.g. server=myServerAddress;database=myDataBase;user=myUsername;password=myPassword;");
+                        "The properties are represented as a sequence of name value pairs (name=pair) separated by ';'. E.g. server=myServerAddress;database=myDataBase;user=myUsername;password=myPassword;");
             newDataSource();
         }
         return src.getConnection();

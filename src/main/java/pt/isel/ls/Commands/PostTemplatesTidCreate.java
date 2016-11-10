@@ -23,7 +23,7 @@ public class PostTemplatesTidCreate extends Command {
         rs.next();
         String templateName = rs.getString(2), templateDesc = rs.getString(3);
 
-        //2º - Criar Tree_Commands checklist. Alguns dos seus dados podem ser copiados da template, se não forem inseridos como parâmetros.
+        //2º - Criar a checklist. Alguns dos seus dados podem ser copiados da template, se não forem inseridos como parâmetros.
         s = "insert into checklist(Cl_name, Cl_desc, Cl_duedate, Tp_id) values(?, ?, CAST(? as datetime), ?)";
         ps = con.prepareStatement(s);
         if(params.containsKey("name")) ps.setString(1, params.get("name"));

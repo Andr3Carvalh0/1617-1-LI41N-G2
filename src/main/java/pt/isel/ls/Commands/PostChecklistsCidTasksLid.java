@@ -12,7 +12,7 @@ public class PostChecklistsCidTasksLid extends Command {
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
-        // 1 - Change Tree_Commands task's isClosed status.
+        // 1 - Change a task's isClosed status.
         String s = "update checklist_task set Cl_Task_closed = ? where Cl_id = ? and Cl_Task_id = ?";
         PreparedStatement ps = con.prepareStatement(s);
         String isClosed = "0";
@@ -27,7 +27,7 @@ public class PostChecklistsCidTasksLid extends Command {
         ps = con.prepareStatement(s);
         ResultSet rs = ps.executeQuery();
         // isBeforeFirst returns false if the cursor isn't placed before the first result, or if the result set is empty.
-        // If called on Tree_Commands newly acquired result set, it will return false if the result set is empty.
+        // If called on a newly acquired result set, it will return false if the result set is empty.
         if (!rs.isBeforeFirst()) {
             s = "update checklist set Cl_closed = 1 where Cl_id = " + params.get("{cid}");
             ps = con.prepareStatement(s);
