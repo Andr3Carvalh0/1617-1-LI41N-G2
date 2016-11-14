@@ -15,10 +15,7 @@ public class ToDosView extends HtmlPage{
             h1(text("Create new To Do")),
             form("POST", "/todos",
                 label("description","Description: "),
-                textInput("description"),
-                label("test", "Test: "),
-                textInput("test"),
-                new HtmlElem("input").withAttr("type","submit").withAttr("value","create")
+                textInput("description")
             )
         );        
     }

@@ -29,6 +29,7 @@ public class FirstHttpServer {
         server.setHandler(handler);
         handler.addServletWithMapping(new ServletHolder(new TimeServlet()), "/*");
         server.start();
+        logger.info("Server started");
         server.join();
 
        logger.info("main ends.");
