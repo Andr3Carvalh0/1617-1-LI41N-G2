@@ -12,7 +12,7 @@ public class PostChecklistsCidTags extends pt.isel.ls.Commands.Command {
         String s1 = "insert into tag_checklist values(?,?)";
         PreparedStatement ps = con.prepareStatement(s1);
         ps.setString(1, params.get("gid"));
-        ps.setString(2, params.get("cid"));
+        ps.setString(2, params.get("{cid}"));
         ps.executeUpdate();
         return "Success!";
     }
