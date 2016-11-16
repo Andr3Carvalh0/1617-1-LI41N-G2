@@ -131,17 +131,25 @@ public class CustomPrinter {
 
         listHTML = processWrapperToHTML(obj);
         listHTML.getFirst().put("page_title", title);
-        listHTML.getFirst().put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
+        if (obj.size() > 0) {
+            listHTML.getFirst().put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
 
-        converter.compile(listHTML, true, Converter.class.getClassLoader().getResource(path + "element.html").getPath());
+            converter.compile(listHTML, true, Converter.class.getClassLoader().getResource(path + "element.html").getPath());
 
-        String[] arr = new String[1];
-        arr[0] = converter.getMessage();
-        listHTML.getFirst().put("table", arr);
+            String[] arr = new String[1];
+            arr[0] = converter.getMessage();
+            listHTML.getFirst().put("table", arr);
 
+        }
+        else{
+            listHTML = new LinkedList<>();
+            HashMap<String, String[]> map = new HashMap<>();
+            map.put("page_title", title);
+            listHTML.add(map);
+
+        }
         run(listHTML, file_location, true, Converter.class.getClassLoader().getResource(path + "template.html").getPath());
     }
-
     private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template) {
         try {
             converter.compile(list, isHTML, template);
@@ -165,16 +173,20 @@ public class CustomPrinter {
         HashMap<String, String[]> map = new HashMap<>();
 
         if (obj instanceof LinkedList) {
-            map.put("table_header", ((BaseDTO) ((LinkedList) obj).get(0)).getPropertiesNames());
-            map.put("table_name", new String[]{((BaseDTO) ((LinkedList) obj).get(0)).getDTOName()});
+            if (((LinkedList) obj).size() > 0) {
+                map.put("table_header", ((BaseDTO) ((LinkedList) obj).get(0)).getPropertiesNames());
+                map.put("table_name", new String[]{((BaseDTO) ((LinkedList) obj).get(0)).getDTOName()});
 
-            for (Object e : (LinkedList) obj) {
+                for (Object e : (LinkedList) obj) {
 
-                map.put("table_value", ((BaseDTO) e).getPropertiesValues());
+                    map.put("table_value", ((BaseDTO) e).getPropertiesValues());
+                    listHTML.add(map);
+                    map = new HashMap<>();
+                }
+            }else{
                 listHTML.add(map);
-                map = new HashMap<>();
             }
-        } else {
+        }else {
             map.put("table_name", new String[]{((BaseDTO) obj).getDTOName()});
             map.put("table_header", ((BaseDTO) obj).getPropertiesNames());
             map.put("table_value", ((BaseDTO) obj).getPropertiesValues());
