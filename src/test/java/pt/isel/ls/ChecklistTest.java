@@ -329,8 +329,8 @@ public class ChecklistTest {
             checklists = (LinkedList<Checklist>) new GetChecklistsOpenSortedNoftasks().execute(null, con);
 
             if(checklists != null){
-                assertEquals("TESTE2", checklists.get(checklists.size()-2).getName());
-                assertEquals("TESTE1", checklists.get(checklists.size()-1).getName());
+                assertEquals("TESTE2", checklists.get(checklists.size()-1).getName());
+                assertEquals("TESTE1", checklists.get(checklists.size()-2).getName());
             }
         }finally {
             if (con != null) {

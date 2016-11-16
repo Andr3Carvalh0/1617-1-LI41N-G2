@@ -88,8 +88,8 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
         checklists = new LinkedList<>();
 
         wrapper.sort((o1, o2) -> {
-            if(o1.getSize() < o2.getSize()) return -1;
-            if(o1.getSize() > o2.getSize()) return 1;
+            if(o1.getSize() > o2.getSize()) return -1;
+            if(o1.getSize() < o2.getSize()) return 1;
             return  0;
         });
 
