@@ -113,11 +113,17 @@ public class CustomPrinter {
 
     private void toJSON(LinkedList obj, String file_location) {
         LinkedList<HashMap<String, String[]>> listJSON = new LinkedList<>();
+        String class_types[];
         /*JSON
         *Since we know that the result was a linkedlist we add the Collection attribute
         */
         HashMap<String, String[]> map = new HashMap<>();
-        String class_types[] = {"\"" + ((BaseDTO) obj.getFirst()).getDTOName() + "\"", "\"Collections\""};
+        if(obj.size() > 0) {
+            class_types = new String[]{"\"" + ((BaseDTO) obj.getFirst()).getDTOName() + "\"", "\"Collections\""};
+        }
+        else {
+            class_types = new String[]{"\"" + "\"", "\"Collections\""};
+        }
         map.put("class_types", class_types);
 
         //Since we have more than 1 type, the prop_header will only have the count attribute
@@ -125,35 +131,39 @@ public class CustomPrinter {
         map.put("prop_header", props);
 
         //listJSON.add(map);
-        for (Object e : obj) {
-            int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
+        if(obj.size() > 0) {
+            for (Object e : obj) {
+                int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
 
-            props = new String[numberOfProperties];
+                props = new String[numberOfProperties];
 
-            String name[] = {"\"" + ((BaseDTO) e).getDTOName() + "\""};
-            map.put("class_name", name);
+                String name[] = {"\"" + ((BaseDTO) e).getDTOName() + "\""};
+                map.put("class_name", name);
 
-            for (int i = 0; i < numberOfProperties; i++) {
+                for (int i = 0; i < numberOfProperties; i++) {
 
-                String begin = "\"" + ((BaseDTO) e).getPropertiesNames()[i] + "\" : ";
+                    String begin = "\"" + ((BaseDTO) e).getPropertiesNames()[i] + "\" : ";
 
-                if (isInteger((((BaseDTO) e).getPropertiesValues()[i]), 10) || isBoolean((((BaseDTO) e).getPropertiesValues()[i]))) {
-                    begin += ((BaseDTO) e).getPropertiesValues()[i];
+                    if (isInteger((((BaseDTO) e).getPropertiesValues()[i]), 10) || isBoolean((((BaseDTO) e).getPropertiesValues()[i]))) {
+                        begin += ((BaseDTO) e).getPropertiesValues()[i];
 
-                } else {
-                    begin += "\"" + ((BaseDTO) e).getPropertiesValues()[i] + "\"";
+                    } else {
+                        begin += "\"" + ((BaseDTO) e).getPropertiesValues()[i] + "\"";
+
+                    }
+
+                    props[i] = begin;
 
                 }
+                map.put("prop_body", props);
 
-                props[i] = begin;
-
+                listJSON.add(map);
+                map = new HashMap<>();
             }
-            map.put("prop_body", props);
-
-            listJSON.add(map);
-            map = new HashMap<>();
         }
-
+        else {
+            listJSON.add(map);
+        }
         run(listJSON, file_location, false, Converter.class.getClassLoader().getResource(path +"template_list.json").getPath());
     }
 
@@ -164,15 +174,18 @@ public class CustomPrinter {
         String title[] = {"Result"};
         map.put("page_title", title);
 
-        map.put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
+        if(obj.size() > 0) {
+            map.put("table_header", ((BaseDTO) obj.get(0)).getPropertiesNames());
 
-        for (Object e : obj) {
+            for (Object e : obj) {
 
-            map.put("table_value", ((BaseDTO) e).getPropertiesValues());
+                map.put("table_value", ((BaseDTO) e).getPropertiesValues());
+                listHTML.add(map);
+                map = new HashMap<>();
+            }
+        } else {
             listHTML.add(map);
-            map = new HashMap<>();
         }
-
         run(listHTML, file_location, true, Converter.class.getClassLoader().getResource(path + "template_list.html").getPath());
     }
 
