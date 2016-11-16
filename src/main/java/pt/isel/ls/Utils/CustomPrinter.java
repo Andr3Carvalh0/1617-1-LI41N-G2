@@ -56,24 +56,31 @@ public class CustomPrinter {
             String types = "";
             int count = 0;
 
-            for (int i = 0; i< obj.getWrapperObjects().size(); i++) {
+            for (int i = 0; i < obj.getWrapperObjects().size(); i++) {
                 Object e = obj.getWrapperObjects().get(i);
-                types += transformToJSON(e) + ",";
-                count++;
+                if (e != null) {
+                    types += transformToJSON(e) + ",";
+                    count++;
 
-                LinkedList<HashMap<String, String[]>> listJSON = processWrapperToJSON(e);
-                converter.compile(listJSON, false, Converter.class.getClassLoader().getResource(path + "element.json").getPath());
+                    LinkedList<HashMap<String, String[]>> listJSON = processWrapperToJSON(e);
+                    if (listJSON.size() > 0) {
+                        converter.compile(listJSON, false, Converter.class.getClassLoader().getResource(path + "element.json").getPath());
 
-                String[] arr = new String[1];
-                arr[0] = converter.getMessage() + (i == (obj.getWrapperObjects().size() -1) ? "" : ",");
-                map.put("table", arr);
-                result.add(map);
+                        String[] arr = new String[1];
+                        arr[0] = converter.getMessage() + (i == (obj.getWrapperObjects().size() - 1) ? "" : ",");
+                        map.put("table", arr);
+                        result.add(map);
 
-                map = new HashMap<>();
+                        map = new HashMap<>();
+                    }
+                }
             }
 
 
-            if(count > 0){ types += "\"" + "Collections" + "\""; count++; }
+            if (count > 0) {
+                types += "\"" + "Collections" + "\"";
+                count++;
+            }
 
             result.getFirst().put("prop_header", new String[]{"\"count\" : " + count + ""});
             result.getFirst().put("class_types", new String[]{types});
@@ -121,7 +128,7 @@ public class CustomPrinter {
         listJSON.getFirst().put("prop_header", new String[]{"\"count\" : " + 2 + ""});
         listJSON.getFirst().put("class_types", class_types);
 
-        run(listJSON, file_location, false, Converter.class.getClassLoader().getResource(path +"template.json").getPath());
+        run(listJSON, file_location, false, Converter.class.getClassLoader().getResource(path + "template.json").getPath());
     }
 
     private void toHTML(LinkedList obj, String file_location) throws Exception {
@@ -140,8 +147,7 @@ public class CustomPrinter {
             arr[0] = converter.getMessage();
             listHTML.getFirst().put("table", arr);
 
-        }
-        else{
+        } else {
             listHTML = new LinkedList<>();
             HashMap<String, String[]> map = new HashMap<>();
             map.put("page_title", title);
@@ -150,6 +156,7 @@ public class CustomPrinter {
         }
         run(listHTML, file_location, true, Converter.class.getClassLoader().getResource(path + "template.html").getPath());
     }
+
     private void run(LinkedList<HashMap<String, String[]>> list, String file_location, boolean isHTML, String template) {
         try {
             converter.compile(list, isHTML, template);
@@ -183,10 +190,10 @@ public class CustomPrinter {
                     listHTML.add(map);
                     map = new HashMap<>();
                 }
-            }else{
+            } else {
                 listHTML.add(map);
             }
-        }else {
+        } else {
             map.put("table_name", new String[]{((BaseDTO) obj).getDTOName()});
             map.put("table_header", ((BaseDTO) obj).getPropertiesNames());
             map.put("table_value", ((BaseDTO) obj).getPropertiesValues());
@@ -200,7 +207,7 @@ public class CustomPrinter {
         String props[];
         HashMap<String, String[]> map = new HashMap<>();
         if (obj instanceof LinkedList) {
-            for (Object e :(LinkedList)obj) {
+            for (Object e : (LinkedList) obj) {
                 int numberOfProperties = ((BaseDTO) e).getPropertiesNames().length;
                 props = new String[numberOfProperties];
 
@@ -227,7 +234,7 @@ public class CustomPrinter {
                 listJSON.add(map);
                 map = new HashMap<>();
             }
-        }else{
+        } else {
             int numberOfProperties = ((BaseDTO) obj).getPropertiesNames().length;
             props = new String[numberOfProperties];
 
@@ -279,12 +286,13 @@ public class CustomPrinter {
 
     private String transformToJSON(Object e) throws Exception {
         String tmp = "";
-        if(e instanceof LinkedList){
-           tmp = quoutes + ((BaseDTO)((LinkedList)e).get(0)).getDTOName() + quoutes;
-        }
-        else if(e instanceof BaseDTO){
-            tmp = quoutes + ((BaseDTO)e).getDTOName() + quoutes;
-        }else{
+        if (e instanceof LinkedList) {
+            if (((LinkedList) e).size() > 0) {
+                tmp = quoutes + ((BaseDTO) ((LinkedList) e).get(0)).getDTOName() + quoutes;
+            }
+        } else if (e instanceof BaseDTO) {
+            tmp = quoutes + ((BaseDTO) e).getDTOName() + quoutes;
+        } else {
             throw new Exception("Object not supported!");
         }
 
