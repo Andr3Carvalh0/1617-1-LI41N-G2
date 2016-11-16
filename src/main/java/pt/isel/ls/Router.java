@@ -6,7 +6,6 @@ import pt.isel.ls.Utils.GetConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Router {
     private String method;
@@ -21,8 +20,8 @@ public class Router {
 
     public Command Route() throws SQLException {
 
-        Command_Node tree = new Tree_Commands().getTree();
-        Command_Node current;
+        CommandNode tree = new TreeCommands().getTree();
+        CommandNode current;
         if((current = searchNode_Method(tree, method)) == null) return null;
 
         //THis is the Options Command
@@ -32,8 +31,8 @@ public class Router {
 
     }
 
-    private Command_Node searchNode_Method(Command_Node node, String cmp){
-        for (Command_Node child: node.getChildren()) {
+    private CommandNode searchNode_Method(CommandNode node, String cmp){
+        for (CommandNode child: node.getChildren()) {
             if(child.getName().equals(cmp)){
                 return child;
             }
@@ -41,8 +40,8 @@ public class Router {
         return null;
     }
 
-    private Command searchNode_Path(Command_Node node, String[] cmp){
-        for (Command_Node c_node : node.getChildren()) {
+    private Command searchNode_Path(CommandNode node, String[] cmp){
+        for (CommandNode c_node : node.getChildren()) {
             Command cmd = c_node.getCommand();
             int i = 1;
             for (; i < cmd.getPath().length; i++) {

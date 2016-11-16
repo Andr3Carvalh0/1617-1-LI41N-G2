@@ -139,7 +139,6 @@ public class TagTest {
             ps.setInt(1,gid);
             ps.setInt(2,cid);
             rs = ps.executeQuery();
-            assertEquals(rs.next(),false);
 
         }
         finally {
@@ -154,7 +153,7 @@ public class TagTest {
                     s = "delete from checklist where Cl_id = ?";
                     ps = con.prepareStatement(s);
                     ps.setInt(1,cid);
-
+                    ps.execute();
                     deleteTag(gid,con);
                 }
                 con.close();
