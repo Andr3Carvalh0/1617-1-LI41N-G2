@@ -11,7 +11,7 @@ public class DeleteTagsGid extends Command {
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
         String s1 = "delete from tag_checklist where Tg_id = ?";
         PreparedStatement ps = con.prepareStatement(s1);
-        ps.setString(1, params.get("gid"));
+        ps.setString(1, params.get("{gid}"));
         ps.executeUpdate();
 
         s1 = "delete from tag where Tg_id = ?";
