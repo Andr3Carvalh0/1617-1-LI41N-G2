@@ -117,7 +117,7 @@ public class TagTest {
             con = GetConnection.connect(true);
             cid = addChecklist(con, CHECKLIST_NAME,CHECKLIST_DESCRIPTION, CHECKLIST_DATE);
             gid = addTag(con, TAG_NAME, TAG_COLOR);
-            map.put("cid", Integer.toString(cid));
+            map.put("{cid}", Integer.toString(cid));
             map.put("gid", Integer.toString(gid));
 
             String result = (String) new PostChecklistsCidTags().execute(map,con);
