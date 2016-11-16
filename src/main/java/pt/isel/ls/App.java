@@ -14,13 +14,7 @@ public class App {
                 enterInteractiveMode();
             }
             else if (args.length >= 2 && args.length <= 4){
-                CommandParser cparser = new CommandParser(args);
-                Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
-                Command c = r.Route();
-
-                CustomPrinter cPrinter = new CustomPrinter();
-                Object obj = r.run(c);
-                cPrinter.print(obj, cparser.getHeaders());
+                run(args);
             } else throw new Exception("Invalid number of arguments.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,14 +29,22 @@ public class App {
             String[] input = io.nextLine().split(" ");
             if (input.length >= 2 && input.length <= 4) {
                 if (input[0].equals("EXIT")) break;
-                CommandParser cparser = new CommandParser(input);
-                Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
-                Command c = r.Route();
-
-                CustomPrinter cPrinter = new CustomPrinter();
-                Object obj = r.run(c);
-                cPrinter.print(obj, cparser.getHeaders());
+                run(input);
             }
+        }
+    }
+
+    private static void run(String[] input) throws Exception {
+        CommandParser cparser = new CommandParser(input);
+        Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
+        Command c = r.Route();
+        Object obj = r.run(c);
+
+        if(c.getMethod().equals("GET")){
+            CustomPrinter cPrinter = new CustomPrinter();
+            cPrinter.print(obj, cparser.getHeaders());
+        }else{
+            System.out.println(obj);
         }
     }
 }

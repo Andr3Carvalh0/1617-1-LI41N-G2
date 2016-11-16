@@ -21,18 +21,37 @@ public class Router {
 
     public Command Route() throws SQLException {
 
-        LinkedList<Command> list = new CommandList().getCommandList();
-        for (Command c : list) {
-            if (method.equals(c.getMethod())) {
-                int i = 1;
-                for (; i < c.getPath().length; i++) {
-                    if (!(match(path[i], c.getPath()[i]))) {
-                        break;
-                    }
+        Command_Node tree = new Tree_Commands().getTree();
+        Command_Node current;
+        if((current = searchNode_Method(tree, method)) == null) return null;
+
+        //THis is the Options Command
+        if(current.getChildren() == null) return current.getCommand();
+
+        return searchNode_Path(current, path);
+
+    }
+
+    private Command_Node searchNode_Method(Command_Node node, String cmp){
+        for (Command_Node child: node.getChildren()) {
+            if(child.getName().equals(cmp)){
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private Command searchNode_Path(Command_Node node, String[] cmp){
+        for (Command_Node c_node : node.getChildren()) {
+            Command cmd = c_node.getCommand();
+            int i = 1;
+            for (; i < cmd.getPath().length; i++) {
+                if (!(match(path[i], cmd.getPath()[i]))) {
+                    break;
                 }
-                if (path.length == i || method.equals("OPTIONS")) {
-                    return c;
-                }
+            }
+            if (path.length == i || method.equals("OPTIONS")) {
+                return cmd;
             }
         }
         return null;

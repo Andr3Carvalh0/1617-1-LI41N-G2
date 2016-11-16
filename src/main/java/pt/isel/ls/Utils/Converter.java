@@ -7,7 +7,7 @@ public class Converter {
 
     private LinkedList<String> message = new LinkedList<>();
     private boolean isHTML;
-
+    private final String theme = "bootstrap.min.css";
     private static final String lookFor_begin_HTML = "{{";
     private static final String lookFor_end_HTML = "}}";
     private static final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}", "{{#FOR_M}}", "{{#END_M}}"};
@@ -80,6 +80,18 @@ public class Converter {
                 PrintWriter writer = new PrintWriter(file, "UTF-8");
                 writer.println(msg);
                 writer.close();
+
+                //Copy the css file
+                if(isHTML){
+                    allocate(Converter.class.getClassLoader().getResource("./views/" + theme).getPath());
+                    String out = outputName.substring(0, outputName.lastIndexOf("/") +1);
+
+                    file = new File(out + theme);
+                    writer = new PrintWriter(file, "UTF-8");
+                    writer.println(msg);
+                    writer.close();
+                }
+
             } catch (FileNotFoundException e) {
                 throw new Exception("Cannot save file!");
             }
