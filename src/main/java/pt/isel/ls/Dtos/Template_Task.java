@@ -4,7 +4,6 @@ public class Template_Task implements BaseDTO{
     private int Tp_id, Tp_Task_id;
     private String Tp_Task_name, Tp_Task_desc;
 
-
     public Template_Task(int Tp_id,int Tp_Task_id, String Tp_Task_name, String Tp_Task_description){
         this.Tp_id = Tp_id;
         this.Tp_Task_id = Tp_Task_id;
@@ -34,18 +33,6 @@ public class Template_Task implements BaseDTO{
 
     public String getTp_Task_desc() {
         return Tp_Task_desc;
-    }
-
-    @Override
-    public String[] getPropertiesNames() {
-        String ret[] = {"Tp_id", "Tp_Task_id", "Tp_Task_name", "Tp_Task_desc"};
-        return ret;
-    }
-
-    @Override
-    public String[] getPropertiesValues() {
-        String ret[] = {getTp_id() + "" , getTp_Task_id() + "", getTp_Task_name(), getTp_Task_desc()};
-        return ret;
     }
 
     @Override

@@ -5,10 +5,8 @@ import pt.isel.ls.Utils.CustomPrinter;
 
 import java.util.Scanner;
 
-//java -cp build/classes/Printer; vendor/Printer/* pt.isel.ls.App
 public class App {
     public static void main(String[] args) {
-        Scanner io;
         try {
             if(args.length == 0){
                 enterInteractiveMode();
@@ -19,7 +17,6 @@ public class App {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private static void enterInteractiveMode() throws Exception {

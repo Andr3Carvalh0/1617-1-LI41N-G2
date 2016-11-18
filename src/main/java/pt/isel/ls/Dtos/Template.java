@@ -5,7 +5,6 @@ public class Template implements BaseDTO{
     private int Tp_id;
     private String Tp_name, Tp_desc;
 
-
     public Template(int id, String name, String description){
         this.Tp_id = id;
         this.Tp_name = name;
@@ -30,18 +29,6 @@ public class Template implements BaseDTO{
 
     public String getTp_desc() {
         return Tp_desc;
-    }
-
-    @Override
-    public String[] getPropertiesNames() {
-        String ret[] = {"Tp_id", "Tp_name", "Tp_desc"};
-        return ret;
-    }
-
-    @Override
-    public String[] getPropertiesValues() {
-        String ret[] = {getTp_id() + "" , getTp_name(), getTp_desc()};
-        return ret;
     }
 
     @Override

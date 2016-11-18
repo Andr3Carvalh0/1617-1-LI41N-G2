@@ -21,9 +21,10 @@ public class GetChecklistsCid extends Command {
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
-        Checklist cl;
+        LinkedList<Checklist> cl = new LinkedList<>();
         LinkedList<Checklist_Task> ct = new LinkedList<Checklist_Task>();
-        Template tp = null;
+        LinkedList<Template> tp = new LinkedList<>();
+
         //Get Checklist info
         String query = "select * from checklist where Cl_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
@@ -32,8 +33,8 @@ public class GetChecklistsCid extends Command {
         rs.next();
 
         String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
-        cl = new Checklist(rs.getInt(1), rs.getString(2), rs.getString(3),
-                rs.getBoolean(4),dueDate, rs.getInt(6));
+        cl.add(new Checklist(rs.getInt(1), rs.getString(2), rs.getString(3),
+                rs.getBoolean(4),dueDate, rs.getInt(6)));
 
         //Get tasks info
         query = "select * from checklist_task where Cl_id = ?";
@@ -54,13 +55,12 @@ public class GetChecklistsCid extends Command {
         //Get template info
         query = "select * from template where Tp_id = ?";
         ps = con.prepareStatement(query);
-        ps.setInt(1, cl.getTp_id());
+        ps.setInt(1, cl.get(0).getTp_id());
         rs = ps.executeQuery();
-        if(rs.next()) tp = new Template(rs.getInt(1), rs.getString(2), rs.getString(3));
+        if(rs.next()) tp.add(new Template(rs.getInt(1), rs.getString(2), rs.getString(3)));
         //Wrap it up
         DtoWrapper dw = new DtoWrapper();
         dw.setChecklist(cl);
-        if(ct.size() == 0) ct = null;
         dw.setChecklist_Task(ct);
         dw.setTemplate(tp);
 

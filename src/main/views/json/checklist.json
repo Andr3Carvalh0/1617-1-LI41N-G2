@@ -1,0 +1,19 @@
+{
+  "class": ["checklist", "collection"],
+  "properties":{
+    "count" : 2
+  },
+  "entities": [
+    <<#FOR>><<self>>
+    {
+      "class": ["checklist"],
+      "properties": {
+        "name": "<<name>>",
+        "description": "<<description>>",
+        "isClosed": <<closed>>,
+        "dueDate": "<<dueDate>>"
+      }
+    },
+    <<#END>><<self>>
+  ]
+}

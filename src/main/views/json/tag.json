@@ -1,0 +1,17 @@
+{
+  "class": ["tag", "collection"],
+  "properties":{
+    "count" : 2
+  },
+  "entities": [
+    <<#FOR>><<self>>
+    {
+      "class": ["tag"],
+      "properties": {
+        "name": "<<Tg_name>>",
+        "color": "<<Tg_color>>"
+      }
+    },
+    <<#END>><<self>>
+  ]
+}

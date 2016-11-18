@@ -1,0 +1,33 @@
+{
+  "class": ["checklist"],
+  "properties":{
+    <<#FOR>><<Checklist>>
+      "name": "<<name>>",
+      "description": "<<description>>",
+      "isClosed": <<closed>>,
+      "dueDate": "<<dueDate>>"
+    <<#END>><<Checklist>>
+  },
+  "entities": [
+    <<#FOR>><<Checklist_Task>>
+    {
+      "class": ["<<type>>"],
+      "properties": {
+        "name": "<<Cl_Task_name>>",
+        "description": "<<Cl_Task_desc>>",
+        "isClosed": <<Cl_isClosed>>,
+        "dueDate": "<<Cl_Task_dueDate>>"
+        }
+    },
+    <<#END>><<Checklist_Task>>
+    <<#FOR>><<Template>>
+    {
+      "class": ["<<type>>"],
+      "properties": {
+        "name": "<<Tp_name>>",
+        "description": "<<Tp_desc>>"
+      }
+    },
+    <<#END>><<Template>>
+  ]
+}

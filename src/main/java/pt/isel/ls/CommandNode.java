@@ -1,11 +1,9 @@
 package pt.isel.ls;
 
-
 import pt.isel.ls.Commands.Command;
-
 import java.util.LinkedList;
 
-public class CommandNode {
+class CommandNode {
     private String name;
     private LinkedList<CommandNode> children;
     private Command command;
@@ -20,7 +18,7 @@ public class CommandNode {
         return name;
     }
 
-    public LinkedList<CommandNode> getChildren() {
+    LinkedList<CommandNode> getChildren() {
         return children;
     }
 

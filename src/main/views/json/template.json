@@ -1,0 +1,17 @@
+{
+  "class": ["template", "collection"],
+  "properties":{
+    "count" : 2
+  },
+  "entities": [
+    <<#FOR>><<self>>
+    {
+      "class": ["template"],
+      "properties": {
+        "name": "<<Tp_name>>",
+        "description": "<<Tp_desc>>"
+      }
+    },
+    <<#END>><<self>>
+  ]
+}

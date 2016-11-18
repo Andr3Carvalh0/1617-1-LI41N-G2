@@ -26,18 +26,6 @@ public class Tag implements BaseDTO{
     public String getTg_name() { return Tg_name; }
 
     @Override
-    public String[] getPropertiesNames() {
-        String ret[] = {"Tg_id", "Tg_name", "Tg_color"};
-        return ret;
-    }
-
-    @Override
-    public String[] getPropertiesValues() {
-        String ret[] = {getTg_id() + "" , getTg_color(), getTg_name()};
-        return ret;
-    }
-
-    @Override
     public String getDTOName() {
         return "Tag";
     }

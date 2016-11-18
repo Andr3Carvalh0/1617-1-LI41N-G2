@@ -1,0 +1,31 @@
+{
+  "class": ["template"],
+  "properties":{
+    <<#FOR>><<Template>>
+      "name": "<<Tp_name>>",
+      "description": "<<Tp_desc>>"
+    <<#END>><<Template>>
+  },
+  "entities": [
+    <<#FOR>><<Checklist>>
+    {
+      "class": ["<<type>>"],
+      "properties": {
+        "name": "<<name>>",
+        "description": "<<description>>",
+        "isClosed": <<closed>>,
+        "dueDate": "<<dueDate>>"
+        }
+    },
+    <<#END>><<Checklist>>
+    <<#FOR>><<Template_Task>>
+    {
+      "class": ["Template Task"],
+      "properties": {
+        "name": "<<Tp_Task_name>>",
+        "description": "<<Tp_Task_desc>>"
+      }
+    },
+    <<#END>><<Template_Task>>
+  ]
+}

@@ -21,7 +21,7 @@ public class GetTemplatesTid extends Command {
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
-        Template template = null;
+        LinkedList<Template> template = new LinkedList<>();
         LinkedList<Checklist> checklists = new LinkedList<>();
         LinkedList<Template_Task> tasks = new LinkedList<>();
 
@@ -39,10 +39,10 @@ public class GetTemplatesTid extends Command {
         while (rs.next()){
             String name = rs.getString(2);
             String description = rs.getString(3);
-            template = new Template(id, name, description);
+            template.add(new Template(id, name, description));
         }
 
-        if(template == null){
+        if(template.get(0) == null){
             throw new Exception("Template with id = " + id + " doesnt exist!");
         }else{
             ps = con.prepareStatement(s2);

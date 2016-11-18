@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-5" style="padding-top: 50px;">
+            {{#FOR}}{{Checklist}}
+            <h2>{{name}}</h2>
+            <p>{{description}}</p>
+            {{#END}}{{Checklist}}
+        </div>
+
+        <div class="col-xs-3" style="padding-top: 50px">
+            <div class="billboard">
+                <h3>Tasks</h3>
+                <ul>
+                    {{#FOR}}{{Checklist_Task}}
+                    <li>
+                        {{Cl_Task_name}}
+                    </li>
+                    {{#END}}{{Checklist_Task}}
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-3" style="padding-top: 50px">
+            <div class="billboard">
+                <h3>Base Template</h3>
+                <ul>
+                    {{#FOR}}{{Template}}
+                    <li>
+                        {{Tp_name}}
+                    </li>
+                    {{#END}}{{Checklist_Task}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

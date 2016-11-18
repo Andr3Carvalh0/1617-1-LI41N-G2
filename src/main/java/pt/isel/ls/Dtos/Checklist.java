@@ -49,19 +49,6 @@ public class Checklist implements BaseDTO{
         return description;
     }
 
-
-    @Override
-    public String[] getPropertiesNames() {
-        String ret[] = {"ID", "Name", "Description", "Closed", "DueDate", "Tp_Id"};
-        return ret;
-    }
-
-    @Override
-    public String[] getPropertiesValues() {
-        String ret[] = {getId() + "", getName(), getDescription(), isClosed() ? "true" : "false", getDueDate(), getTp_id() + ""};
-        return ret;
-    }
-
     @Override
     public String getDTOName() {
         return "Checklist";

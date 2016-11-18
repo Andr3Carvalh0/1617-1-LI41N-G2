@@ -1,17 +1,15 @@
 package pt.isel.ls.Dtos;
 
-import java.util.LinkedList;
-
-public class DtoWrapper{
+public class DtoWrapper implements BaseDTO{
     private Object Checklist;
     private Object Checklist_Task;
     private Object Template;
     private Object Template_Task;
+    private Object Tag;
 
     public Object getChecklist() {
         return Checklist;
     }
-
     public void setChecklist(Object checklist) {
         Checklist = checklist;
     }
@@ -19,7 +17,6 @@ public class DtoWrapper{
     public Object getChecklist_Task() {
         return Checklist_Task;
     }
-
     public void setChecklist_Task(Object checklist_Task) {
         Checklist_Task = checklist_Task;
     }
@@ -27,7 +24,6 @@ public class DtoWrapper{
     public Object getTemplate() {
         return Template;
     }
-
     public void setTemplate(Object template) {
         Template = template;
     }
@@ -38,6 +34,9 @@ public class DtoWrapper{
     public Object getTemplate_Task() {
         return Template_Task;
     }
+
+    public Object getTag() { return Tag; }
+    public void setTag(Object tag) { Tag = tag;}
 
     @Override
     public String toString(){
@@ -55,17 +54,14 @@ public class DtoWrapper{
         if(Template_Task != null){
             res += "Template's Tasks Information:\n" + Template_Task.toString();
         }
+        if(Tag != null){
+            res += "Tag Information:\n" + Tag.toString();
+        }
         return res;
     }
 
-    public LinkedList<Object> getWrapperObjects(){
-        LinkedList<Object> list = new LinkedList<>();
-
-        if(Checklist != null) list.add(Checklist);
-        if(Checklist_Task != null) list.add(Checklist_Task);
-        if(Template != null) list.add(Template);
-        if(Template_Task != null) list.add(Template_Task);
-
-        return list;
+    @Override
+    public String getDTOName() {
+        return "DTOWrapper";
     }
 }

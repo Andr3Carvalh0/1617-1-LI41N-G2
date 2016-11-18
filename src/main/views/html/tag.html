@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Tags</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Tag ID</th>
+                <th>Name</th>
+                <th>Color</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#FOR}}{{self}}
+            <tr>
+                <td>{{Tg_id}}</td>
+                <td>{{Tg_name}}</td>
+                <td>{{Tg_color}}</td>
+            </tr>
+            {{#END}}{{self}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
