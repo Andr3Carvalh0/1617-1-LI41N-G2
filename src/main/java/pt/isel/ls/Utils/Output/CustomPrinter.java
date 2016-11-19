@@ -1,4 +1,4 @@
-package pt.isel.ls.Utils;
+package pt.isel.ls.Utils.Output;
 
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;

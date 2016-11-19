@@ -1,11 +1,13 @@
 package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
-import pt.isel.ls.Utils.CustomPrinter;
+import pt.isel.ls.Utils.Output.CustomPrinter;
 
 import java.util.Scanner;
 
 public class App {
+    static CustomPrinter cPrinter = new CustomPrinter();
+
     public static void main(String[] args) {
         try {
             if(args.length == 0){
@@ -38,7 +40,6 @@ public class App {
         Object obj = r.run(c);
 
         if(c.getMethod().equals("GET")){
-            CustomPrinter cPrinter = new CustomPrinter();
             cPrinter.print(obj, cparser.getHeaders());
         }else{
             System.out.println(obj);

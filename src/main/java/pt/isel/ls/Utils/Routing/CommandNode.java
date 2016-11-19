@@ -1,9 +1,9 @@
-package pt.isel.ls;
+package pt.isel.ls.Utils.Routing;
 
 import pt.isel.ls.Commands.Command;
 import java.util.LinkedList;
 
-class CommandNode {
+public class CommandNode {
     private String name;
     private LinkedList<CommandNode> children;
     private Command command;
@@ -18,7 +18,7 @@ class CommandNode {
         return name;
     }
 
-    LinkedList<CommandNode> getChildren() {
+    public LinkedList<CommandNode> getChildren() {
         return children;
     }
 

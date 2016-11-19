@@ -1,7 +1,6 @@
-package pt.isel.ls;
+package pt.isel.ls.Utils.Routing;
 
 import pt.isel.ls.Commands.*;
-
 import java.util.LinkedList;
 
 /*

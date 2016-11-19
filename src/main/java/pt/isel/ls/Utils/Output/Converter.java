@@ -1,10 +1,11 @@
-package pt.isel.ls.Utils;
+package pt.isel.ls.Utils.Output;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -24,16 +25,28 @@ class Converter {
     private static final String lookFor_end_JSON = ">>";
     private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>"};
 
+    //Cache for the objects fields.
+    private HashMap<String, HashMap<String, Field>> cache = new HashMap<>();
+
+    //Cache the files that we use as template
+    private HashMap<String, LinkedList<String>> file_cache = new HashMap<>();
+
     private void allocate(String baseFile) throws Exception {
         Scanner io = null;
         try {
             message = new LinkedList<>();
-            io = new Scanner(new File(baseFile));
 
-            while (io.hasNextLine()) {
-                message.add(io.nextLine() + "\n");
+            if (isPresentInCache(baseFile, file_cache)) {
+                message = file_cache.get(baseFile);
+            } else {
+                io = new Scanner(new File(baseFile));
+
+                while (io.hasNextLine()) {
+                    message.add(io.nextLine() + "\n");
+                }
+
+                file_cache.put(baseFile, message);
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             // throw new Exception("Cannot read file!");
@@ -62,7 +75,7 @@ class Converter {
     }
 
     void commit(String msg, String outputName) throws Exception {
-        if(msg == null) msg = generateMessage();
+        if (msg == null) msg = generateMessage();
 
         if (outputName == null) {
             System.out.println(msg);
@@ -88,19 +101,19 @@ class Converter {
         writer.close();
     }
 
-    private LinkedList<String> replaceFOR(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter){
+    private LinkedList<String> replaceFOR(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter) {
         LinkedList<String> result = new LinkedList<>();
         String line;
         for (int i = 0; i < msg.size(); i++) {
             line = msg.get(i);
 
             if (line.contains(marks[0])) {
-                if(!isHTML){
-                    if(result.getLast().contains("}")) {
+                if (!isHTML) {
+                    if (result.getLast().contains("}")) {
                         result.set(result.size() - 1, result.getLast().replace("\n", ",\n"));
                     }
                 }
-                //Remove the For tag and obtain the object name in which we will iterate
+                //Remove the FOR tag and obtain the object name in which we will iterate
                 line = line.replace(marks[0], "");
                 String object = line.replace(leftDelimiter, "").replace(rightDelimiter, "").replace("\n", "").replace(" ", "");
 
@@ -117,23 +130,28 @@ class Converter {
                 //else we will iterate over a property that the object we receive in the pars has
                 if (object.equals(privateKey)) {
                     applyObjectValues((LinkedList) obj, leftDelimiter, rightDelimiter, result, iterateBody);
-                    if(!isHTML){
+                    if (!isHTML) {
                         result.set(result.size() - 1, result.getLast().replace(",", ""));
                     }
                 } else {
                     try {
-                        Field field = obj.getClass().getDeclaredField(object);
+                        if (!isPresentInCache(obj.getClass().getName(), cache)) {
+                            addToCache(obj);
+                        }
+
+                        HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                        Field field = currentOBJ.get(object);
                         field.setAccessible(true);
                         Object value = field.get(obj);
 
                         applyObjectValues((LinkedList) value, leftDelimiter, rightDelimiter, result, iterateBody);
 
-                        if(!isHTML){
+                        if (!isHTML) {
                             result.set(result.size() - 1, result.getLast().replace(",", ""));
                         }
 
-                    } catch (NoSuchFieldException | IllegalAccessException e){
-                        System.out.println("Error: Can find field");
+                    } catch (IllegalAccessException e) {
+                        System.out.println("Error: Cant find field");
                     }
                 }
             } else {
@@ -149,21 +167,26 @@ class Converter {
             if (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
                 String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
                 try {
-                    Field field = obj.getClass().getDeclaredField(key);
+                    if (!isPresentInCache(obj.getClass().getName(), cache)) {
+                        addToCache(obj);
+                    }
+
+                    HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                    Field field = currentOBJ.get(key);
                     field.setAccessible(true);
                     Object value = field.get(obj);
-                    if(isHTML) {
+                    if (isHTML) {
                         result.add(line.replace(leftDelimiter + key + rightDelimiter, value == null ? "" : value.toString()));
-                    }else{
-                        if(value != null){
+                    } else {
+                        if (value != null) {
                             result.add(line.replace(leftDelimiter + key + rightDelimiter, value.toString()));
-                        }else{
-                            if(result.getLast().contains(",")){
+                        } else {
+                            if (result.getLast().contains(",")) {
                                 result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
                             }
                         }
                     }
-                } catch (NoSuchFieldException | IllegalAccessException e1) {
+                } catch (IllegalAccessException e1) {
                     result.add(line);
                 }
             } else {
@@ -178,6 +201,25 @@ class Converter {
             LinkedList<String> tmp = replaceFlag(o, iterateBody, leftDelimiter, rightDelimiter);
             result.addAll(tmp);
         }
+    }
+
+    private void addToCache(Object obj) {
+        HashMap<String, Field> objFields = new HashMap<>();
+
+        for (Field f : obj.getClass().getDeclaredFields()) {
+            objFields.put(f.getName(), f);
+        }
+
+        cache.put(obj.getClass().getName(), objFields);
+    }
+
+    private boolean isPresentInCache(String obj, HashMap<String, ?> map) {
+        for (String key : map.keySet()) {
+            if (key.equals(obj)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void removeNotUsedMarkers(String mark) {

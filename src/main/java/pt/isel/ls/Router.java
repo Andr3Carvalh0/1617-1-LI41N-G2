@@ -2,6 +2,8 @@ package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Utils.GetConnection;
+import pt.isel.ls.Utils.Routing.CommandNode;
+import pt.isel.ls.Utils.Routing.TreeCommands;
 
 import java.sql.Connection;
 import java.sql.SQLException;
