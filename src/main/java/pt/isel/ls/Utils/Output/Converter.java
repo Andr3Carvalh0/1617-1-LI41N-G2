@@ -214,12 +214,7 @@ class Converter {
     }
 
     private boolean isPresentInCache(String obj, HashMap<String, ?> map) {
-        for (String key : map.keySet()) {
-            if (key.equals(obj)) {
-                return true;
-            }
-        }
-        return false;
+        return (map.get(obj) != null);
     }
 
     private void removeNotUsedMarkers(String mark) {

@@ -1,40 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Result</title>
-    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-5" style="padding-top: 50px;">
-                {{#FOR}}{{Template}}
-                <h2>{{Tp_name}}</h2>
-                <p>{{Tp_desc}}</p>
-                {{#END}}{{Template}}
-            </div>
-            <div class="col-xs-3" style="padding-top: 50px">
-                <div class="billboard">
-                    <h3>Tasks</h3>
-                    <ul>
-                        {{#FOR}}{{Template_Task}}
-                        <li>{{Tp_Task_name}}</li>
-                        {{#END}}{{Checklist_Task}}
-                    </ul>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Result</title>
+        <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-5" style="padding-top: 50px;">
+                    {{#FOR}}{{Template}}
+                    <h1>{{Tp_name}}</h1>
+                    <p>{{Tp_desc}}</p>
+                    {{#END}}{{Template}}
                 </div>
-            </div>
-            <div class="col-xs-3" style="padding-top: 50px">
-                <div class="billboard">
-                    <h3>Used in</h3>
-                    <ul>
-                        {{#FOR}}{{Checklist}}
-                        <li>{{name}}</li>
-                        {{#END}}{{Checklist}}
-                    </ul>
+                <div class="col-xs-3" style="padding-top: 50px">
+                    <div class="billboard">
+                        <h3>Tasks:</h3>
+                        <ul>
+                            {{#FOR}}{{Template_Task}}
+                            <li>{{Tp_Task_name}}</li>
+                            {{#END}}{{Checklist_Task}}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-3" style="padding-top: 50px">
+                    <div class="billboard">
+                        <h3>Used in:</h3>
+                        <ul>
+                            {{#FOR}}{{Checklist}}
+                            <li>{{name}}</li>
+                            {{#END}}{{Checklist}}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
