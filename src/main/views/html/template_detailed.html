@@ -14,15 +14,12 @@
                 <p>{{Tp_desc}}</p>
                 {{#END}}{{Template}}
             </div>
-
             <div class="col-xs-3" style="padding-top: 50px">
                 <div class="billboard">
                     <h3>Tasks</h3>
                     <ul>
                         {{#FOR}}{{Template_Task}}
-                        <li>
-                            {{Tp_Task_name}}
-                        </li>
+                        <li>{{Tp_Task_name}}</li>
                         {{#END}}{{Checklist_Task}}
                     </ul>
                 </div>
@@ -32,9 +29,7 @@
                     <h3>Used in</h3>
                     <ul>
                         {{#FOR}}{{Checklist}}
-                        <li>
-                            {{name}}
-                        </li>
+                        <li>{{name}}</li>
                         {{#END}}{{Checklist}}
                     </ul>
                 </div>

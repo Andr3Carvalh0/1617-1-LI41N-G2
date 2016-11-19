@@ -1,6 +1,5 @@
 package pt.isel.ls;
 
-
 import org.junit.Test;
 import pt.isel.ls.Commands.*;
 import pt.isel.ls.Dtos.Checklist;
@@ -17,12 +16,14 @@ import java.util.LinkedList;
 
 import static junit.framework.Assert.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class ChecklistTest {
-    Connection con = null;
+    private Connection con = null;
 
     private final String TEST_NAME = "SQLTest";
     private final String TEST_DESC = "DESCRIPTION";
-    private final String TEST_DATE = "06-10-2016";
+    private final String TEST_DATE = "06/10/2016";
+    private final String EXPECTED_DATE = "06-10-2016";
 
     private int getLastInsertedChecklist(Connection con) throws SQLException {
         String s0 = "select max(Cl_id) from checklist";
@@ -90,7 +91,7 @@ public class ChecklistTest {
             assertEquals(true, result.size()>=1);
             assertEquals(true, ((Checklist) result.get(result.size()-1)).getName().equals(TEST_NAME));
             assertEquals(true, ((Checklist) result.get(result.size()-1)).getDescription().equals(TEST_DESC));
-            assertEquals(true, ((Checklist) result.get(result.size()-1)).getDueDate().equals(TEST_DATE));
+            assertEquals(true, ((Checklist) result.get(result.size()-1)).getDueDate().equals(EXPECTED_DATE));
 
         } finally {
             if (con != null) {
@@ -226,6 +227,7 @@ public class ChecklistTest {
                     "WHERE Cl_id = ?;");
             ps.setInt(1, TestChecklistsIds[1]);
             ps.executeUpdate();
+
             LinkedList<Checklist> list = (LinkedList<Checklist>) new GetChecklistsClosed().execute(map, con);
             for (Checklist c : list) {
                 assertEquals(c.isClosed(), true);
@@ -297,8 +299,8 @@ public class ChecklistTest {
             }
             //Retrieve values
             DtoWrapper dw = (DtoWrapper) new GetChecklistsCid().execute(map, con);
-            assertEquals(dw.getTemplate(), null);
-            assertEquals(((Checklist) dw.getChecklist()).getId(), TestChecklistId);
+            assertEquals(new LinkedList<>(), dw.getTemplate());
+            assertEquals(((Checklist)((LinkedList) dw.getChecklist()).get(0)).getId(), TestChecklistId);
             assertEquals(((LinkedList<Checklist_Task>) dw.getChecklist_Task()).get(0).getCl_Task_id(), TestTasksId[0]);
             assertEquals(((LinkedList<Checklist_Task>) dw.getChecklist_Task()).get(1).getCl_Task_id(), TestTasksId[1]);
         } finally {
@@ -325,8 +327,7 @@ public class ChecklistTest {
             generateChecklist_Tasks(2, checklist1, 5, con);
             generateChecklist_Tasks(3, checklist2, 5, con);
 
-            LinkedList<Checklist> checklists = new LinkedList<>();
-            checklists = (LinkedList<Checklist>) new GetChecklistsOpenSortedNoftasks().execute(null, con);
+            LinkedList<Checklist> checklists = (LinkedList<Checklist>) new GetChecklistsOpenSortedNoftasks().execute(null, con);
 
             if(checklists != null){
                 assertEquals("TESTE2", checklists.get(checklists.size()-1).getName());

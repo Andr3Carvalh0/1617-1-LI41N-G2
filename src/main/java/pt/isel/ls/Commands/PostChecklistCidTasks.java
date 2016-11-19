@@ -54,7 +54,8 @@ public class PostChecklistCidTasks extends Command {
                     rs = ps.executeQuery();
 
                     rs.next();
-                    return "Checklist Task created with ID: " + rs.getInt(1);
+                    System.out.print("Checklist Task created with ID: ");
+                    return rs.getInt(1);
                 }
                 throw new Exception("Its not possible for the task dueDate be greater that Checklist dueDate");
             }else{
@@ -72,7 +73,8 @@ public class PostChecklistCidTasks extends Command {
                 rs = ps.executeQuery();
 
                 rs.next();
-                return "Checklist Task created with ID: " + rs.getInt(1);
+                System.out.print("Checklist Task created with ID: ");
+                return rs.getInt(1);
             }
         }
     }

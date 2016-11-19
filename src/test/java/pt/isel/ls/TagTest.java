@@ -14,6 +14,7 @@ import java.util.LinkedList;
 
 import static junit.framework.Assert.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class TagTest {
     private static final String SUCCESS = "Success!" ;
     private Connection con = null;
@@ -83,6 +84,7 @@ public class TagTest {
             assertEquals(result, rs.getInt(1));
             assertEquals(TAG_NAME, rs.getString(2));
             assertEquals(TAG_COLOR, rs.getString(3));
+            map.put("{gid}", result + "");
 
             String r = (String) new DeleteTagsGid().execute(map,con);
             assertEquals(SUCCESS, r);
@@ -118,6 +120,7 @@ public class TagTest {
             cid = addChecklist(con, CHECKLIST_NAME,CHECKLIST_DESCRIPTION, CHECKLIST_DATE);
             gid = addTag(con, TAG_NAME, TAG_COLOR);
             map.put("{cid}", Integer.toString(cid));
+            map.put("{gid}", Integer.toString(gid));
             map.put("gid", Integer.toString(gid));
 
             String result = (String) new PostChecklistsCidTags().execute(map,con);

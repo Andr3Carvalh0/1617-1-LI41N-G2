@@ -11,7 +11,7 @@ public class PostTemplatesTidTasks extends Command {
     private final String[] path = {"", "templates", "{tid}", "tasks"};
 
     @Override
-    public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
+    public Object execute(HashMap<String, String> params, Connection con) throws Exception {
         String s1 = "insert into template_task(Tp_id, Tp_Task_name, Tp_Task_desc) values (?, ?, ?)";
         String s2 = "select max(Tp_Task_id) from template_task";
 
@@ -25,7 +25,9 @@ public class PostTemplatesTidTasks extends Command {
         ps = con.prepareStatement(s2);
         ResultSet rs = ps.executeQuery();
         rs.next();
-        return "Template Task created with ID: " + rs.getInt(1);
+
+        System.out.print("Template Task created with ID: ");
+        return rs.getInt(1);
     }
 
     @Override

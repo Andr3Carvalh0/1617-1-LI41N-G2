@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+@SuppressWarnings("unchecked")
 public class TemplateTest {
     private Connection con = null;
 
@@ -116,7 +117,7 @@ public class TemplateTest {
 
     @Test
     public void testPostTemplatesTidCreate() throws Exception {
-        int tid = -1, cid = -1;
+        int tid = -1, cid;
         String s;
         PreparedStatement ps;
         ResultSet rs;
@@ -169,7 +170,7 @@ public class TemplateTest {
             addChecklistFromTemplate("Check1", "Desc", 0, null, id, con);
 
             DtoWrapper result = (DtoWrapper) new GetTemplatesTid().execute(map, con);
-            assertEquals(id, ((Template) result.getTemplate()).getTp_id());
+            assertEquals(id, ((Template)((LinkedList) result.getTemplate()).get(0)).getTp_id());
             assertEquals(1, ((LinkedList<Checklist>) result.getChecklist()).size());
             assertEquals("Check1", ((LinkedList<Checklist>) result.getChecklist()).get(0).getName());
         } finally {
@@ -224,8 +225,8 @@ public class TemplateTest {
     @Test
     public void PostTemplatesTidTasks() throws Exception {
         HashMap<String, String> params = new HashMap<>();
-        int tp_id = -1;
-        int tp_task_id = -1;
+        int tp_id;
+        int tp_task_id;
         try {
 
             con = GetConnection.connect(true);

@@ -23,7 +23,8 @@ public class PostTemplates extends Command {
         ResultSet rs = ps.getGeneratedKeys();
         rs.next();
 
-        return "Template created with ID: " + rs.getInt(1);
+        System.out.print("Template created with ID: ");
+        return rs.getInt(1);
     }
 
     @Override
