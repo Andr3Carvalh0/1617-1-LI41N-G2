@@ -21,7 +21,7 @@ public class PostTags extends Command {
         ResultSet rs = ps.getGeneratedKeys();
         rs.next();
 
-        return rs.getInt(1);
+        return "Tag created with ID: " + rs.getInt(1);
     }
 
     @Override

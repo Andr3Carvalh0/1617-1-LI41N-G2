@@ -58,7 +58,7 @@ public class PostTemplatesTidCreate extends Command {
             ps.execute();
             taskIndex++;
         }
-        return "POST /templates/{tid}/create... Success";
+        return "Checklist created with ID: " + cid;
     }
 
     @Override

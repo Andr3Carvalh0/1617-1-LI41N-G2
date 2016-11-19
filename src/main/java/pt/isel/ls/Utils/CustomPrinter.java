@@ -61,7 +61,6 @@ public class CustomPrinter {
         try {
             converter.compile(obj, isHTML, template);
             converter.commit(null, file_location);
-            System.out.println("Done");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error: Can't display the message");
@@ -71,7 +70,6 @@ public class CustomPrinter {
     private void run(String text, String file_location) {
         try {
             converter.commit(text, file_location);
-            System.out.println("Done");
         } catch (Exception e) {
             System.out.println("Error: Can't display the message");
         }

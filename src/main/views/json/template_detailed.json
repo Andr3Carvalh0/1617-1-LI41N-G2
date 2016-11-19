@@ -9,7 +9,7 @@
   "entities": [
     <<#FOR>><<Checklist>>
     {
-      "class": ["<<type>>"],
+      "class": ["checklist"],
       "properties": {
         "name": "<<name>>",
         "description": "<<description>>",
@@ -20,7 +20,7 @@
     <<#END>><<Checklist>>
     <<#FOR>><<Template_Task>>
     {
-      "class": ["Template Task"],
+      "class": ["template task"],
       "properties": {
         "name": "<<Tp_Task_name>>",
         "description": "<<Tp_Task_desc>>"

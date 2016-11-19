@@ -26,7 +26,7 @@ public class PostChecklist extends Command {
         ResultSet rs = ps.executeQuery();
         rs.next();
 
-        return rs.getInt(1);
+        return "Checklist created with ID: " + rs.getInt(1);
     }
 
     public String getMethod() {

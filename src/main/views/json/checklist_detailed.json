@@ -11,7 +11,7 @@
   "entities": [
     <<#FOR>><<Checklist_Task>>
     {
-      "class": ["<<type>>"],
+      "class": ["checklist task"],
       "properties": {
         "name": "<<Cl_Task_name>>",
         "description": "<<Cl_Task_desc>>",
@@ -22,12 +22,21 @@
     <<#END>><<Checklist_Task>>
     <<#FOR>><<Template>>
     {
-      "class": ["<<type>>"],
+      "class": ["template"],
       "properties": {
         "name": "<<Tp_name>>",
         "description": "<<Tp_desc>>"
       }
     },
     <<#END>><<Template>>
+    <<#FOR>><<Tag>>
+    {
+      "class": ["Tag"],
+      "properties": {
+        "name": "<<Tg_name>>",
+        "color": "<<Tg_color>>"
+      }
+    },
+    <<#END>><<Tag>>
   ]
 }

@@ -33,7 +33,7 @@ public class PostChecklistsCidTasksLid extends Command {
             ps = con.prepareStatement(s);
             ps.execute();
         }
-        return "POST /checklists/{cid}/Tasks/{lid}... Success";
+        return "Success";
     }
 
     @Override

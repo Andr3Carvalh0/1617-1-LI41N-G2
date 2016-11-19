@@ -25,7 +25,7 @@ public class PostTemplatesTidTasks extends Command {
         ps = con.prepareStatement(s2);
         ResultSet rs = ps.executeQuery();
         rs.next();
-        return rs.getInt(1);
+        return "Template Task created with ID: " + rs.getInt(1);
     }
 
     @Override
