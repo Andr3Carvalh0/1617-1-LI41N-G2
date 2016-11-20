@@ -40,7 +40,7 @@ public class App {
         Object obj = r.run(c);
 
         if(c.getMethod().equals("GET")){
-            cPrinter.print(obj, cparser.getHeaders());
+            cPrinter.print(obj, cparser.getHeaders(),input);
         }else{
             System.out.println(obj);
         }

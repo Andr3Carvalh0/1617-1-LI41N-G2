@@ -31,7 +31,7 @@ public class GetChecklists extends Command {
             String description = rs.getString(3);
             boolean closed = rs.getBoolean(4);
             String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
-            int Tp_id = rs.getInt(6);
+            int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
             list.add(new Checklist(id, nome, description, closed, dueDate, Tp_id));
         }
 

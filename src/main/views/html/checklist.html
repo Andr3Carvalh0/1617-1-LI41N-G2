@@ -26,8 +26,8 @@
                         <td>{{name}}</td>
                         <td>{{description}}</td>
                         <td>{{closed}}</td>
-                        <td>{{dueDate}}</td>
-                        <td>{{Tp_id}}</td>
+                        {{#REPLACE_NULL}}<td>{{dueDate}}</td>
+                        {{#REPLACE_NULL}}<td>{{Tp_id}}</td>
                     </tr>
                 {{#END}}{{self}}
                 </tbody>

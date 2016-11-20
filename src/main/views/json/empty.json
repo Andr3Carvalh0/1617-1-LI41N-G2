@@ -1,0 +1,7 @@
+{
+  "class": ["<<type>>", "collection"],
+  "properties":{
+    "count" : 0
+  },
+  "entities": []
+}

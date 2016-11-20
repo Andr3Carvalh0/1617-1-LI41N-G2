@@ -14,7 +14,7 @@
         "name": "<<name>>",
         "description": "<<description>>",
         "isClosed": <<closed>>,
-        "dueDate": "<<dueDate>>"
+        <<#NOT_NULL>>"dueDate": "<<dueDate>>"
         }
     },
     <<#END>><<Checklist>>

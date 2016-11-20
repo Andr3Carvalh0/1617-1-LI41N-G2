@@ -11,25 +11,25 @@ import java.util.Scanner;
 
 @SuppressWarnings("ConstantConditions")
 class Converter {
-
     private LinkedList<String> message = new LinkedList<>();
-    private boolean isHTML;
     private static final String theme = "bootstrap.min.css";
     private static final String privateKey = "self";
 
-    private static final String lookFor_begin_HTML = "{{";
-    private static final String lookFor_end_HTML = "}}";
-    private static final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}", "{{#END}}"};
-
-    private static final String lookFor_begin_JSON = "<<";
-    private static final String lookFor_end_JSON = ">>";
-    private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>"};
+    private boolean isHTML;
 
     //Cache for the objects fields.
     private HashMap<String, HashMap<String, Field>> cache = new HashMap<>();
 
     //Cache the files that we use as template
     private HashMap<String, LinkedList<String>> file_cache = new HashMap<>();
+
+    private static final String lookFor_begin_HTML = "{{";
+    private static final String lookFor_end_HTML = "}}";
+    private static final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}", "{{#END}}", "{{#NOT_NULL}}", "{{#REPLACE_NULL}}", "{{#COUNT}}"};
+
+    private static final String lookFor_begin_JSON = "<<";
+    private static final String lookFor_end_JSON = ">>";
+    private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>", "<<#NOT_NULL>>", "<<#REPLACE_NULL>>", "<<#COUNT>>"};
 
     private void allocate(String baseFile) throws Exception {
         Scanner io = null;
@@ -58,8 +58,9 @@ class Converter {
     }
 
     void compile(Object obj, boolean isHTML, String baseFile) throws Exception {
-        //Make this the generic-ist way possible
         this.isHTML = isHTML;
+
+        //Make this the generic-ist way possible
         String[] marks = isHTML ? SUPPORTED_MARKERS_HTML : SUPPORTED_MARKERS_JSON;
         String marker_begin = isHTML ? lookFor_begin_HTML : lookFor_begin_JSON;
         String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
@@ -68,7 +69,7 @@ class Converter {
 
         message = replaceFOR(obj, message, marks, marker_begin, marker_end);
 
-        message = replaceFlag(obj, message, marker_begin, marker_end);
+        message = replaceFlag(obj, message, marks, marker_begin, marker_end);
 
         //Cleanup
         removeNotUsedMarkers(marker_begin);
@@ -129,7 +130,7 @@ class Converter {
                 //If so we will iterate over the object we receive in the pars
                 //else we will iterate over a property that the object we receive in the pars has
                 if (object.equals(privateKey)) {
-                    applyObjectValues((LinkedList) obj, leftDelimiter, rightDelimiter, result, iterateBody);
+                    applyObjectValues((LinkedList) obj, marks, leftDelimiter, rightDelimiter, result, iterateBody);
                     if (!isHTML) {
                         result.set(result.size() - 1, result.getLast().replace(",", ""));
                     }
@@ -144,7 +145,7 @@ class Converter {
                         field.setAccessible(true);
                         Object value = field.get(obj);
 
-                        applyObjectValues((LinkedList) value, leftDelimiter, rightDelimiter, result, iterateBody);
+                        applyObjectValues((LinkedList) value, marks, leftDelimiter, rightDelimiter, result, iterateBody);
 
                         if (!isHTML) {
                             result.set(result.size() - 1, result.getLast().replace(",", ""));
@@ -161,44 +162,96 @@ class Converter {
         return result;
     }
 
-    private LinkedList<String> replaceFlag(Object obj, LinkedList<String> msg, String leftDelimiter, String rightDelimiter) {
+    private LinkedList<String> replaceFlag(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter) {
         LinkedList<String> result = new LinkedList<>();
+        boolean toRemove = false;
+        boolean toReplace = false;
+
         for (String line : msg) {
-            if (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
-                String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
-                try {
+            //SPECIAL CASE : #COUNT
+            if (line.contains(marks[4])) {
+                line = line.replace(marks[4], "");
+                String count_for_object = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
+
+                if (count_for_object.equals(privateKey)) {
+                    result.add(line.replace(leftDelimiter + count_for_object + rightDelimiter, ((LinkedList) obj).size() + ""));
+                } else {
                     if (!isPresentInCache(obj.getClass().getName(), cache)) {
                         addToCache(obj);
                     }
-
                     HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
-                    Field field = currentOBJ.get(key);
+                    Field field = currentOBJ.get(count_for_object);
                     field.setAccessible(true);
-                    Object value = field.get(obj);
-                    if (isHTML) {
-                        result.add(line.replace(leftDelimiter + key + rightDelimiter, value == null ? "" : value.toString()));
-                    } else {
-                        if (value != null) {
-                            result.add(line.replace(leftDelimiter + key + rightDelimiter, value.toString()));
-                        } else {
-                            if (result.getLast().contains(",")) {
-                                result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
-                            }
-                        }
+                    try {
+                        Object value = field.get(obj);
+                        result.add(line.replace(leftDelimiter + count_for_object + rightDelimiter, ((LinkedList) value).size() + ""));
+                    } catch (IllegalAccessException e) {
+                        result.add(line);
                     }
-                } catch (IllegalAccessException e1) {
+                }
+
+            } else {
+                //#NOT_NULL
+                if (line.contains(marks[2])) {
+                    toRemove = true;
+                    line = line.replace(marks[2], "");
+                }
+                //#REPLACE_NULL
+                if (line.contains(marks[3])) {
+                    toReplace = true;
+                    line = line.replace(marks[3], "");
+                }
+                if (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
+                    String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
+                    try {
+                        if (!isPresentInCache(obj.getClass().getName(), cache)) {
+                            addToCache(obj);
+                        }
+                        HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                        Field field = currentOBJ.get(key);
+                        field.setAccessible(true);
+                        Object value = field.get(obj);
+
+                        if (toRemove) {
+                            if (value == null || isNumericNull(value, -1)) {
+                                //We dont add to our message, but if the message is json, we have
+                                // to check if the previous line contains "," and if so remove it
+                                if (!isHTML) {
+                                    if (result.getLast().contains(",")) {
+                                        result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
+                                    }
+                                }
+                            } else {
+                                result.add(line.replace(leftDelimiter + key + rightDelimiter, value.toString()));
+                            }
+                            toRemove = false;
+
+                        } else if (toReplace) {
+                            if (value == null || isNumericNull(value, -1)) {
+                                result.add((line.replace(leftDelimiter + key + rightDelimiter, "")));
+
+                            } else {
+                                result.add((line.replace(leftDelimiter + key + rightDelimiter, value.toString())));
+                            }
+
+                            toReplace = false;
+                        } else {
+                            result.add(line.replace(leftDelimiter + key + rightDelimiter, value.toString()));
+                        }
+                    } catch (IllegalAccessException e1) {
+                        result.add(line);
+                    }
+                } else {
                     result.add(line);
                 }
-            } else {
-                result.add(line);
             }
         }
         return result;
     }
 
-    private void applyObjectValues(LinkedList obj, String leftDelimiter, String rightDelimiter, LinkedList<String> result, LinkedList<String> iterateBody) {
+    private void applyObjectValues(LinkedList obj, String marks[], String leftDelimiter, String rightDelimiter, LinkedList<String> result, LinkedList<String> iterateBody) {
         for (Object o : obj) {
-            LinkedList<String> tmp = replaceFlag(o, iterateBody, leftDelimiter, rightDelimiter);
+            LinkedList<String> tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter);
             result.addAll(tmp);
         }
     }
@@ -234,5 +287,14 @@ class Converter {
         }
 
         return res;
+    }
+
+    private boolean isNumericNull(Object obj, int definitionOfNull){
+        if (obj instanceof Integer) {
+            if(((Integer)obj) == definitionOfNull){
+                return true;
+            }
+        }
+        return false;
     }
 }

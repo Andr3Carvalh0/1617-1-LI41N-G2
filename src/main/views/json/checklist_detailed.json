@@ -5,7 +5,7 @@
       "name": "<<name>>",
       "description": "<<description>>",
       "isClosed": <<closed>>,
-      "dueDate": "<<dueDate>>"
+      <<#NOT_NULL>>"dueDate": "<<dueDate>>"
     <<#END>><<Checklist>>
   },
   "entities": [
@@ -16,7 +16,7 @@
         "name": "<<Cl_Task_name>>",
         "description": "<<Cl_Task_desc>>",
         "isClosed": <<Cl_isClosed>>,
-        "dueDate": "<<Cl_Task_dueDate>>"
+        <<#NOT_NULL>>"dueDate": "<<Cl_Task_dueDate>>"
         }
     },
     <<#END>><<Checklist_Task>>

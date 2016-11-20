@@ -1,7 +1,7 @@
 {
   "class": ["tag", "collection"],
   "properties":{
-    "count" : 2
+    "count" : <<#COUNT>><<self>>
   },
   "entities": [
     <<#FOR>><<self>>

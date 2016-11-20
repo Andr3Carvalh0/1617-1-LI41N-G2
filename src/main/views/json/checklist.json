@@ -1,7 +1,7 @@
 {
   "class": ["checklist", "collection"],
   "properties":{
-    "count" : 2
+    "count" : <<#COUNT>><<self>>
   },
   "entities": [
     <<#FOR>><<self>>
@@ -11,7 +11,7 @@
         "name": "<<name>>",
         "description": "<<description>>",
         "isClosed": <<closed>>,
-        "dueDate": "<<dueDate>>"
+        <<#NOT_NULL>>"dueDate": "<<dueDate>>"
       }
     },
     <<#END>><<self>>

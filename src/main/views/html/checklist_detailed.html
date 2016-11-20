@@ -12,7 +12,7 @@
                     {{#FOR}}{{Checklist}}
                     <h1>{{name}}</h1>
                     <p>{{description}}</p>
-                    <p>{{dueDate}}</p>
+                    {{#NOT_NULL}}<p>{{dueDate}}</p>
                     {{#END}}{{Checklist}}
                     <h4 style="padding-top:50px">Base Template:</h4>
                     <ul>
