@@ -30,7 +30,7 @@ public class TreeCommands {
         GETS.add(new CommandNode(null, null, new GetChecklistsOpenSortedDueDate()));
         GETS.add(new CommandNode(null, null, new GetChecklistsOpenSortedNoftasks()));
         GETS.add(new CommandNode(null, null, new GetTags()));
-        GETS.add(new CommandNode(null, null, new PostChecklistsCidTags()));
+        GETS.add(new CommandNode(null, null, new GetTemplatesTidChecklistsSortedByOpentasksDesc()));
         CommandNode gets = new CommandNode("GET", GETS, null);
 
         LinkedList<CommandNode> POSTS = new LinkedList<>();

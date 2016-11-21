@@ -3,6 +3,7 @@ package pt.isel.ls;
 
 import org.junit.Test;
 import pt.isel.ls.Commands.GetTemplates;
+import pt.isel.ls.Commands.GetTemplatesTidChecklistsSortedByOpentasksDesc;
 import pt.isel.ls.Commands.GetTemplatesTid;
 import pt.isel.ls.Commands.PostTemplates;
 import pt.isel.ls.Commands.PostTemplatesTidCreate;
@@ -61,6 +62,28 @@ public class TemplateTest {
         ps.setString(2, desc);
 
         ps.execute();
+    }
+
+    private void generateChecklist_Tasks(int numberOfClosedTasks, int Cl_id, int numberOfTasks, Connection con) throws SQLException {
+        String s1 = "insert into checklist_task(Cl_id ,Cl_Task_index, Cl_Task_Closed, Cl_Task_name, Cl_Task_desc, Cl_Task_duedate) values (?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps = con.prepareStatement(s1);
+        ps.setInt(1, Cl_id);
+        ps.setInt(2, 0); //For now we leave Task_index = 0
+        ps.setInt(3, (numberOfClosedTasks > 0) ? 1 : 0);
+        ps.setString(4, TEST_NAME);
+        ps.setString(5, TEST_DESC);
+        ps.setString(6, null);
+
+        for (int i = 0; i < numberOfClosedTasks; i++) {
+            ps.execute();
+        }
+
+        ps.setInt(3, 0);
+        for (int i = 0; i < numberOfTasks - numberOfClosedTasks; i++) {
+            ps.execute();
+        }
+
     }
 
     private void addTemplateTask(int Tp_id, String Tp_Task_name, String Tp_Task_desc, Connection con) throws SQLException {
@@ -222,6 +245,57 @@ public class TemplateTest {
             }
         }
     }
+
+    @Test
+    public void testGetTemplateTidChecklistsSortedByOpenTasksDesc() throws Exception {
+        int checklist_id1 = 0, checklist_id2 = 0;
+        try{
+            con = GetConnection.connect(true);
+            //Inserir template
+            addTemplate("Template", "Desc", con);
+            int template_id = getLastInsertedTemplate(con);
+
+            addChecklistFromTemplate("Check1", "Desc1", 0, null, template_id, con);
+            checklist_id1 = getLastInsertedChecklist(con);
+
+            addChecklistFromTemplate("Check2", "Desc2", 0, null, template_id, con);
+            checklist_id2 = getLastInsertedChecklist(con);
+
+            generateChecklist_Tasks(0, checklist_id1, 1, con);
+
+            generateChecklist_Tasks(0, checklist_id1, 1, con);
+
+            generateChecklist_Tasks(0, checklist_id2, 1, con);
+
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("{tid}", template_id + "");
+
+            LinkedList<Checklist> LinkedList = (LinkedList) new GetTemplatesTidChecklistsSortedByOpentasksDesc().execute(map, con);
+            assertEquals(2, LinkedList.size());
+            assertEquals(checklist_id2, LinkedList.get(1).getId());
+
+
+        }
+        finally {
+            if (con != null) {
+                PreparedStatement dels;
+                dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
+                dels.setInt(1, checklist_id1);
+                dels.executeUpdate();
+
+                dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
+                dels.setInt(1, checklist_id2);
+                dels.executeUpdate();
+
+                dels = con.prepareStatement("DELETE from template where Tp_id = ?");
+                dels.setInt(1, getLastInsertedTemplate(con));
+                dels.executeUpdate();
+                con.close();
+            }
+        }
+    }
+
     @Test
     public void PostTemplatesTidTasks() throws Exception {
         HashMap<String, String> params = new HashMap<>();
