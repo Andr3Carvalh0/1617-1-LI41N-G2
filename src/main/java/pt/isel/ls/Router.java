@@ -58,7 +58,7 @@ public class Router {
 
     private boolean match(String s, String s1) {
         if (s.equals(s1)) return true;
-        else if (s1.contains("id")) {
+        else if (s1.contains("id") || s1.contains("noftasks")) {
             params.put(s1, s);
             return true;
         }
