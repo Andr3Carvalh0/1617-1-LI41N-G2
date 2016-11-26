@@ -246,6 +246,7 @@ class Converter {
                                         result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
                                     }
                                 }
+                                line = "";
                             } else {
                                 line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
                             }

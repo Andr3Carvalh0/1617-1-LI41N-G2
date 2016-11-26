@@ -6,12 +6,24 @@
         <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
     </head>
     <body>
+        <div class="jumbotron">
+            <nav>
+                <ul class="nav nav-pills pull-right" style="padding-top:35px;padding-right:20px">
+                    <li role="presentation"><a href="/templates">All</a></li>
+                </ul>
+            </nav>
+            <div class="container">
+                {{#FOR}}{{Template}}
+                <h1>Template {{Tp_id}}</h1>
+                {{#END}}{{Template}}
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-xs-5" style="padding-top: 50px;">
                     {{#FOR}}{{Template}}
-                    <h1>{{Tp_name}}</h1>
-                    <p>{{Tp_desc}}</p>
+                    <h1>Name : {{Tp_name}}</h1>
+                    <p>Description : {{Tp_desc}}</p>
                     {{#END}}{{Template}}
                 </div>
                 <div class="col-xs-3" style="padding-top: 50px">

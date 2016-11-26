@@ -6,26 +6,19 @@
         <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
     </head>
     <body>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Tags</h1>
+            </div>
+        </div>
         <div class="container">
-            <h2>Tags</h2>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Tag ID</th>
-                    <th>Name</th>
-                    <th>Color</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="container">
                 {{#FOR}}{{self}}
-                <tr>
-                    <td>{{Tg_id}}</td>
-                    <td>{{Tg_name}}</td>
-                    <td>{{Tg_color}}</td>
-                </tr>
+                <h4><a href="/tags/{{Tg_id}}">Name : {{Tg_name}}</a></h4>
+                <p>Color : {{Tg_color}}</p>
+                {{#REMOVE_ON_LAST}}<hr/>
                 {{#END}}{{self}}
-                </tbody>
-            </table>
+            </div>
         </div>
     </body>
 </html>

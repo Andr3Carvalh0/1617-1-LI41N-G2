@@ -6,7 +6,7 @@ import pt.isel.ls.Utils.Output.CustomPrinter;
 import java.util.Scanner;
 
 public class App {
-    static CustomPrinter cPrinter = new CustomPrinter();
+    private static CustomPrinter cPrinter = new CustomPrinter();
 
     public static void main(String[] args) {
         try {
