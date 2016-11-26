@@ -25,11 +25,11 @@ class Converter {
 
     private static final String lookFor_begin_HTML = "{{";
     private static final String lookFor_end_HTML = "}}";
-    private static final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}", "{{#END}}", "{{#NOT_NULL}}", "{{#REPLACE_NULL}}", "{{#COUNT}}"};
+    private static final String[] SUPPORTED_MARKERS_HTML = {"{{#FOR}}", "{{#END}}", "{{#NOT_NULL}}", "{{#REPLACE_NULL}}", "{{#COUNT}}", "{{#REMOVE_ON_LAST}}"};
 
     private static final String lookFor_begin_JSON = "<<";
     private static final String lookFor_end_JSON = ">>";
-    private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>", "<<#NOT_NULL>>", "<<#REPLACE_NULL>>", "<<#COUNT>>"};
+    private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>", "<<#NOT_NULL>>", "<<#REPLACE_NULL>>", "<<#COUNT>>", "<<#REMOVE_ON_LAST>>"};
 
     private void allocate(String baseFile) throws Exception {
         Scanner io = null;
@@ -69,7 +69,7 @@ class Converter {
 
         message = replaceFOR(obj, message, marks, marker_begin, marker_end);
 
-        message = replaceFlag(obj, message, marks, marker_begin, marker_end);
+        message = replaceFlag(obj, message, marks, marker_begin, marker_end, false);
 
         //Cleanup
         removeNotUsedMarkers(marker_begin);
@@ -162,7 +162,20 @@ class Converter {
         return result;
     }
 
-    private LinkedList<String> replaceFlag(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter) {
+    /*
+    *
+    * obj : Object -> the object which we will get the properties values to populate the msg.
+    * msg : LinkedList -> the body of text that we will analyze and replace with values from obj.
+    * marks : String[] -> we use different marks for JSON and HTML, so instead of trying to tell if its a HTML or
+    *                     JSON we just received the marks to use.
+    * leftDelimiter : String  -> the same case as marks.
+    * rightDelimiter : String -> the same case as marks.
+    * isLastElement : boolean -> we use this, so that we can implement the "REMOVE_ON_LAST", which removes all lines
+    *                               that begin with "#REMOVE_ON_LAST", if the we are using a list and we are populating
+    *                               the last element of such list.
+    *
+     */
+    private LinkedList<String> replaceFlag(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter, boolean isLastElement) throws IllegalAccessException {
         LinkedList<String> result = new LinkedList<>();
         boolean toRemove = false;
         boolean toReplace = false;
@@ -201,57 +214,74 @@ class Converter {
                     toReplace = true;
                     line = line.replace(marks[3], "");
                 }
-                if (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
-                    String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
-                    try {
-                        if (!isPresentInCache(obj.getClass().getName(), cache)) {
-                            addToCache(obj);
+
+
+                while (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
+                    //CASE REMOVE_ON_LAST
+                    if(line.contains(marks[5])){
+                        if(isLastElement){
+                            line = "";
+                            break;
+                        }else{
+                            line = line.replace(marks[5], "");
                         }
-                        HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
-                        Field field = currentOBJ.get(key);
-                        field.setAccessible(true);
-                        Object value = field.get(obj);
-
-                        if (toRemove) {
-                            if (value == null || isNumericNull(value, -1)) {
-                                //We dont add to our message, but if the message is json, we have
-                                // to check if the previous line contains "," and if so remove it
-                                if (!isHTML) {
-                                    if (result.getLast().contains(",")) {
-                                        result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
-                                    }
-                                }
-                            } else {
-                                result.add(line.replace(leftDelimiter + key + rightDelimiter, value.toString()));
-                            }
-                            toRemove = false;
-
-                        } else if (toReplace) {
-                            if (value == null || isNumericNull(value, -1)) {
-                                result.add((line.replace(leftDelimiter + key + rightDelimiter, "")));
-
-                            } else {
-                                result.add((line.replace(leftDelimiter + key + rightDelimiter, value.toString())));
-                            }
-
-                            toReplace = false;
-                        } else {
-                            result.add(line.replace(leftDelimiter + key + rightDelimiter, value.toString()));
-                        }
-                    } catch (IllegalAccessException e1) {
-                        result.add(line);
                     }
-                } else {
-                    result.add(line);
+
+
+                    String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
+
+                    if (!isPresentInCache(obj.getClass().getName(), cache)) {
+                        addToCache(obj);
+                    }
+                    HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                    Field field = currentOBJ.get(key);
+                    field.setAccessible(true);
+                    Object value = field.get(obj);
+
+                    if (toRemove) {
+                        if (value == null || isNumericNull(value, -1)) {
+                            //We dont add to our message, but if the message is json, we have
+                            // to check if the previous line contains "," and if so remove it
+                            if (!isHTML) {
+                                if (result.getLast().contains(",")) {
+                                    result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
+                                }
+                            }
+                        } else {
+                            line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
+                        }
+                        toRemove = false;
+
+                    } else if (toReplace) {
+                        if (value == null || isNumericNull(value, -1)) {
+                            line = line.replace(leftDelimiter + key + rightDelimiter, "");
+
+                        } else {
+                            line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
+                        }
+
+                        toReplace = false;
+                    } else {
+                        line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
+                    }
+
                 }
+                result.add(line);
             }
         }
         return result;
     }
 
     private void applyObjectValues(LinkedList obj, String marks[], String leftDelimiter, String rightDelimiter, LinkedList<String> result, LinkedList<String> iterateBody) {
-        for (Object o : obj) {
-            LinkedList<String> tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter);
+        LinkedList<String> tmp;
+
+        for (int i = 0; i < obj.size(); i++) {
+            Object o = obj.get(i);
+            try {
+                tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter, (i == obj.size()-1));
+            } catch (IllegalAccessException e) {
+                throw new Error("Couldnt populate the file due to a unknown property!");
+            }
             result.addAll(tmp);
         }
     }
@@ -289,9 +319,9 @@ class Converter {
         return res;
     }
 
-    private boolean isNumericNull(Object obj, int definitionOfNull){
+    private boolean isNumericNull(Object obj, int definitionOfNull) {
         if (obj instanceof Integer) {
-            if(((Integer)obj) == definitionOfNull){
+            if (((Integer) obj) == definitionOfNull) {
                 return true;
             }
         }
