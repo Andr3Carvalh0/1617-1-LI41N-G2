@@ -1,4 +1,5 @@
 apply plugin: 'java'
+import org.apache.tools.ant.taskdefs.condition.Os
 
 version = '1.0'
 
@@ -10,13 +11,17 @@ task copyTask(type: Copy) {
 }
 
 task initDb(type:Exec) {
-	def varsArray = System.getenv("LS_DBCONN_TEST_SQLSRV").split(";")
-	def credentials = new String[4]
-	for(def i = 0; i < 4; i++){
-		credentials.putAt(i, varsArray[i].split("=")[1])
+	if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+		def varsArray = System.getenv("LS_DBCONN_TEST_SQLSRV").split(";")
+		def credentials = new String[4]
+		for (def i = 0; i < 4; i++) {
+			credentials.putAt(i, varsArray[i].split("=")[1])
+		}
+
+		commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./Table_Creation_Script.sql"
+	}else{
+		println('The current OS can´t exexute the setup command to execute initDB.Please do it yourself!')
 	}
-	
-	commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./Table_Creation_Script.sql"
 }
 
 dependencies {
