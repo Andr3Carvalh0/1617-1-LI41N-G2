@@ -20,17 +20,15 @@ task initDb(type:Exec) {
 
 		commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./Table_Creation_Script.sql"
 	}else{
-		println('The current OS can´t exexute the setup command to execute initDB.Please do it yourself!')
+		commandLine "echo", "The current OS can´t exexute the setup command to execute initDB.Please do it yourself!"
 	}
 }
 
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
-
-	tasks.copyTask.execute()
-	tasks.initDb.execute()
 }
 
+build.dependsOn copyTask
 
 test.dependsOn initDb
