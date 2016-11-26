@@ -218,53 +218,57 @@ class Converter {
 
                 while (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
                     //CASE REMOVE_ON_LAST
-                    if(line.contains(marks[5])){
-                        if(isLastElement){
+                    if (line.contains(marks[5])) {
+                        if (isLastElement) {
                             line = "";
-                            break;
-                        }else{
+                        } else {
                             line = line.replace(marks[5], "");
                         }
                     }
 
+                    if (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
+                        String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
 
-                    String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
+                        if (!isPresentInCache(obj.getClass().getName(), cache)) {
+                            addToCache(obj);
+                        }
+                        HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                        Field field = currentOBJ.get(key);
+                        field.setAccessible(true);
+                        Object value = field.get(obj);
 
-                    if (!isPresentInCache(obj.getClass().getName(), cache)) {
-                        addToCache(obj);
-                    }
-                    HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
-                    Field field = currentOBJ.get(key);
-                    field.setAccessible(true);
-                    Object value = field.get(obj);
-
-                    if (toRemove) {
-                        if (value == null || isNumericNull(value, -1)) {
-                            //We dont add to our message, but if the message is json, we have
-                            // to check if the previous line contains "," and if so remove it
-                            if (!isHTML) {
-                                if (result.getLast().contains(",")) {
-                                    result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
+                        if (toRemove) {
+                            if (value == null || isNumericNull(value, -1)) {
+                                //We dont add to our message, but if the message is json, we have
+                                // to check if the previous line contains "," and if so remove it
+                                if (!isHTML) {
+                                    if (result.getLast().contains(",")) {
+                                        result.set(result.size() - 1, result.getLast().replace(",\n", "\n"));
+                                    }
                                 }
+                            } else {
+                                line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
                             }
+                            toRemove = false;
+
+                        } else if (toReplace) {
+                            if (value == null || isNumericNull(value, -1)) {
+                                line = line.replace(leftDelimiter + key + rightDelimiter, "");
+
+                            } else {
+                                line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
+                            }
+
+                            toReplace = false;
                         } else {
-                            line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
-                        }
-                        toRemove = false;
-
-                    } else if (toReplace) {
-                        if (value == null || isNumericNull(value, -1)) {
-                            line = line.replace(leftDelimiter + key + rightDelimiter, "");
-
-                        } else {
-                            line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
+                            if(value != null) {
+                                line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
+                            }else{
+                                line = line.replace(leftDelimiter + key + rightDelimiter, "");
+                            }
                         }
 
-                        toReplace = false;
-                    } else {
-                        line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
                     }
-
                 }
                 result.add(line);
             }
@@ -278,7 +282,8 @@ class Converter {
         for (int i = 0; i < obj.size(); i++) {
             Object o = obj.get(i);
             try {
-                tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter, (i == obj.size()-1));
+                boolean last = i == obj.size() - 1;
+                tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter, last);
             } catch (IllegalAccessException e) {
                 throw new Error("Couldnt populate the file due to a unknown property!");
             }

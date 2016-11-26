@@ -6,26 +6,15 @@
         <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
     </head>
     <body>
+    <div class="container">
+        <h2>Templates</h2>
         <div class="container">
-            <h2>Templates</h2>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                {{#FOR}}{{self}}
-                <tr>
-                    <td>{{Tp_id}}</td>
-                    <td>{{Tp_name}}</td>
-                    <td>{{Tp_desc}}</td>
-                </tr>
-                {{#END}}{{self}}
-                </tbody>
-            </table>
+            {{#FOR}}{{self}}
+            <h4><a href="/templates/{{Tp_id}}">{{Tp_name}}</a></h4>
+            <p>{{Tp_desc}}</p>
+            {{#REMOVE_ON_LAST}}<hr/>
+            {{#END}}{{self}}
         </div>
+    </div>
     </body>
 </html>

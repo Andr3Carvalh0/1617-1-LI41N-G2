@@ -8,30 +8,13 @@
     <body>
         <div class="container">
             <h2>Checklists</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Closed</th>
-                        <th>DueDate</th>
-                        <th>References Template #</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="container">
                 {{#FOR}}{{self}}
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{name}}</td>
-                        <td>{{description}}</td>
-                        <td>{{closed}}</td>
-                        {{#REPLACE_NULL}}<td>{{dueDate}}</td>
-                        {{#REPLACE_NULL}}<td>{{Tp_id}}</td>
-                    </tr>
+                <h4><a href="/checklists/{{id}}">{{name}}</a></h4>
+                <p>{{description}}</p>
+                {{#REMOVE_ON_LAST}}<hr/>
                 {{#END}}{{self}}
-                </tbody>
-            </table>
+            </div>
         </div>
     </body>
 </html>

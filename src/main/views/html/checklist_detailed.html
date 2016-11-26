@@ -17,7 +17,7 @@
                     <h4 style="padding-top:50px">Base Template:</h4>
                     <ul>
                         {{#FOR}}{{Template}}
-                        <li>{{Tp_name}}</li>
+                        <li><a href="/templates/{{Tp_id}}">{{Tp_name}}</a></li>
                         {{#END}}{{Template}}
                     </ul>
                 </div>
@@ -26,7 +26,7 @@
                         <h3>Tasks:</h3>
                         <ul>
                             {{#FOR}}{{Checklist_Task}}
-                            <li>{{Cl_Task_name}}</li>
+                            {{#NOT_NULL}}<li>{{Cl_Task_name}}</li>
                             {{#END}}{{Checklist_Task}}
                         </ul>
                     </div>
@@ -36,7 +36,7 @@
                         <h3>Tags:</h3>
                         <ul>
                             {{#FOR}}{{Tag}}
-                            <li>{{Tg_name}}</li>
+                            {{#NOT_NULL}}<li>{{Tg_name}}</li>
                             {{#END}}{{Tag}}
                         </ul>
                     </div>
