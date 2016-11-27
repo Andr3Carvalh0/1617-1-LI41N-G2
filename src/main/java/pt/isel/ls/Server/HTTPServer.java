@@ -18,6 +18,7 @@ public class HTTPServer {
         //DONT DO IT THIS WAY.THIS WAS JUST A TEST
         handler.addServletWithMapping(new ServletHolder(new Checklists(con)), "/checklists");
         handler.addServletWithMapping(new ServletHolder(new Home(con)), "");
+        handler.addServletWithMapping(new ServletHolder(new About(con)), "/about");
         handler.addServletWithMapping(new ServletHolder(new Error(con)), "/*");
     }
 

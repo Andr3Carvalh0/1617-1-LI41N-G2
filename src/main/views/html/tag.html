@@ -8,13 +8,13 @@
     <body>
         <div class="jumbotron">
             <div class="container">
-                <h1>Tags</h1>
+                <h1 style="display:inline; margin-left:10px"><a href="/"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Tags</h1>
             </div>
         </div>
         <div class="container">
             <div class="container">
                 {{#FOR}}{{self}}
-                <h4><a href="/tags/{{Tg_id}}">Name : {{Tg_name}}</a></h4>
+                <h4>Name : <a href="/tags/{{Tg_id}}">{{Tg_name}}</a></h4>
                 <p>Color : {{Tg_color}}</p>
                 {{#REMOVE_ON_LAST}}<hr/>
                 {{#END}}{{self}}

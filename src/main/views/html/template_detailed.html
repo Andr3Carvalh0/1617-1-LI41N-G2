@@ -7,14 +7,9 @@
     </head>
     <body>
         <div class="jumbotron">
-            <nav>
-                <ul class="nav nav-pills pull-right" style="padding-top:35px;padding-right:20px">
-                    <li role="presentation"><a href="/templates">All</a></li>
-                </ul>
-            </nav>
             <div class="container">
                 {{#FOR}}{{Template}}
-                <h1>Template {{Tp_id}}</h1>
+                <h1 style="display:inline; margin-left:10px"><a href="/templates"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Template {{Tp_id}}</h1>
                 {{#END}}{{Template}}
             </div>
         </div>

@@ -8,7 +8,7 @@
     <body>
         <div class="jumbotron">
             <nav>
-                <ul class="nav nav-pills pull-right" style="padding-top:35px;padding-right:20px">
+                <ul class="nav nav-pills pull-right" style="padding-top:20px;padding-right:20px">
                     <li role="presentation" class="active"><a href="/checklists">All</a></li>
                     <li role="presentation"><a href="/checklists/closed">Closed</a></li>
                     <li role="presentation"><a href="/checklists/open/sorted/duedate">By Date</a></li>
@@ -16,15 +16,15 @@
                 </ul>
             </nav>
             <div class="container">
-                <h1>Checklists</h1>
+                <h1 style="display:inline; margin-left:10px"><a href="/"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Checklists</h1>
             </div>
         </div>
         <div class="container">
             <div class="container">
                 {{#FOR}}{{self}}
-                <h4><a href="/checklists/{{id}}">Name : {{name}}</a></h4>
+                <h4>Name : <a href="/checklists/{{id}}">{{name}}</a></h4>
                 <p>Description : {{description}}</p>
-                {{#NOT_NULL}}<a href="/templates/"{{Tp_id}}>Based on template number : {{Tp_id}}</a>
+                {{#NOT_NULL}}<p>Based on template number : <a href="/templates/"{{Tp_id}}>{{Tp_id}}</a></p>
                 {{#REMOVE_ON_LAST}}<hr/>
                 {{#END}}{{self}}
             </div>

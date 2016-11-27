@@ -7,14 +7,9 @@
     </head>
     <body>
         <div class="jumbotron">
-            <nav>
-                <ul class="nav nav-pills pull-right" style="padding-top:35px;padding-right:20px">
-                    <li role="presentation"><a href="/checklists">All</a></li>
-                </ul>
-            </nav>
             <div class="container">
                 {{#FOR}}{{Checklist}}
-                <h1>Checklist {{id}}</h1>
+                <h1 style="display:inline; margin-left:10px"><a href="/checklists"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Checklist {{id}}</h1>
                 {{#END}}{{Checklist}}
             </div>
         </div>
@@ -27,7 +22,7 @@
                     {{#NOT_NULL}}<p>Due : {{dueDate}}</p>
                     {{#END}}{{Checklist}}
                     {{#FOR}}{{Template}}
-                    <a href="/templates/{{Tp_id}}">Base template : {{Tp_name}}</a>
+                    <p>Base template : <a href="/templates/{{Tp_id}}">{{Tp_name}}</a></p>
                     {{#END}}{{Template}}
                 </div>
                 <div class="col-xs-3" style="padding-top: 50px">

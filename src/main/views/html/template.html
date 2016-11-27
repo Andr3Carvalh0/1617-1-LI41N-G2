@@ -8,13 +8,13 @@
     <body>
     <div class="jumbotron">
         <div class="container">
-            <h1>Templates</h1>
+            <h1 style="display:inline; margin-left:10px"><a href="/"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Templates</h1>
         </div>
     </div>
     <div class="container">
         <div class="container">
             {{#FOR}}{{self}}
-            <h4><a href="/templates/{{Tp_id}}">Name : {{Tp_name}}</a></h4>
+            <h4>Name : <a href="/templates/{{Tp_id}}">{{Tp_name}}</a></h4>
             <p>Description : {{Tp_desc}}</p>
             {{#REMOVE_ON_LAST}}<hr/>
             {{#END}}{{self}}

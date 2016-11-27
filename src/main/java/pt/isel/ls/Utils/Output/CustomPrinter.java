@@ -65,6 +65,8 @@ public class CustomPrinter {
             file = "empty";
         }else if(obj.equals("main")){
             file = "home";
+        } else if(obj.equals("about")){
+            file = "about";
         } else {
             if (obj instanceof LinkedList) {
                 file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
