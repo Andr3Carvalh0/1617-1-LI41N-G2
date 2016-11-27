@@ -12,7 +12,6 @@ import java.util.Scanner;
 @SuppressWarnings("ConstantConditions")
 class Converter {
     private LinkedList<String> message = new LinkedList<>();
-    private static final String theme = "bootstrap.min.css";
     private static final String privateKey = "self";
 
     private boolean isHTML;
@@ -75,22 +74,17 @@ class Converter {
         removeNotUsedMarkers(marker_begin);
     }
 
-    void commit(String msg, String outputName) throws Exception {
+    String commit(String msg, String outputName) throws Exception {
         if (msg == null) msg = generateMessage();
 
         if (outputName == null) {
-            System.out.println(msg);
+            return msg;
         } else {
             try {
                 saveToFile(msg, outputName);
-                //Copy the css file
-                if (isHTML) {
-                    allocate(Converter.class.getClassLoader().getResource("./views/" + theme).getPath());
-                    String out = outputName.substring(0, outputName.lastIndexOf("/") + 1);
-                    saveToFile(generateMessage(), out + theme);
-                }
+                return "Saved!";
             } catch (FileNotFoundException e) {
-                System.out.println("Cannot save file!");
+                return "Cannot save file!";
             }
         }
     }

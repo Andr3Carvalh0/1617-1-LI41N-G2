@@ -14,16 +14,22 @@ public class CommandParser {
         path = args[1].split("/");
         params = new HashMap<String, String>();
         if (args.length > 2) {
-            if(args[2].contains("=") && args[2].contains(":")) throw new Exception("Não sao permitidos parâmetros com ':' ou headers com '='");
+            if (args[2].contains("=") && args[2].contains(":"))
+                throw new Exception("Não sao permitidos parâmetros com ':' ou headers com '='");
 
-            if(args[2].contains("="))
-                setParams(args,2);
-            else if(args[2].contains(":"))
+            if (args[2].contains("="))
+                setParams(args, 2);
+            else if (args[2].contains(":"))
                 setHeaders(args);
 
+            //Listen Command
+            if (args[1].equals("/")) {
+                params.put("port", args[2]);
+            }
+
             if (args.length == 4)
-                if(args[3].contains("+"))
-                    setParams(args,3);
+                if (args[3].contains("+"))
+                    setParams(args, 3);
         }
 
     }
@@ -46,6 +52,7 @@ public class CommandParser {
             params.put(aux[0], aux[1]);
         }
     }
+
 
     public String getMethod() {
         return method;

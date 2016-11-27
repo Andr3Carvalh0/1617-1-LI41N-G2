@@ -6,12 +6,12 @@ import java.util.LinkedList;
 /*
 *                  "/"
 *                   |
-*        ___________|____________
-*        |      |        |      |
-*       GET    POST   DELETE  OPTION
+*        ___________|____________________
+*        |      |        |       |       |
+*       GET    POST    DELETE  OPTION  LISTEN
 *        |      |        |
-*       GET    POST   DELETE
-*       CMDs   CMDs   CMDs
+*       GET    POST    DELETE
+*       CMDs   CMDs    CMDs
 *
  */
 
@@ -55,6 +55,10 @@ public class TreeCommands {
         ROOT.add(deletes);
         CommandNode options = new CommandNode("OPTIONS", null, new Options());
         ROOT.add(options);
+        CommandNode listen = new CommandNode("LISTEN", null, new Listen());
+        ROOT.add(listen);
+
+
         root = new CommandNode("/", ROOT, null);
 
     }

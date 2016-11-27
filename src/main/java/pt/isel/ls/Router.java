@@ -51,7 +51,7 @@ public class Router {
                     break;
                 }
             }
-            if (path.length == i || method.equals("OPTIONS")) {
+            if (path.length == i) {
                 return cmd;
             }
         }
@@ -79,7 +79,7 @@ public class Router {
             e.printStackTrace();
         } finally {
             try {
-                if(con != null) {
+                if(!con.isClosed()) {
                     con.close();
                 }
             } catch (SQLException e) {
