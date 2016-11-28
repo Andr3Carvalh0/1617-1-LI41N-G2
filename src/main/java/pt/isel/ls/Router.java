@@ -60,7 +60,7 @@ public class Router {
 
     private boolean match(String s, String s1) {
         if (s.equals(s1)) return true;
-        else if (s1.contains("id")) {
+        else if (s1.contains("id") && isNumeric(s)) {
             params.put(s1, s);
             return true;
         }
@@ -87,5 +87,16 @@ public class Router {
             }
         }
         return obj;
+    }
+
+    private boolean isNumeric(String obj) {
+        try {
+            int i = Integer.parseInt(obj);
+            return true;
+
+        }catch (Exception e){
+            return false;
+
+        }
     }
 }

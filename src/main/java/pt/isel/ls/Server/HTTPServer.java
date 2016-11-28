@@ -16,10 +16,7 @@ public class HTTPServer {
         server.setHandler(handler);
 
         //DONT DO IT THIS WAY.THIS WAS JUST A TEST
-        handler.addServletWithMapping(new ServletHolder(new Checklists(con)), "/checklists");
-        handler.addServletWithMapping(new ServletHolder(new Home(con)), "");
-        handler.addServletWithMapping(new ServletHolder(new About(con)), "/about");
-        handler.addServletWithMapping(new ServletHolder(new Error(con)), "/*");
+        handler.addServletWithMapping(new ServletHolder(new Service(con)), "/*");
     }
 
     public void run() throws Exception {
