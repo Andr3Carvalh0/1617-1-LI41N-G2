@@ -2,6 +2,7 @@ package pt.isel.ls.Utils.Output;
 
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
+import pt.isel.ls.Server.WrapperChecklistView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -63,14 +64,17 @@ public class CustomPrinter {
 
         if(obj == null){
             file = "empty";
-        }else if(obj.equals("main")){
+        }else if(obj.equals("/")){
             file = "home";
-        } else if(obj.equals("about")){
+        } else if(obj.equals("/about")){
             file = "about";
         } else {
             if (obj instanceof LinkedList) {
                 file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
-            } else {
+            } else if(obj instanceof WrapperChecklistView){
+                file = "checklist";
+            }
+            else {
                 file = ((DtoWrapper) obj).getTemplate_Task() != null ? "template_detailed" : "checklist_detailed";
             }
         }

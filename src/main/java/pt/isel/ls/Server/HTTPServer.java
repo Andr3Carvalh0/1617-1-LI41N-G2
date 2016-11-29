@@ -1,9 +1,14 @@
 package pt.isel.ls.Server;
 
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.io.File;
 import java.sql.Connection;
 
 public class HTTPServer {
@@ -15,8 +20,7 @@ public class HTTPServer {
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
 
-        //DONT DO IT THIS WAY.THIS WAS JUST A TEST
-        handler.addServletWithMapping(new ServletHolder(new Service(con)), "/*");
+        handler.addServletWithMapping(new ServletHolder(new Service()), "/*");
     }
 
     public void run() throws Exception {
