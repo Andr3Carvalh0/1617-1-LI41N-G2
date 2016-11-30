@@ -48,7 +48,12 @@ public class CustomPrinter {
             if (obj instanceof LinkedList) {
                 file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
             } else {
-                file = ((DtoWrapper) obj).getTemplate_Task() != null ? "template_detailed" : "checklist_detailed";
+                if(((DtoWrapper) obj).getTemplate_Task() != null){
+                    file = (((DtoWrapper) obj).getTag() != null) ? "tag_detailed" : "template_detailed";
+
+                }else{
+                    file = "checklist_detailed";
+                }
             }
         }
 

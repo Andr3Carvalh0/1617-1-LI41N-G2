@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Result</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
+            <div class="container">
+                {{#FOR}}{{Tag}}
+                <h1 style="display:inline; margin-left:10px"><a href="/tag/{{Tg_id}}"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Tag {{Tg_id}}</h1>
+                {{#END}}{{Tag}}
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-5" style="padding-top: 50px;">
+                    {{#FOR}}{{Tag}}
+                    <h1>Name : {{Tg_name}}</h1>
+                    {{#NOT_NULL}}<p>Color : {{Tg_color}}</p>
+                    {{#END}}{{Tag}}
+                </div>
+                <div class="col-xs-3" style="padding-top: 50px">
+                    <div class="billboard">
+                        <h3>Used in:</h3>
+                        <ul>
+                            {{#FOR}}{{Checklist}}
+                            {{#NOT_NULL}}<li><a href="/checklists/{{id}}">{{name}}</a></li>
+                            {{#END}}{{Checklist}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

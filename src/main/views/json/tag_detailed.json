@@ -1,0 +1,22 @@
+{
+  "class": ["tag"],
+  "properties":{
+    <<#FOR>><<Tag>>
+      "name": "<<Tg_name>>",
+      "color": "<<Tg_color>>"
+    <<#END>><<Tag>>
+  },
+  "entities": [
+    <<#FOR>><<Checklist>>
+    {
+      "class": ["checklist"],
+      "properties": {
+        "name": "<<name>>",
+        "description": "<<description>>",
+        "isClosed": <<closed>>,
+        <<#NOT_NULL>>"dueDate": "<<dueDate>>"
+      }
+    },
+    <<#END>><<Checklist>>
+  ]
+}
