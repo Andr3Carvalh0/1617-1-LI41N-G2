@@ -14,7 +14,7 @@ public class Router {
     private String[] path;
     private HashMap<String, String> params;
 
-    public Router(String method, String[] path, HashMap<String, String>params){
+    public Router(String method, String[] path, HashMap<String, String> params) {
         this.method = method;
         this.path = path;
         this.params = params;
@@ -24,25 +24,25 @@ public class Router {
 
         CommandNode tree = new TreeCommands().getTree();
         CommandNode current;
-        if((current = searchNode_Method(tree, method)) == null) return null;
+        if ((current = searchNode_Method(tree, method)) == null) return null;
 
         //THis is the Options Command
-        if(current.getChildren() == null) return current.getCommand();
+        if (current.getChildren() == null) return current.getCommand();
 
         return searchNode_Path(current, path);
 
     }
 
-    private CommandNode searchNode_Method(CommandNode node, String cmp){
-        for (CommandNode child: node.getChildren()) {
-            if(child.getName().equals(cmp)){
+    private CommandNode searchNode_Method(CommandNode node, String cmp) {
+        for (CommandNode child : node.getChildren()) {
+            if (child.getName().equals(cmp)) {
                 return child;
             }
         }
         return null;
     }
 
-    private Command searchNode_Path(CommandNode node, String[] cmp){
+    private Command searchNode_Path(CommandNode node, String[] cmp) {
         for (CommandNode c_node : node.getChildren()) {
             Command cmd = c_node.getCommand();
             int i = 1;
@@ -72,14 +72,16 @@ public class Router {
         con.setAutoCommit(false);
         Object obj = null;
         try {
-            obj = c.execute(params, con);
-            con.commit();
+            if (c != null) {
+                obj = c.execute(params, con);
+                con.commit();
+            }
         } catch (SQLException e) {
             con.rollback();
             e.printStackTrace();
         } finally {
             try {
-                if(!con.isClosed()) {
+                if (!con.isClosed()) {
                     con.close();
                 }
             } catch (SQLException e) {
@@ -94,7 +96,7 @@ public class Router {
             int i = Integer.parseInt(obj);
             return true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
 
         }
