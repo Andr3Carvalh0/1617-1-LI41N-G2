@@ -5,10 +5,19 @@
         <title>Not Found!</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
-    <body>
+    <body style="background-color:#F2EFE9">
         <div class="container">
-            <center><h1>The query didn´t return any value.</h1></center>
-            <center><a href="{{query}}">Try again, maybe?</a></center>
+
+                <div class="row">
+                    <div class="col-xs-4" style="padding-top: 50px;padding-left:100px">
+                        <img src="https://maps.gstatic.com/tactile/basepage/pegman_sherlock.png" height="300" width="250">
+                    </div>
+                    <div class="col-xs-7" style="padding-top: 50px;padding-left: 100px;padding-top: 100px">
+                        <div><h1><strong>Ups...</strong> It seems like something went wrong.</h1></div>
+
+                        <a href="{{query}}">{{message}}</a>
+                    </div>
+                </div>
         </div>
     </body>
 </html>
