@@ -80,7 +80,12 @@ public class CustomPrinter {
                 file = "checklist";
             }
             else {
-                file = ((DtoWrapper) obj).getTemplate_Task() != null ? "template_detailed" : "checklist_detailed";
+                if(((DtoWrapper) obj).getTemplate_Task() != null){
+                    file = (((DtoWrapper) obj).getTag() != null) ? "tag_detailed" : "template_detailed";
+
+                }else{
+                    file = "checklist_detailed";
+                }
             }
         }
 

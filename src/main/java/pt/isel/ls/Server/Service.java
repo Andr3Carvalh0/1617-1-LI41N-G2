@@ -28,14 +28,15 @@ public class Service extends HttpServlet {
         try {
             Charset utf8 = Charset.forName("utf-8");
 
-            //PERGUNTAR
-            resp.setContentType(String.format("text/html" + "; charset=%s", utf8.name()));
+            resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
 
             String respBody;
             byte[] respBodyBytes;
             HashMap<String, String> map = new HashMap<>();
 
-            map.put("accept", req.getHeader("accept") == null ? "text/html": req.getHeader("accept"));
+            map.put("accept", getContentType(req.getHeader("accept")));
+
+            //This is useless but you never know...
             map.put("file-name", req.getHeader("file-name"));
 
             if (req.getPathInfo().equals("/") || req.getPathInfo().equals("/about")) {
@@ -69,13 +70,12 @@ public class Service extends HttpServlet {
                             active = 3;
                         }
                         respBody = cPrinter.print(new WrapperChecklistView((LinkedList) obj, active), map, req.getRequestURI());
-                        respBodyBytes = respBody.getBytes(utf8);
-                        resp.setStatus(200);
                     } else {
                         respBody = cPrinter.print(obj, map, req.getRequestURI());
-                        respBodyBytes = respBody.getBytes(utf8);
-                        resp.setStatus(200);
+
                     }
+                    respBodyBytes = respBody.getBytes(utf8);
+                    resp.setStatus(200);
                 }
             }
 
@@ -88,5 +88,19 @@ public class Service extends HttpServlet {
             e.printStackTrace();
         }
 
+    }
+
+    private String getContentType(String accept){
+
+        if(accept.contains("text/html"))
+            return "text/html";
+
+        if(accept.contains("application/json"))
+            return "application/json";
+
+        if(accept.contains("text/plain"))
+            return "text/plain";
+
+        return "text/html";
     }
 }
