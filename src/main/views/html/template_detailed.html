@@ -2,7 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Result</title>
+        {{#FOR}}{{Template}}
+        <title>Template {{Tp_id}}</title>
+        {{#END}}{{Template}}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
     <body>
@@ -18,7 +20,7 @@
                 <div class="col-xs-5" style="padding-top: 50px;">
                     {{#FOR}}{{Template}}
                     <h1>Name : {{Tp_name}}</h1>
-                    <p>Description : {{Tp_desc}}</p>
+                    <p><strong>Description</strong> : {{Tp_desc}}</p>
                     {{#END}}{{Template}}
                 </div>
                 <div class="col-xs-3" style="padding-top: 50px">

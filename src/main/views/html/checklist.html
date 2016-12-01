@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Result</title>
+        <title>Checklists</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
     <body>
@@ -22,8 +22,8 @@
             <div class="container">
                 {{#FOR}}{{Checklists}}
                 <h4>Name : <a href="/checklists/{{id}}">{{name}}</a></h4>
-                <p>Description : {{description}}</p>
-                {{#NOT_NULL}}<p>Based on template number : <a href="/templates/"{{Tp_id}}>{{Tp_id}}</a></p>
+                <p><strong>Description</strong> : {{description}}</p>
+                {{#NOT_NULL}}<p><strong>Based on template number</strong> : <a href="/templates/"{{Tp_id}}>{{Tp_id}}</a></p>
                 {{#REMOVE_ON_LAST}}<hr/>
                 {{#END}}{{Checklists}}
             </div>
