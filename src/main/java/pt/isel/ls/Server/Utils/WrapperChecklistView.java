@@ -1,4 +1,4 @@
-package pt.isel.ls.Server;
+package pt.isel.ls.Server.Utils;
 
 import pt.isel.ls.Dtos.Checklist;
 
@@ -14,7 +14,7 @@ public class WrapperChecklistView {
     private final String names[] = {"All", "Closed", "By Date", "By #Tasks"};
 
 
-    WrapperChecklistView(LinkedList list, int position_Active){
+    public WrapperChecklistView(LinkedList list, int position_Active){
         Checklists = list;
 
         for (int i = 0; i < 4; i++) {

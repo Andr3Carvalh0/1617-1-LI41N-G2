@@ -2,7 +2,7 @@ package pt.isel.ls.Utils.Output;
 
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
-import pt.isel.ls.Server.WrapperChecklistView;
+import pt.isel.ls.Server.Utils.WrapperChecklistView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,13 +23,13 @@ public class CustomPrinter {
             if (obj instanceof String) {
                 return run((String) obj, null);
             } else {
-                return toHTML(obj, file_location);
+                return toHTML(obj, file_location, query);
             }
         } else {
             if (file_type.contains("plain")) {
                 return toPlain(obj, file_location);
             } else if (file_type.contains("html")) {
-                return toHTML(obj, file_location);
+                return toHTML(obj, file_location, query);
             } else {
                 return toJSON(obj, file_location);
             }
@@ -64,12 +64,12 @@ public class CustomPrinter {
         return run(obj, file_location, false, CustomPrinter.class.getClassLoader().getResource(path + "json/" + file + ".json").getPath());
     }
 
-    private String toHTML(Object obj, String file_location) throws Exception {
+    private String toHTML(Object obj, String file_location, String query) throws Exception {
         String file;
 
         if(obj == null){
             file = "empty";
-        }else if(obj.equals("/")){
+        }else if(query.equals("/")){
             file = "home";
         } else if(obj.equals("/about")){
             file = "about";
@@ -89,7 +89,7 @@ public class CustomPrinter {
             }
         }
 
-        if (file.equals("empty") || file.equals("home")) {
+        if (file.equals("empty")) {
             obj = new EmptyObject(executedCommand);
         }
         return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
@@ -100,7 +100,7 @@ public class CustomPrinter {
             converter.compile(obj, isHTML, template);
             return converter.commit(null, file_location);
         } catch (Exception e) {
-            return "Error: Can't display the message";
+            throw new Error("Error: Can't display the message because there is a unknown marker");
         }
     }
 
@@ -108,7 +108,7 @@ public class CustomPrinter {
         try {
             return converter.commit(text, file_location);
         } catch (Exception e) {
-            return "Error: Can't display the message";
+            throw new Error("Error: Can't display the message because there is a unknown marker");
         }
     }
 }

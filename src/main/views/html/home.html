@@ -3,7 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <title>Hello</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style>
+            .image_left {
+                background: url(arrow.png) no-repeat;
+                width:32px; height:32px;
+                -webkit-transform: rotate(180deg);
+                -moz-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                transform: rotate(180deg);
+            }
+
+        </style>
     </head>
     <body>
         <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
@@ -17,11 +30,49 @@
             </div>
         </div>
         <div class="container">
-            <h3>Go to:</h3>
-            <div class="container">
-                <p><a href="/checklists"><strong>Checklists</strong></a></p>
-                <p><a href="/templates"><strong>Templates</strong></a></p>
-                <p><a href="/tags"><strong>Tags</strong></a></p>
+            <a href="/checklists"><h3>Checklists:</h3></a>
+            <div class="row">
+                {{#FOR}}{{Checklist}}
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="">{{name}}</h3>
+                        </div>
+                        <div class="panel-body">{{description}}</div>
+                    </div>
+                </div>
+                {{#END}}{{Checklist}}
+                <p style="margin-top:30px;margin-left:25px"><strong>{{message_checklists}}</strong></p>
+            </div>
+            <hr/>
+            <a href="/templates"><h3>Templates:</h3></a>
+            <div class="row">
+                {{#FOR}}{{Template}}
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="">{{Tp_name}}</h3>
+                        </div>
+                        <div class="panel-body">{{Tp_desc}}</div>
+                    </div>
+                </div>
+                {{#END}}{{Template}}
+                <p style="margin-top:30px;margin-left:25px"><strong>{{message_templates}}</strong></p>
+            </div>
+            <hr/>
+            <a href="/tags"><h3>Tags:</h3></a>
+            <div class="row">
+                {{#FOR}}{{Tag}}
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="">{{Tg_name}}</h3>
+                        </div>
+                        <div class="panel-body">{{Tg_color}}</div>
+                    </div>
+                </div>
+                {{#END}}{{Tag}}
+                <p style="margin-top:30px;margin-left:25px"><strong>{{message_tags}}</strong></p>
             </div>
         </div>
     </body>

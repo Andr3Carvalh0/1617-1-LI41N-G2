@@ -4,7 +4,7 @@ package pt.isel.ls.Server;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.sql.SQLException;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -16,6 +16,9 @@ import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Dtos.Checklist;
 import pt.isel.ls.Router;
+import pt.isel.ls.Server.Utils.GetRootInfo;
+import pt.isel.ls.Server.Utils.WrapperChecklistView;
+import pt.isel.ls.Utils.GetConnection;
 import pt.isel.ls.Utils.Output.CustomPrinter;
 
 public class Service extends HttpServlet {
@@ -39,7 +42,18 @@ public class Service extends HttpServlet {
             //This is useless but you never know...
             map.put("file-name", req.getHeader("file-name"));
 
-            if (req.getPathInfo().equals("/") || req.getPathInfo().equals("/about")) {
+            if (req.getPathInfo().equals("/")) {
+                Connection con = GetConnection.connect(false);
+                try {
+                    respBody = cPrinter.print(new GetRootInfo().execute(null, con), map, req.getRequestURI());
+                    respBodyBytes = respBody.getBytes(utf8);
+                    resp.setStatus(200);
+                }finally {
+                    if(!con.isClosed()){
+                        con.close();
+                    }
+                }
+            } else if(req.getPathInfo().equals("/about")){
                 respBody = cPrinter.print(req.getPathInfo(), map, req.getRequestURI());
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(200);
