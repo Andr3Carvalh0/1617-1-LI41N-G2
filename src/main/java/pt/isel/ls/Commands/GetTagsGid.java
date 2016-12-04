@@ -1,13 +1,14 @@
 package pt.isel.ls.Commands;
 
+
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Connection;
 import java.util.HashMap;
 
-public class GetTagsGidChecklists extends Command{
+public class GetTagsGid extends Command {
     private final String method = "GET";
-    private final String[] path = {"", "tags", "{gid}", "checklists"};
+    private final String[] path = {"", "tags", "{gid}"};
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
@@ -16,11 +17,11 @@ public class GetTagsGidChecklists extends Command{
 
     @Override
     public String getMethod() {
-        return null;
+        return method;
     }
 
     @Override
     public String[] getPath() {
-        return new String[0];
+        return path;
     }
 }

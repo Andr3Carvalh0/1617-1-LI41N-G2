@@ -12,7 +12,7 @@ public class Listen extends Command {
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
         int port = params.get("port") == null ? 8080 : Integer.parseInt(params.get("port"));
 
-        HTTPServer server = new HTTPServer(port, con);
+        HTTPServer server = new HTTPServer(port);
         server.run();
 
         return "Server initialize on port " + params.get("port");

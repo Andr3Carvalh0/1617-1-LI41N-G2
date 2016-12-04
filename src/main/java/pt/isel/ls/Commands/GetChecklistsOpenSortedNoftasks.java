@@ -58,7 +58,7 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
             boolean closed = rs.getBoolean(4);
 
             String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
-            int Tp_id = rs.getInt(6);
+            int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
             checklists.add(new Checklist(id, name, description, closed, dueDate, Tp_id));
         }
         if(checklists.size() == 0){

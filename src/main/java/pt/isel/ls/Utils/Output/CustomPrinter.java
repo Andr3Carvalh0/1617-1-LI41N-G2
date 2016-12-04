@@ -42,16 +42,16 @@ public class CustomPrinter {
 
     private String toJSON(Object obj, String file_location) throws Exception {
         String file;
-        if(obj == null){
+        if (obj == null) {
             file = "empty";
-        }else {
+        } else {
             if (obj instanceof LinkedList) {
                 file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
             } else {
-                if(((DtoWrapper) obj).getTemplate_Task() != null){
+                if (((DtoWrapper) obj).getTemplate_Task() != null) {
                     file = (((DtoWrapper) obj).getTag() != null) ? "tag_detailed" : "template_detailed";
 
-                }else{
+                } else {
                     file = "checklist_detailed";
                 }
             }
@@ -67,31 +67,30 @@ public class CustomPrinter {
     private String toHTML(Object obj, String file_location, String query) throws Exception {
         String file;
 
-        if(obj == null){
-            file = "empty";
-        }else if(query.equals("/")){
+        if (obj == null) {
+            file = "error";
+            obj = new EmptyObject(executedCommand);
+        } else if (query.equals("/")) {
             file = "home";
-        } else if(obj.equals("/about")){
+        } else if (obj.equals("/about")) {
             file = "about";
         } else {
             if (obj instanceof LinkedList) {
-                file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
-            } else if(obj instanceof WrapperChecklistView){
-                file = "checklist";
-            }
-            else {
-                if(((DtoWrapper) obj).getTemplate_Task() != null){
+                String[] req = query.split("/");
+
+                file = req[1];
+            } else if (obj instanceof WrapperChecklistView) {
+                file = "checklists";
+            } else {
+                if (((DtoWrapper) obj).getTemplate_Task() != null) {
                     file = (((DtoWrapper) obj).getTag() != null) ? "tag_detailed" : "template_detailed";
 
-                }else{
+                } else {
                     file = "checklist_detailed";
                 }
             }
         }
 
-        if (file.equals("empty")) {
-            obj = new EmptyObject(executedCommand);
-        }
         return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
     }
 

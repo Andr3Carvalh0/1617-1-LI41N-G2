@@ -47,8 +47,7 @@ class Converter {
                 file_cache.put(baseFile, message);
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            // throw new Exception("Cannot read file!");
+            throw new Exception("Cannot read the template file: " + baseFile);
         } finally {
             if (io != null) {
                 io.close();
@@ -84,7 +83,7 @@ class Converter {
                 saveToFile(msg, outputName);
                 return "Saved!";
             } catch (FileNotFoundException e) {
-                return "Cannot save file!";
+                throw new Exception("Cannot save file!");
             }
         }
     }
@@ -96,7 +95,7 @@ class Converter {
         writer.close();
     }
 
-    private LinkedList<String> replaceFOR(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter) {
+    private LinkedList<String> replaceFOR(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter) throws Exception {
         LinkedList<String> result = new LinkedList<>();
         String line;
         for (int i = 0; i < msg.size(); i++) {
@@ -146,7 +145,7 @@ class Converter {
                         }
 
                     } catch (IllegalAccessException e) {
-                        System.out.println("Error: Cant find field");
+                        throw new Exception("Error: the field named: " + object + " doesn't exist!");
                     }
                 }
             } else {
@@ -167,8 +166,7 @@ class Converter {
     * isLastElement : boolean -> we use this, so that we can implement the "REMOVE_ON_LAST", which removes all lines
     *                               that begin with "#REMOVE_ON_LAST", if the we are using a list and we are populating
     *                               the last element of such list.
-    *
-     */
+    */
     private LinkedList<String> replaceFlag(Object obj, LinkedList<String> msg, String marks[], String leftDelimiter, String rightDelimiter, boolean isLastElement) throws IllegalAccessException {
         LinkedList<String> result = new LinkedList<>();
         boolean toRemove = false;
@@ -256,9 +254,9 @@ class Converter {
 
                             toReplace = false;
                         } else {
-                            if(value != null) {
+                            if (value != null) {
                                 line = line.replace(leftDelimiter + key + rightDelimiter, value.toString());
-                            }else{
+                            } else {
                                 line = line.replace(leftDelimiter + key + rightDelimiter, "");
                             }
                         }
@@ -280,7 +278,7 @@ class Converter {
                 boolean last = i == obj.size() - 1;
                 tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter, last);
             } catch (IllegalAccessException e) {
-                throw new Error("Couldnt populate the file due to a unknown property!");
+                throw new Error("Couldn´t populate the file due to a unknown property!");
             }
             result.addAll(tmp);
         }

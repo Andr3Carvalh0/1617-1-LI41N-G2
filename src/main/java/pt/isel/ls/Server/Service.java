@@ -1,20 +1,16 @@
 package pt.isel.ls.Server;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.LinkedList;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
-import pt.isel.ls.Dtos.Checklist;
 import pt.isel.ls.Router;
 import pt.isel.ls.Server.Utils.GetRootInfo;
 import pt.isel.ls.Server.Utils.WrapperChecklistView;
@@ -31,6 +27,7 @@ public class Service extends HttpServlet {
         try {
             Charset utf8 = Charset.forName("utf-8");
 
+            System.out.println(getContentType(req.getHeader("accept")));
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
 
             String respBody;
@@ -59,7 +56,7 @@ public class Service extends HttpServlet {
                 resp.setStatus(200);
 
             } else {
-                CommandParser cparser = new CommandParser(new String[]{req.getMethod(), req.getPathInfo()});
+                CommandParser cparser = new CommandParser(new String[]{req.getMethod(), req.getPathInfo(), getContentType(req.getHeader("accept"))});
                 Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
                 Command c = r.Route();
                 Object obj = r.run(c);
@@ -71,7 +68,7 @@ public class Service extends HttpServlet {
                     resp.setStatus(404);
 
                 } else {
-                    if (obj instanceof LinkedList && ((LinkedList) obj).size() > 0 && ((LinkedList) obj).get(0) instanceof Checklist) {
+                    if (cparser.getPath()[1].equals("checklists") && obj instanceof LinkedList) {
                         int active;
 
                         if (req.getPathInfo().equals("/checklists")) {
@@ -106,6 +103,7 @@ public class Service extends HttpServlet {
 
     private String getContentType(String accept){
 
+        System.out.println(accept);
         if(accept.contains("text/html"))
             return "text/html";
 
