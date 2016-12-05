@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
+import pt.isel.ls.Dtos.DtoWrapper;
+import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Router;
 import pt.isel.ls.Server.Utils.GetRootInfo;
 import pt.isel.ls.Server.Utils.WrapperChecklistView;
+import pt.isel.ls.Server.Utils.WrapperTagsDetailed;
 import pt.isel.ls.Utils.GetConnection;
 import pt.isel.ls.Utils.Output.CustomPrinter;
 
@@ -27,7 +30,6 @@ public class Service extends HttpServlet {
         try {
             Charset utf8 = Charset.forName("utf-8");
 
-            System.out.println(getContentType(req.getHeader("accept")));
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
 
             String respBody;
@@ -68,7 +70,7 @@ public class Service extends HttpServlet {
                     resp.setStatus(404);
 
                 } else {
-                    if (cparser.getPath()[1].equals("checklists") && obj instanceof LinkedList) {
+                    if (cparser.getPath()[1].equals("checklists") && obj instanceof LinkedList && getContentType(req.getHeader("accept")).contains("text/html")) {
                         int active;
 
                         if (req.getPathInfo().equals("/checklists")) {
@@ -81,7 +83,14 @@ public class Service extends HttpServlet {
                             active = 3;
                         }
                         respBody = cPrinter.print(new WrapperChecklistView((LinkedList) obj, active), map, req.getRequestURI());
-                    } else {
+                    }
+                    else if(cparser.getPath()[1].equals("tags") && obj instanceof DtoWrapper && getContentType(req.getHeader("accept")).contains("text/html")){
+                        String link = req.getPathInfo().contains("checklists") ? "/tags/"+ ((Tag)((LinkedList)((DtoWrapper) obj).getTag()).get(0)).getTg_id(): "/tags";
+
+                        respBody = cPrinter.print(new WrapperTagsDetailed(link, (DtoWrapper) obj), map, req.getRequestURI());
+
+                    }
+                    else {
                         respBody = cPrinter.print(obj, map, req.getRequestURI());
 
                     }
@@ -102,8 +111,6 @@ public class Service extends HttpServlet {
     }
 
     private String getContentType(String accept){
-
-        System.out.println(accept);
         if(accept.contains("text/html"))
             return "text/html";
 

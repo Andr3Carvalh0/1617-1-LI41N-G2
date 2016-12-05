@@ -3,6 +3,7 @@ package pt.isel.ls.Utils.Output;
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Server.Utils.WrapperChecklistView;
+import pt.isel.ls.Server.Utils.WrapperTagsDetailed;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -81,12 +82,15 @@ public class CustomPrinter {
                 file = req[1];
             } else if (obj instanceof WrapperChecklistView) {
                 file = "checklists";
-            } else {
+            } else if (obj instanceof WrapperTagsDetailed) {
+                file = "tag_detailed";
+            }else {
                 if (((DtoWrapper) obj).getTemplate_Task() != null) {
-                    file = (((DtoWrapper) obj).getTag() != null) ? "tag_detailed" : "template_detailed";
+                    file = "template_detailed";
 
                 } else {
-                    file = "checklist_detailed";
+                    file = (((DtoWrapper) obj).getTemplate() != null) ? "checklist_detailed" : "tag_detailed";
+
                 }
             }
         }
@@ -94,7 +98,7 @@ public class CustomPrinter {
         return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
     }
 
-    private String run(Object obj, String file_location, boolean isHTML, String template) {
+    private String run(Object obj, String file_location, boolean isHTML, String template) throws Exception {
         try {
             converter.compile(obj, isHTML, template);
             return converter.commit(null, file_location);

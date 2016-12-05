@@ -8,13 +8,20 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
     <body>
+
         <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
-            <div class="container">
+            <nav>
                 {{#FOR}}{{Tag}}
-                <h1 style="display:inline; margin-left:10px"><a href="/tag/{{Tg_id}}"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Tag {{Tg_id}}</h1>
+                <ul class="nav nav-pills pull-right" style="padding-top:35px;padding-right:20px">
+                    <li role="presentation"><a href="/tags/{{Tg_id}}/checklists"><strong>Detailed</strong></a></li>
+                </ul>
                 {{#END}}{{Tag}}
+            </nav>
+            <div class="container">
+                <h1 style="display:inline; margin-left:10px"><a href={{link}}><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Tag</h1>
             </div>
         </div>
+
         <div class="container">
             <div class="row">
                 <div class="col-xs-5" style="padding-top: 50px;">

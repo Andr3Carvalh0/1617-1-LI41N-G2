@@ -20,9 +20,6 @@ public class TagTest {
     private Connection con = null;
     private final String TAG_COLOR = "Blood_Red";
     private final String TAG_NAME = "I_am_a_test_tag";
-    private final String CHECKLIST_NAME = "I_am_a_test_checklist";
-    private final String CHECKLIST_DESCRIPTION = "I_am_a_test_checklist";
-    private final String CHECKLIST_DATE = "06-10-2016";
 
     private int getLastInsertedTag(Connection con) throws SQLException {
         String s = "select max(Tg_id) from tag";
@@ -70,33 +67,18 @@ public class TagTest {
         int result = -1;
         try {
             con = GetConnection.connect(true);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("name", TAG_NAME);
-            map.put("color", TAG_COLOR);
-            result = (int) new PostTags().execute(map, con);
-            assertEquals(getLastInsertedTag(con), result);
 
-            String s = "select * from tag where Tg_id = ?";
-            PreparedStatement ps = con.prepareStatement(s);
-            ps.setInt(1,result);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            assertEquals(result, rs.getInt(1));
-            assertEquals(TAG_NAME, rs.getString(2));
-            assertEquals(TAG_COLOR, rs.getString(3));
-            map.put("{gid}", result + "");
+            addTag(con, "test", "test");
 
-            String r = (String) new DeleteTagsGid().execute(map,con);
-            assertEquals(SUCCESS, r);
+            result = getLastInsertedTag(con);
 
-            s = "select * from tag where Tg_id = ?";
-            ps = con.prepareStatement(s);
-            ps.setInt(1,result);
-            rs = ps.executeQuery();
-            rs.next();
-            int d = 0;
-            while(rs.next())d++;
-            assertEquals(0,d);
+            HashMap<String, String> params = new HashMap<>();
+            params.put("{gid}", ""+result);
+
+            Object com = new GetTagsGid().execute(params, con);
+
+            assertEquals(result, ((Tag)((LinkedList)com).get(0)).getTg_id());
+
         }
         finally {
             if (con != null){
@@ -117,7 +99,10 @@ public class TagTest {
             map.put("name", TAG_NAME);
             map.put("color", TAG_COLOR);
             con = GetConnection.connect(true);
-            cid = addChecklist(con, CHECKLIST_NAME,CHECKLIST_DESCRIPTION, CHECKLIST_DATE);
+            String CHECKLIST_DATE = "06-10-2016";
+            String CHECKLIST_DESCRIPTION = "I_am_a_test_checklist";
+            String CHECKLIST_NAME = "I_am_a_test_checklist";
+            cid = addChecklist(con, CHECKLIST_NAME, CHECKLIST_DESCRIPTION, CHECKLIST_DATE);
             gid = addTag(con, TAG_NAME, TAG_COLOR);
             map.put("{cid}", Integer.toString(cid));
             map.put("{gid}", Integer.toString(gid));
@@ -141,7 +126,7 @@ public class TagTest {
             ps = con.prepareStatement(s);
             ps.setInt(1,gid);
             ps.setInt(2,cid);
-            rs = ps.executeQuery();
+            ps.executeQuery();
 
         }
         finally {
@@ -181,10 +166,9 @@ public class TagTest {
         finally {
             if(con!=null) {
                 if (gid[0] != -1) {
-                    for(int i=0; i<gid.length; i++) deleteTag(gid[i],con);
+                    for (int aGid : gid) deleteTag(aGid, con);
                 }
             }
         }
-
     }
 }

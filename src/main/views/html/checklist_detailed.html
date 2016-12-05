@@ -42,7 +42,7 @@
                         <h3>Tags:</h3>
                         <ul>
                             {{#FOR}}{{Tag}}
-                            {{#NOT_NULL}}<li><a href="/tags/{{Tg_id}}">{{Tg_name}}</a></li>
+                            {{#NOT_NULL}}<li><a href="/tags/{{Tg_id}}">{{Tg_name}}</a> - <a href="/tags/{{Tg_id}}/checklists">Detailed</a></li>
                             {{#END}}{{Tag}}
                         </ul>
                     </div>

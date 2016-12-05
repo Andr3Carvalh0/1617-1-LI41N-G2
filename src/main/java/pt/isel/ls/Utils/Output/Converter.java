@@ -278,7 +278,8 @@ class Converter {
                 boolean last = i == obj.size() - 1;
                 tmp = replaceFlag(o, iterateBody, marks, leftDelimiter, rightDelimiter, last);
             } catch (IllegalAccessException e) {
-                throw new Error("Couldn´t populate the file due to a unknown property!");
+                e.printStackTrace();
+                return;
             }
             result.addAll(tmp);
         }
