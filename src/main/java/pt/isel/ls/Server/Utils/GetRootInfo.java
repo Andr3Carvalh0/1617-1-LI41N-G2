@@ -2,9 +2,9 @@ package pt.isel.ls.Server.Utils;
 
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Dtos.Checklist;
-import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Dtos.Template;
+import pt.isel.ls.Utils.Output.Dummies.WrapperRootView;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

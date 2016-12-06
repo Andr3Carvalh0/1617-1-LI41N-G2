@@ -1,4 +1,4 @@
-package pt.isel.ls.Server.Utils;
+package pt.isel.ls.Utils.Output.Dummies;
 
 import pt.isel.ls.Dtos.Checklist;
 

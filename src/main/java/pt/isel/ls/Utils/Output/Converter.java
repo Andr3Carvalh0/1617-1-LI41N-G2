@@ -10,6 +10,16 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 @SuppressWarnings("ConstantConditions")
+
+
+/*
+*
+* Future improvements:
+*  - Make it modular
+*  - Instead of declaring the head on every template.Make a template for template
+*
+ */
+
 class Converter {
     private LinkedList<String> message = new LinkedList<>();
     private static final String privateKey = "self";

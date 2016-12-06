@@ -2,8 +2,10 @@ package pt.isel.ls.Utils.Output;
 
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
-import pt.isel.ls.Server.Utils.WrapperChecklistView;
-import pt.isel.ls.Server.Utils.WrapperTagsDetailed;
+import pt.isel.ls.Dtos.Tag;
+import pt.isel.ls.Utils.Output.Dummies.WrapperChecklistView;
+import pt.isel.ls.Utils.Output.Dummies.WrapperServerError;
+import pt.isel.ls.Utils.Output.Dummies.WrapperTagsDetailed;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -59,7 +61,7 @@ public class CustomPrinter {
         }
 
         if (file.equals("empty")) {
-            obj = new EmptyObject(executedCommand);
+            obj = new WrapperServerError(executedCommand);
         }
 
         return run(obj, file_location, false, CustomPrinter.class.getClassLoader().getResource(path + "json/" + file + ".json").getPath());
@@ -70,12 +72,37 @@ public class CustomPrinter {
 
         if (obj == null) {
             file = "error";
-            obj = new EmptyObject(executedCommand);
-        } else if (query.equals("/")) {
+            obj = new WrapperServerError(executedCommand);
+        } else if (obj.equals("not_found")) {
+            file = obj.toString();
+        }
+        else if (query.equals("/")) {
             file = "home";
         } else if (obj.equals("/about")) {
             file = "about";
         } else {
+
+            if (query.contains("/checklists") && obj instanceof LinkedList) {
+                int active;
+
+                if (query.equals("/checklists")) {
+                    active = 0;
+                } else if (query.contains("closed")) {
+                    active = 1;
+                } else if (query.contains("duedate")) {
+                    active = 2;
+                } else {
+                    active = 3;
+                }
+                obj = new WrapperChecklistView((LinkedList) obj, active);
+            }
+            else if(query.contains("/tags") && obj instanceof DtoWrapper) {
+                String link = query.contains("checklists") ? "/tags/" + ((Tag) ((LinkedList) ((DtoWrapper) obj).getTag()).get(0)).getTg_id() : "/tags";
+                obj = new WrapperTagsDetailed(link, (DtoWrapper) obj);
+
+            }
+
+
             if (obj instanceof LinkedList) {
                 String[] req = query.split("/");
 

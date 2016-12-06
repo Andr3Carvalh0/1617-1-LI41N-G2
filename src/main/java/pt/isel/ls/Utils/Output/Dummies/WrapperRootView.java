@@ -1,4 +1,4 @@
-package pt.isel.ls.Server.Utils;
+package pt.isel.ls.Utils.Output.Dummies;
 
 import pt.isel.ls.Dtos.Checklist;
 import pt.isel.ls.Dtos.DtoWrapper;
@@ -15,7 +15,7 @@ public class WrapperRootView {
     private LinkedList<Tag> Tag = new LinkedList<>();
     private String message_tags = "", message_checklists = "", message_templates = "";
 
-    WrapperRootView(LinkedList<Checklist> checklists, LinkedList<Template> templates, LinkedList<Tag> tags) {
+    public WrapperRootView(LinkedList<Checklist> checklists, LinkedList<Template> templates, LinkedList<Tag> tags) {
         this.Checklist = checklists;
 
         this.Template = templates;
