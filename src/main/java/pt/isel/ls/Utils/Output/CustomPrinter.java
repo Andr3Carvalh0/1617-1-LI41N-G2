@@ -70,8 +70,8 @@ public class CustomPrinter {
     private String toHTML(Object obj, String file_location, String query) throws Exception {
         String file;
 
-        if (obj == null) {
-            file = "error";
+        if(obj == null){
+            file = "server_error";
             obj = new WrapperServerError(executedCommand);
         } else if (obj.equals("not_found")) {
             file = obj.toString();
