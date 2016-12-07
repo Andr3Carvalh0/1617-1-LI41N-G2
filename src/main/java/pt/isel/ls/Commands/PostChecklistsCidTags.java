@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 public class PostChecklistsCidTags extends pt.isel.ls.Commands.Command {
-    private final String method = "POST";
     private final String[] path = {"", "checklists", "{cid}", "tags"};
 
     @Override
@@ -39,7 +38,7 @@ public class PostChecklistsCidTags extends pt.isel.ls.Commands.Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "POST";
     }
 
     @Override

@@ -1,7 +1,6 @@
 package pt.isel.ls.Utils.Output.Dummies;
 
 import pt.isel.ls.Dtos.Checklist;
-import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Dtos.Template;
 

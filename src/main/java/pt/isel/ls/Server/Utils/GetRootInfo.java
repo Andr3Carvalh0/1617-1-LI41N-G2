@@ -63,7 +63,7 @@ public class GetRootInfo extends Command {
 
     @Override
     public String getMethod() {
-        return "special";
+        return "SPECIAL";
     }
 
     @Override

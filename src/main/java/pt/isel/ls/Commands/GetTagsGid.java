@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetTagsGid extends Command {
-    private final String method = "GET";
     private final String[] path = {"", "tags", "{gid}"};
 
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
@@ -78,7 +77,7 @@ public class GetTagsGid extends Command {
     }
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

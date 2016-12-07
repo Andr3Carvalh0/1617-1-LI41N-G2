@@ -2,8 +2,6 @@ package pt.isel.ls;
 
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Utils.Output.CustomPrinter;
-
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class App {

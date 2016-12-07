@@ -3,11 +3,9 @@ package pt.isel.ls.Commands;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostChecklistsCidTasksLid extends Command {
-    String method = "POST";
     String[] path = {"", "checklists", "{cid}", "tasks", "{lid}"};
 
     @Override
@@ -48,7 +46,7 @@ public class PostChecklistsCidTasksLid extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "POST";
     }
 
     @Override

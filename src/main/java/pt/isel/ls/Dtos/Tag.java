@@ -21,9 +21,9 @@ public class Tag implements BaseDTO{
 
     public int getTg_id() { return Tg_id; }
 
-    public String getTg_color() { return Tg_color; }
+    private String getTg_color() { return Tg_color; }
 
-    public String getTg_name() { return Tg_name; }
+    private String getTg_name() { return Tg_name; }
 
     @Override
     public String getDTOName() {

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetTags extends Command {
-    private String method = "GET";
     private String[] path = {"", "tags"};
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
@@ -24,7 +23,7 @@ public class GetTags extends Command {
     }
 
     @Override
-    public String getMethod() { return method; }
+    public String getMethod() { return "GET"; }
 
     @Override
     public String[] getPath() {

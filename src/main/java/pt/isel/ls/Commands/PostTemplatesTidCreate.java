@@ -3,11 +3,9 @@ package pt.isel.ls.Commands;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostTemplatesTidCreate extends Command {
-    private final String method = "POST";
     private final String[] path = {"", "templates", "{tid}", "create"};
 
     @Override
@@ -68,7 +66,7 @@ public class PostTemplatesTidCreate extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "POST";
     }
 
     @Override

@@ -13,12 +13,11 @@ import java.util.LinkedList;
 
 public class GetChecklistsOpenSortedDueDate extends Command {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-    private final String method = "GET";
     private final String[] path = {"", "checklists", "open", "sorted", "duedate"};
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
-        LinkedList<Checklist> cl = new LinkedList<Checklist>();
+        LinkedList<Checklist> cl = new LinkedList<>();
         String query = "select * from checklist where Cl_closed = 0 order by Cl_duedate";
         PreparedStatement ps = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
@@ -33,7 +32,7 @@ public class GetChecklistsOpenSortedDueDate extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

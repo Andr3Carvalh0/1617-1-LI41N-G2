@@ -5,7 +5,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.sql.Connection;
 
 public class GetConnection {
-    static SQLServerDataSource src;
+    private static SQLServerDataSource src;
 
     // Environment variables
     private static String server;

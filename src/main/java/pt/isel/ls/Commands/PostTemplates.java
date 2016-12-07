@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostTemplates extends Command {
-    private final String method = "POST";
     private final String[] path = {"", "templates"};
 
     @Override
@@ -29,7 +28,7 @@ public class PostTemplates extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "POST";
     }
 
     @Override

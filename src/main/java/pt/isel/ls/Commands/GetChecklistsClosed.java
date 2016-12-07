@@ -13,7 +13,6 @@ import java.util.LinkedList;
 
 public class GetChecklistsClosed extends Command {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-    private final String method = "GET";
     private final String[] path = {"", "checklists", "closed"};
 
     @Override
@@ -39,7 +38,7 @@ public class GetChecklistsClosed extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostTags extends Command {
-    private final String method = "POST";
     private final String[] path = {"", "tags"};
 
     @Override
@@ -27,7 +26,7 @@ public class PostTags extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "POST";
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 public class DeleteChecklistsCidTagsGid extends Command {
-    private final String method = "DELETE";
     private final String[] path = {"", "checklist", "{cid}", "tags", "{gid}"};
 
     @Override
@@ -32,7 +31,7 @@ public class DeleteChecklistsCidTagsGid extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "DELETE";
     }
 
     @Override

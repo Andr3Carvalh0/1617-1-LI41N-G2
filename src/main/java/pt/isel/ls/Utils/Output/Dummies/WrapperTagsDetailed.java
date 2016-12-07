@@ -19,7 +19,7 @@ public class WrapperTagsDetailed {
     public WrapperTagsDetailed(String link, DtoWrapper content){
         this.link = link;
         this.message = link.equals("/tags") ? "Detailed" : "";
-        this.id = ((Tag)((LinkedList<pt.isel.ls.Dtos.Tag>) content.getTag()).get(0)).getTg_id();
+        this.id = (((LinkedList<pt.isel.ls.Dtos.Tag>) content.getTag()).get(0)).getTg_id();
         this.Tag = (LinkedList<pt.isel.ls.Dtos.Tag>) content.getTag();
         this.Checklist = (LinkedList<pt.isel.ls.Dtos.Checklist>) content.getChecklist();
     }

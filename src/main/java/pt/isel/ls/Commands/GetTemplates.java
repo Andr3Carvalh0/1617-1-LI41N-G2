@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetTemplates extends Command {
-    private String method = "GET";
     private String[] path = {"", "templates"};
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
@@ -26,7 +25,7 @@ public class GetTemplates extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

@@ -7,12 +7,11 @@ public class CommandParser {
     private String[] path;
     private HashMap<String, String> params;
     private HashMap<String, String> headers = new HashMap<>();
-    private String[] headersArray;
 
     public CommandParser(String[] args) throws Exception {
         method = args[0];
         path = args[1].split("/");
-        params = new HashMap<String, String>();
+        params = new HashMap<>();
         if (args.length > 2) {
             if (args[2].contains("=") && args[2].contains(":"))
                 throw new Exception("Não sao permitidos parâmetros com ':' ou headers com '='");
@@ -35,19 +34,19 @@ public class CommandParser {
     }
 
     private void setHeaders(String[] args) {
-        headersArray = args[2].split("\\|");
-        headers = new HashMap<String, String>();
+        String[] headersArray = args[2].split("\\|");
+        headers = new HashMap<>();
 
-        for (int i = 0; i < headersArray.length; i++) {
-            headers.put(headersArray[i].split(":")[0], headersArray[i].split(":")[1]);
+        for (String aHeadersArray : headersArray) {
+            headers.put(aHeadersArray.split(":")[0], aHeadersArray.split(":")[1]);
         }
     }
 
     private void setParams(String[] args, int n) {
         String[] paramsArray = args[n].split("&");
         String[] aux;
-        for (int i = 0; i < paramsArray.length; i++) {
-            aux = paramsArray[i].split("=");
+        for (String aParamsArray : paramsArray) {
+            aux = aParamsArray.split("=");
             aux[1] = aux[1].replace('+', ' ');
             params.put(aux[0], aux[1]);
         }
@@ -66,7 +65,7 @@ public class CommandParser {
         return params;
     }
 
-    public HashMap<String, String> getHeaders() {
+    HashMap<String, String> getHeaders() {
         return headers;
     }
 }

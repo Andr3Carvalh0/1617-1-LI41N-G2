@@ -14,7 +14,6 @@ import java.util.LinkedList;
 
 
 public class GetTemplatesTid extends Command {
-    private final String method = "GET";
     private final String[] path = {"", "templates", "{tid}"};
 
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
@@ -82,7 +81,7 @@ public class GetTemplatesTid extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

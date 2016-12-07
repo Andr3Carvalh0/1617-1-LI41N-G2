@@ -4,6 +4,7 @@ import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Utils.Output.Dummies.WrapperChecklistView;
+import pt.isel.ls.Utils.Output.Dummies.WrapperJsonError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperServerError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperTagsDetailed;
 
@@ -47,21 +48,23 @@ public class CustomPrinter {
         String file;
         if (obj == null) {
             file = "empty";
+
         } else {
             if (obj instanceof LinkedList) {
                 file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
             } else {
                 if (((DtoWrapper) obj).getTemplate_Task() != null) {
-                    file = (((DtoWrapper) obj).getTag() != null) ? "tag_detailed" : "template_detailed";
+                    file = "template_detailed";
 
                 } else {
-                    file = "checklist_detailed";
+                    file = (((DtoWrapper) obj).getTemplate() != null) ? "checklist_detailed" : "tag_detailed";
+
                 }
             }
         }
 
-        if (file.equals("empty")) {
-            obj = new WrapperServerError(executedCommand);
+        if(file.equals("empty")){
+            obj = new WrapperJsonError(executedCommand);
         }
 
         return run(obj, file_location, false, CustomPrinter.class.getClassLoader().getResource(path + "json/" + file + ".json").getPath());

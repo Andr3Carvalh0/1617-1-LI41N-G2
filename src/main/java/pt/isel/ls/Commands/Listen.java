@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.util.HashMap;
 
 public class Listen extends Command {
-    private final String method = "LISTEN";
     private final String[] path = {"LISTEN", "/", "port"};
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
@@ -20,7 +19,7 @@ public class Listen extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "LISTEN";
     }
 
     @Override

@@ -34,8 +34,7 @@ public class Service extends HttpServlet {
 
             //This is useless but you never know...
             map.put("file-name", req.getHeader("file-name"));
-
-            if (req.getPathInfo().equals("/")) {
+            if(req.getPathInfo().equals("/")){
                 Connection con = GetConnection.connect(false);
                 try {
                     respBody = cPrinter.print(new GetRootInfo().execute(null, con), map, req.getRequestURI());
@@ -46,7 +45,8 @@ public class Service extends HttpServlet {
                         con.close();
                     }
                 }
-            } else if (req.getPathInfo().equals("/about")) {
+            }
+             else if (req.getPathInfo().equals("/about")) {
                 respBody = cPrinter.print(req.getPathInfo(), map, req.getRequestURI());
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(200);

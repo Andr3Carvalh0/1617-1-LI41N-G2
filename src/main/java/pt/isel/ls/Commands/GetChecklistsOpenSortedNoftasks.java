@@ -13,7 +13,6 @@ import java.util.LinkedList;
 
 public class GetChecklistsOpenSortedNoftasks extends Command {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-    private final String method = "GET";
     private final String[] path = {"", "checklists", "open", "sorted", "noftasks"};
 
     public class Wrapper{
@@ -21,13 +20,13 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
         private LinkedList<Checklist_Task> tasks;
         private int size;
 
-        public Wrapper(Checklist checklist, LinkedList<Checklist_Task> task, int size){
+        Wrapper(Checklist checklist, LinkedList<Checklist_Task> task, int size){
             this.check = checklist;
             this.tasks = task;
             this.size = size;
         }
 
-        public Checklist getCheck() {
+        Checklist getCheck() {
             return check;
         }
 
@@ -35,7 +34,7 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
             return tasks;
         }
 
-        public int getSize() {
+        int getSize() {
             return size;
         }
     }
@@ -100,7 +99,7 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

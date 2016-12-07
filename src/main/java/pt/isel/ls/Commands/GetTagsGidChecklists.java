@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.util.HashMap;
 
 public class GetTagsGidChecklists extends Command{
-    private final String method = "GET";
     private final String[] path = {"", "tags", "{gid}", "checklists"};
 
     @Override
@@ -14,7 +13,7 @@ public class GetTagsGidChecklists extends Command{
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

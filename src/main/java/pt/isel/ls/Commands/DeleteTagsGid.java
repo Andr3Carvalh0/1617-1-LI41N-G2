@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 public class DeleteTagsGid extends Command {
-    private final String method = "DELETE";
     private final String[] path = {"", "tags", "{gid}"};
 
     @Override
@@ -35,7 +34,7 @@ public class DeleteTagsGid extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "DELETE";
     }
 
     @Override

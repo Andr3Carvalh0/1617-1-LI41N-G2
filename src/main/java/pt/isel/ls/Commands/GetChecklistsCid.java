@@ -5,7 +5,6 @@ import pt.isel.ls.Dtos.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -13,13 +12,12 @@ import java.util.LinkedList;
 
 public class GetChecklistsCid extends Command {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-    private final String method = "GET";
     private final String[] path = {"", "checklists", "{cid}"};
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
         LinkedList<Checklist> cl = new LinkedList<>();
-        LinkedList<Checklist_Task> ct = new LinkedList<Checklist_Task>();
+        LinkedList<Checklist_Task> ct = new LinkedList<>();
         LinkedList<Template> tp = new LinkedList<>();
         LinkedList<Tag> tag = new LinkedList<>();
 
@@ -92,7 +90,7 @@ public class GetChecklistsCid extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostChecklist extends Command {
-    private final String method = "POST";
     private final String[] path = {"", "checklists"};
 
     @Override
@@ -31,7 +30,7 @@ public class PostChecklist extends Command {
     }
 
     public String getMethod() {
-        return method;
+        return "POST";
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.util.LinkedList;
 
 public class GetTemplatesTidChecklistsSortedByOpentasksDesc extends Command {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-    private final String method = "GET";
     private final String[] path = {"", "templates", "{tid}", "checklists", "sorted", "by", "opentasks", "desc"};
 
     @Override
@@ -61,7 +60,7 @@ public class GetTemplatesTidChecklistsSortedByOpentasksDesc extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override

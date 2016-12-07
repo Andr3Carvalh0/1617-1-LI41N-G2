@@ -27,7 +27,7 @@ public class Template implements BaseDTO{
         return Tp_name;
     }
 
-    public String getTp_desc() {
+    private String getTp_desc() {
         return Tp_desc;
     }
 

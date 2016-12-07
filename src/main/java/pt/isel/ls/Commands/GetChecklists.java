@@ -13,7 +13,6 @@ import java.util.LinkedList;
 
 public class GetChecklists extends Command {
     private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-    private final String method = "GET";
     private final String[] path = {"", "checklists"};
 
     @Override
@@ -40,7 +39,7 @@ public class GetChecklists extends Command {
 
     @Override
     public String getMethod() {
-        return method;
+        return "GET";
     }
 
     @Override
