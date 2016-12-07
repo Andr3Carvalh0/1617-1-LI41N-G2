@@ -121,7 +121,6 @@ public class CustomPrinter {
                 }
             }
         }
-
         return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
     }
 

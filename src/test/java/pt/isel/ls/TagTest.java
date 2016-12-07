@@ -2,6 +2,7 @@ package pt.isel.ls;
 
 import org.junit.Test;
 import pt.isel.ls.Commands.*;
+import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Utils.GetConnection;
 
@@ -67,18 +68,33 @@ public class TagTest {
         int result = -1;
         try {
             con = GetConnection.connect(true);
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", TAG_NAME);
+            map.put("color", TAG_COLOR);
+            result = (int) new PostTags().execute(map, con);
+            assertEquals(getLastInsertedTag(con), result);
 
-            addTag(con, "test", "test");
+            String s = "select * from tag where Tg_id = ?";
+            PreparedStatement ps = con.prepareStatement(s);
+            ps.setInt(1,result);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            assertEquals(result, rs.getInt(1));
+            assertEquals(TAG_NAME, rs.getString(2));
+            assertEquals(TAG_COLOR, rs.getString(3));
+            map.put("{gid}", result + "");
 
-            result = getLastInsertedTag(con);
+            String r = (String) new DeleteTagsGid().execute(map,con);
+            assertEquals(SUCCESS, r);
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("{gid}", ""+result);
-
-            Object com = new GetTagsGid().execute(params, con);
-
-            assertEquals(result, ((Tag)((LinkedList)com).get(0)).getTg_id());
-
+            s = "select * from tag where Tg_id = ?";
+            ps = con.prepareStatement(s);
+            ps.setInt(1,result);
+            rs = ps.executeQuery();
+            rs.next();
+            int d = 0;
+            while(rs.next())d++;
+            assertEquals(0,d);
         }
         finally {
             if (con != null){
@@ -168,7 +184,29 @@ public class TagTest {
                 if (gid[0] != -1) {
                     for (int aGid : gid) deleteTag(aGid, con);
                 }
+                con.close();
             }
         }
+    }
+
+    @Test
+    public void TestGetTagGid() throws Exception {
+        int gid = -1;
+        try {
+            con = GetConnection.connect(true);
+            addTag(con, "Tag1", "Blue");
+            HashMap<String, String> map = new HashMap<>();
+            gid = getLastInsertedTag(con);
+            map.put("{gid}", gid + "");
+            DtoWrapper d = (DtoWrapper) new GetTagsGid().execute(map, con);
+            assertEquals(gid, ((LinkedList<Tag>) d.getTag()).get(0).getTg_id());
+        }
+        finally {
+            if(con!=null) {
+                deleteTag(gid, con);
+                con.close();
+            }
+        }
+
     }
 }
