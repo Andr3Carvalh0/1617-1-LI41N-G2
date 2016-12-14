@@ -12,12 +12,39 @@
             </div>
         </div>
         <div class="container">
-            <div class="container">
-                {{#FOR}}{{self}}
-                <h4>Name : <a href="/templates/{{Tp_id}}">{{Tp_name}}</a></h4>
-                <p><strong>Description</strong> : {{Tp_desc}}</p>
-                {{#REMOVE_ON_LAST}}<hr/>
-                {{#END}}{{self}}
+            <div class="row">
+                <div class="col-xs-9" style="padding-top: 50px;">
+                    {{#FOR}}{{self}}
+                    <h4>Name : <a href="/templates/{{Tp_id}}">{{Tp_name}}</a></h4>
+                    <p><strong>Description</strong> : {{Tp_desc}}</p>
+                    {{#REMOVE_ON_LAST}}<hr/>
+                    {{#END}}{{self}}
+                </div>
+                <div style="padding-top: 50px;">
+                    <form action="/templates" method="post">
+                        <div class="col-md-3" style="float:right;padding-right: 25px">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="">Create Template</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                    </div>
+                                    <p></p>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                    </div>
+                                    <p></p>
+                                    <h2></h2>
+                                    <div >
+                                        <center><button class="btn btn-primary" type="submit">Create</button></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </body>

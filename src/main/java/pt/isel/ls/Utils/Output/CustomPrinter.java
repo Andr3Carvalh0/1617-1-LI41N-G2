@@ -3,7 +3,6 @@ package pt.isel.ls.Utils.Output;
 import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Tag;
-import pt.isel.ls.Utils.Output.Dummies.WrapperChecklistView;
 import pt.isel.ls.Utils.Output.Dummies.WrapperJsonError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperServerError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperTagsDetailed;
@@ -85,34 +84,17 @@ public class CustomPrinter {
             file = "about";
         } else {
 
-            if (query.contains("/checklists") && obj instanceof LinkedList) {
-                int active;
-
-                if (query.equals("/checklists")) {
-                    active = 0;
-                } else if (query.contains("closed")) {
-                    active = 1;
-                } else if (query.contains("duedate")) {
-                    active = 2;
-                } else {
-                    active = 3;
-                }
-                obj = new WrapperChecklistView((LinkedList) obj, active);
-            }
-            else if(query.contains("/tags") && obj instanceof DtoWrapper) {
+            if(query.contains("/tags") && obj instanceof DtoWrapper) {
                 String link = query.contains("checklists") ? "/tags/" + ((Tag) ((LinkedList) ((DtoWrapper) obj).getTag()).get(0)).getTg_id() : "/tags";
                 obj = new WrapperTagsDetailed(link, (DtoWrapper) obj);
 
             }
 
-
             if (obj instanceof LinkedList) {
                 String[] req = query.split("/");
 
                 file = req[1];
-            } else if (obj instanceof WrapperChecklistView) {
-                file = "checklists";
-            } else if (obj instanceof WrapperTagsDetailed) {
+            }else if (obj instanceof WrapperTagsDetailed) {
                 file = "tag_detailed";
             }else {
                 if (((DtoWrapper) obj).getTemplate_Task() != null) {
