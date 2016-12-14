@@ -60,9 +60,6 @@ public class GetChecklistsOpenSortedNoftasks extends Command {
             int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
             checklists.add(new Checklist(id, name, description, closed, dueDate, Tp_id));
         }
-        if(checklists.size() == 0){
-            throw new Exception("No Checklists uncompleted");
-        }
 
         for (Checklist c: checklists) {
             ps = con.prepareStatement(s2);
