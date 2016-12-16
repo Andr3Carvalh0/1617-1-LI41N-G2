@@ -31,16 +31,67 @@
                             {{#NOT_NULL}}<li>{{Tp_Task_name}}</li>
                             {{#END}}{{Checklist_Task}}
                         </ul>
-                    </div>
-                </div>
-                <div class="col-xs-3" style="padding-top: 50px">
-                    <div class="billboard">
+                        <br>
                         <h3>Used in:</h3>
                         <ul>
                             {{#FOR}}{{Checklist}}
                             {{#NOT_NULL}}<li><a href="/checklists/{{id}}">{{name}}</a></li>
                             {{#END}}{{Checklist}}
                         </ul>
+                    </div>
+                </div>
+                <div class="container" style="padding-top: 50px">
+                    <div class="col-md-3" style="float:right;padding-right: 25px">
+                        {{#FOR}}{{Template}}
+                        <form action="/templates/{{Tp_id}}/tasks" method="post">
+                            {{#END}}{{Template}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="">Add a task</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="name"
+                                        required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                    </div>
+                                    <br>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <center><button class="btn btn-primary" type="submit">Add</button></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {{#FOR}}{{Template}}
+                        <form action="/templates/{{Tp_id}}/create" method="post">
+                            {{#END}}{{Template}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="">Create Checklist based on this template</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="name"
+                                        required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                    </div>
+                                    <br>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                    </div>
+                                    <br>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <center><button class="btn btn-primary" type="submit">Create</button></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

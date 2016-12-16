@@ -6,8 +6,24 @@
         <title>Checklist {{id}}</title>
         {{#END}}{{Checklist}}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script>
+            function prepareView(){
+                let Tasks = document.getElementById("ul_Tasks").children
+                let numberChildrens = Tasks.length;
+                let checklistID = window.location.pathname.split("/")[2]
+                
+                for(let i = 0; i < numberChildrens; i++){
+                    let taskID = Tasks[i].children[0].getAttribute("id").split("_")[1]
+                    let state = Tasks[i].getAttribute("data")
+                    document.getElementById(Tasks[i].children[0].getAttribute("id")).action = "/checklists/" + checklistID + "/tasks/" + taskID
+                    if((state === 'true')){
+                        document.getElementById(Tasks[i].children[0].children[0].children[0].getAttribute("id")).checked = true
+                    }
+                }
+            }
+        </script>
     </head>
-    <body>
+    <body onload = "prepareView()">
         <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
             <div class="container">
                 {{#FOR}}{{Checklist}}
@@ -30,21 +46,75 @@
                 <div class="col-xs-3" style="padding-top: 50px">
                     <div class="billboard">
                         <h3>Tasks:</h3>
-                        <ul>
+                        <ul id = "ul_Tasks">
                             {{#FOR}}{{Checklist_Task}}
-                            {{#NOT_NULL}}<li>{{Cl_Task_name}}</li>
+                            <li id = "li_{{Cl_Task_id}}" data="{{Cl_isClosed}}">
+                                {{Cl_Task_name}}
+                                <form id="form_{{Cl_Task_id}}" action="/" method="post">
+                                    <p>Closed:
+                                        <input id="checkbox_{{Cl_Task_id}}" type="checkbox" name="isClosed" onChange="this.form.submit()">
+                                    </p>
+                                </form>
+                            </li>
                             {{#END}}{{Checklist_Task}}
                         </ul>
-                    </div>
-                </div>
-                <div class="col-xs-3" style="padding-top: 50px">
-                    <div class="billboard">
+                        <br>
                         <h3>Tags:</h3>
                         <ul>
                             {{#FOR}}{{Tag}}
                             {{#NOT_NULL}}<li><a href="/tags/{{Tg_id}}">{{Tg_name}}</a> - <a href="/tags/{{Tg_id}}/checklists">Detailed</a></li>
                             {{#END}}{{Tag}}
                         </ul>
+                    </div>
+                </div>
+                <div class="container" style="padding-top: 50px">
+                    <div class="col-md-3" style="float:right;padding-right: 25px">
+                        {{#FOR}}{{Checklist}}
+                        <form action="/checklists/{{id}}/tasks" method="post">
+                            {{#END}}{{Checklist}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="">Add a task</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="name"
+                                        required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                    </div>
+                                    <br>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                    </div>
+                                    <br>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <center><button class="btn btn-primary" type="submit">Add</button></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {{#FOR}}{{Checklist}}
+                        <form action="/checklists/{{id}}/tags" method="post">
+                            {{#END}}{{Checklist}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="">Add a tag</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="gid"
+                                        required="required" pattern="[0-9]{1,80}" placeholder="Tag ID">
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <center><button class="btn btn-primary" type="submit">Add</button></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

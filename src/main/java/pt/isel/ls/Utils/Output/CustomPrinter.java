@@ -39,7 +39,7 @@ public class CustomPrinter {
         }
     }
 
-    private String toPlain(Object obj, String file_location) {
+    private String toPlain(Object obj, String file_location) throws Exception {
         return run(obj.toString(), file_location);
     }
 
@@ -114,15 +114,15 @@ public class CustomPrinter {
             converter.compile(obj, isHTML, template);
             return converter.commit(null, file_location);
         } catch (Exception e) {
-            throw new Error("Error: Can't display the message because there is a unknown marker");
+            throw e;
         }
     }
 
-    private String run(String text, String file_location) {
+    private String run(String text, String file_location) throws Exception {
         try {
             return converter.commit(text, file_location);
         } catch (Exception e) {
-            throw new Error("Error: Can't display the message because there is a unknown marker");
+            throw e;
         }
     }
 }
