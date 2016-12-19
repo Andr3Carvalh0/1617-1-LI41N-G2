@@ -6,7 +6,6 @@ import pt.isel.ls.Dtos.Template;
 
 import java.util.LinkedList;
 
-@SuppressWarnings("unchecked")
 public class WrapperRootView {
 
     private LinkedList<Checklist> Checklist = new LinkedList<>();

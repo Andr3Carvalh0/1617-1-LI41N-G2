@@ -26,7 +26,7 @@ public class Router {
         CommandNode current;
         if ((current = searchNode_Method(tree, method)) == null) return null;
 
-        //THis is the Options Command
+        //This is the Options Command
         if (current.getChildren() == null) return current.getCommand();
 
         return searchNode_Path(current, path);

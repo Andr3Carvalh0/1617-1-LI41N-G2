@@ -14,7 +14,7 @@ public class CommandParser {
         params = new HashMap<>();
         if (args.length > 2) {
             if (args[2].contains("=") && args[2].contains(":"))
-                throw new Exception("Não sao permitidos parâmetros com ':' ou headers com '='");
+                throw new Exception("You can't have params with ':' or headers with '='");
 
             if (args[2].contains("="))
                 setParams(args, 2);
