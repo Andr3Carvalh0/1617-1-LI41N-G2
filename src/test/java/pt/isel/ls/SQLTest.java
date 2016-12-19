@@ -8,7 +8,7 @@ import java.sql.Connection;
 import static junit.framework.Assert.assertEquals;
 
 public class SQLTest {
-    Connection con = null;
+    private Connection con = null;
 
     @Test
     public void connectionTest() throws Exception {

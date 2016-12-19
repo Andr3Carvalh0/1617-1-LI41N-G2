@@ -15,7 +15,6 @@ import java.util.LinkedList;
 
 import static junit.framework.Assert.assertEquals;
 
-@SuppressWarnings("unchecked")
 public class TagTest {
     private static final String SUCCESS = "Success!" ;
     private Connection con = null;
@@ -174,9 +173,9 @@ public class TagTest {
             for(int i = 0; i<gid.length; i++)
                 gid[i] = addTag(con, TAG_NAME+i,TAG_COLOR+i);
 
-            LinkedList<Tag> tl = (LinkedList<Tag>) new GetTags().execute(map,con);
+            LinkedList tl = (LinkedList) new GetTags().execute(map,con);
             for(int i=0; i<gid.length; i++){
-                assertEquals(tl.get(i).getTg_id(),gid[i]);
+                assertEquals(((Tag)tl.get(i)).getTg_id(),gid[i]);
             }
         }
         finally {
@@ -199,7 +198,7 @@ public class TagTest {
             gid = getLastInsertedTag(con);
             map.put("{gid}", gid + "");
             DtoWrapper d = (DtoWrapper) new GetTagsGid().execute(map, con);
-            assertEquals(gid, ((LinkedList<Tag>) d.getTag()).get(0).getTg_id());
+            assertEquals(gid, ((Tag)((LinkedList) d.getTag()).get(0)).getTg_id());
         }
         finally {
             if(con!=null) {

@@ -16,7 +16,6 @@ import java.util.LinkedList;
 
 import static junit.framework.Assert.assertEquals;
 
-@SuppressWarnings("unchecked")
 public class ChecklistTest {
     private Connection con = null;
 
@@ -228,9 +227,9 @@ public class ChecklistTest {
             ps.setInt(1, TestChecklistsIds[1]);
             ps.executeUpdate();
 
-            LinkedList<Checklist> list = (LinkedList<Checklist>) new GetChecklistsClosed().execute(map, con);
-            for (Checklist c : list) {
-                assertEquals(c.isClosed(), true);
+            LinkedList list = (LinkedList) new GetChecklistsClosed().execute(map, con);
+            for (Object c : list) {
+                assertEquals(((Checklist)c).isClosed(), true);
             }
         } finally {
             if (con != null) {
@@ -259,11 +258,11 @@ public class ChecklistTest {
                 map.put("dueDate", dates[i]);
                 TestChecklistsIds[i] = (int) pc.execute(map, con);
             }
-            LinkedList<Checklist> cl = (LinkedList<Checklist>) new GetChecklistsOpenSortedDueDate().execute(map, con);
+            LinkedList cl = (LinkedList) new GetChecklistsOpenSortedDueDate().execute(map, con);
             int[] sortedIds = {1, 0, 3, 2};
             for (int i = 0; i < 4; i++) {
-                assertEquals(cl.get(i).getId(), TestChecklistsIds[sortedIds[i]]);
-                assertEquals(cl.get(i).isClosed(), false);
+                assertEquals(((Checklist)cl.get(i)).getId(), TestChecklistsIds[sortedIds[i]]);
+                assertEquals(((Checklist)cl.get(i)).isClosed(), false);
             }
             assertEquals(cl.size(), 4);
         } finally {
@@ -301,8 +300,9 @@ public class ChecklistTest {
             DtoWrapper dw = (DtoWrapper) new GetChecklistsCid().execute(map, con);
             assertEquals(new LinkedList<>(), dw.getTemplate());
             assertEquals(((Checklist)((LinkedList) dw.getChecklist()).get(0)).getId(), TestChecklistId);
-            assertEquals(((LinkedList<Checklist_Task>) dw.getChecklist_Task()).get(0).getCl_Task_id(), TestTasksId[0]);
-            assertEquals(((LinkedList<Checklist_Task>) dw.getChecklist_Task()).get(1).getCl_Task_id(), TestTasksId[1]);
+
+            assertEquals(((Checklist_Task)((LinkedList) dw.getChecklist_Task()).get(0)).getCl_Task_id(), TestTasksId[0]);
+            assertEquals(((Checklist_Task)((LinkedList) dw.getChecklist_Task()).get(1)).getCl_Task_id(), TestTasksId[1]);
         } finally {
             if (con != null) {
                 PreparedStatement dels;
@@ -327,11 +327,11 @@ public class ChecklistTest {
             generateChecklist_Tasks(2, checklist1, 5, con);
             generateChecklist_Tasks(3, checklist2, 5, con);
 
-            LinkedList<Checklist> checklists = (LinkedList<Checklist>) new GetChecklistsOpenSortedNoftasks().execute(null, con);
+            LinkedList checklists = (LinkedList) new GetChecklistsOpenSortedNoftasks().execute(null, con);
 
             if(checklists != null){
-                assertEquals("TESTE2", checklists.get(checklists.size()-1).getName());
-                assertEquals("TESTE1", checklists.get(checklists.size()-2).getName());
+                assertEquals("TESTE2", ((Checklist)checklists.get(checklists.size()-1)).getName());
+                assertEquals("TESTE1", ((Checklist)checklists.get(checklists.size()-2)).getName());
             }
         }finally {
             if (con != null) {
