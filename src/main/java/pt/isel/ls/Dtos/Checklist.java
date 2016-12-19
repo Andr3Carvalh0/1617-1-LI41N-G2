@@ -1,6 +1,6 @@
 package pt.isel.ls.Dtos;
 
-public class Checklist implements BaseDTO{
+public class Checklist{
     private int id, Tp_id;
     private String name, dueDate, description;
     private boolean closed;
@@ -49,8 +49,4 @@ public class Checklist implements BaseDTO{
         return description;
     }
 
-    @Override
-    public String getDTOName() {
-        return "Checklist";
-    }
 }

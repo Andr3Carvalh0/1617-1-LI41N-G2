@@ -1,6 +1,5 @@
 package pt.isel.ls.Utils.Output;
 
-import pt.isel.ls.Dtos.BaseDTO;
 import pt.isel.ls.Dtos.DtoWrapper;
 import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Utils.Output.Dummies.WrapperJsonError;
@@ -34,7 +33,7 @@ public class CustomPrinter {
             } else if (file_type.contains("html")) {
                 return toHTML(obj, file_location, query);
             } else {
-                return toJSON(obj, file_location);
+                return toJSON(obj, file_location, query);
             }
         }
     }
@@ -43,14 +42,20 @@ public class CustomPrinter {
         return run(obj.toString(), file_location);
     }
 
-    private String toJSON(Object obj, String file_location) throws Exception {
+    private String toJSON(Object obj, String file_location, String query) throws Exception {
         String file;
         if (obj == null) {
             file = "empty";
 
         } else {
             if (obj instanceof LinkedList) {
-                file = ((LinkedList) obj).size() == 0 ? "empty" : ((BaseDTO) (((LinkedList) obj).get(0))).getDTOName();
+                if(((LinkedList) obj).size() == 0){
+                    file = "empty";
+                }
+                else{
+                    String[] req = query.split("/");
+                    file = req[1];
+                }
             } else {
                 if (((DtoWrapper) obj).getTemplate_Task() != null) {
                     file = "template_detailed";
@@ -114,7 +119,7 @@ public class CustomPrinter {
             converter.compile(obj, isHTML, template);
             return converter.commit(null, file_location);
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -122,7 +127,7 @@ public class CustomPrinter {
         try {
             return converter.commit(text, file_location);
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e.getMessage());
         }
     }
 }

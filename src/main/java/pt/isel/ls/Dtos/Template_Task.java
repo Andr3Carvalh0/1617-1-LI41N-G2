@@ -1,6 +1,6 @@
 package pt.isel.ls.Dtos;
 
-public class Template_Task implements BaseDTO{
+public class Template_Task{
     private int Tp_id, Tp_Task_id;
     private String Tp_Task_name, Tp_Task_desc;
 
@@ -33,10 +33,5 @@ public class Template_Task implements BaseDTO{
 
     public String getTp_Task_desc() {
         return Tp_Task_desc;
-    }
-
-    @Override
-    public String getDTOName() {
-        return "Template Task";
     }
 }

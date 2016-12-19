@@ -1,6 +1,6 @@
 package pt.isel.ls.Dtos;
 
-public class Checklist_Task implements BaseDTO{
+public class Checklist_Task{
 
     private int Cl_id;
     private int Cl_Task_id;
@@ -33,8 +33,4 @@ public class Checklist_Task implements BaseDTO{
         return Cl_Task_id;
     }
 
-    @Override
-    public String getDTOName() {
-        return "Checklist Task";
-    }
 }

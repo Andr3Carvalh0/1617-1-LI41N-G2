@@ -1,6 +1,6 @@
 package pt.isel.ls.Dtos;
 
-public class DtoWrapper implements BaseDTO{
+public class DtoWrapper{
     private Object Checklist;
     private Object Checklist_Task;
     private Object Template;
@@ -58,10 +58,5 @@ public class DtoWrapper implements BaseDTO{
             res += "Tag Information:\n" + Tag.toString();
         }
         return res;
-    }
-
-    @Override
-    public String getDTOName() {
-        return "DTOWrapper";
     }
 }
