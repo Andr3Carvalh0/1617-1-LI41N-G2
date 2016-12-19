@@ -11,11 +11,12 @@
                 let Tasks = document.getElementById("ul_Tasks").children
                 let numberChildrens = Tasks.length;
                 let checklistID = window.location.pathname.split("/")[2]
-                
+        
                 for(let i = 0; i < numberChildrens; i++){
                     let taskID = Tasks[i].children[0].getAttribute("id").split("_")[1]
                     let state = Tasks[i].getAttribute("data")
                     document.getElementById(Tasks[i].children[0].getAttribute("id")).action = "/checklists/" + checklistID + "/tasks/" + taskID
+
                     if((state === 'true')){
                         document.getElementById(Tasks[i].children[0].children[0].children[0].getAttribute("id")).checked = true
                     }
@@ -97,19 +98,23 @@
                             </div>
                         </form>
                         {{#FOR}}{{Checklist}}
-                        <form action="/checklists/{{id}}/tags" method="post">
+                        <form action="/checklists/{{id}}/tags/create" method="post">
                             {{#END}}{{Checklist}}
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="">Add a tag</h3>
+                                    <h3 class="">Add a Tag</h3>
                                 </div>
                                 <div class="panel-body">
                                     <div class="input">
-                                        <input type="text" class="form-control" name="gid"
-                                        required="required" pattern="[0-9]{1,80}" placeholder="Tag ID">
+                                        <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                     </div>
-                                    <br>
-                                    <div>
+                                    <p></p>
+                                    <div class="input">
+                                        <input type="text" class="form-control" name="color" required="required" pattern="[A-Za-z0-9]{1,10}" placeholder="Color">
+                                    </div>
+                                    <p></p>
+                                    <h2></h2>
+                                    <div >
                                         <center><button class="btn btn-primary" type="submit">Add</button></center>
                                     </div>
                                 </div>

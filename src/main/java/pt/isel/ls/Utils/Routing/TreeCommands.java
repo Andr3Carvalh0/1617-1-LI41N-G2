@@ -4,16 +4,16 @@ import pt.isel.ls.Commands.*;
 import java.util.LinkedList;
 
 /*
-*                  "/"
-*                   |
-*        ___________|____________________
+*                       "/"
+*                        |
+*        ________________|________________
 *        |      |        |       |       |
 *       GET    POST    DELETE  OPTION  LISTEN
 *        |      |        |
 *       GET    POST    DELETE
-*       CMDs   CMDs    CMDs
+*       CMDs   CMDs     CMDs
 *
- */
+*/
 
 public class TreeCommands {
 
@@ -44,6 +44,7 @@ public class TreeCommands {
         POSTS.add(new CommandNode(null, null, new PostTemplates()));
         POSTS.add(new CommandNode(null, null, new PostTemplatesTidCreate()));
         POSTS.add(new CommandNode(null, null, new PostTemplatesTidTasks()));
+        POSTS.add(new CommandNode(null, null, new PostChecklistCidTagsCreate()));
         CommandNode posts = new CommandNode("POST", POSTS, null);
 
         LinkedList<CommandNode> DELETES = new LinkedList<>();
@@ -59,7 +60,6 @@ public class TreeCommands {
         ROOT.add(options);
         CommandNode listen = new CommandNode("LISTEN", null, new Listen());
         ROOT.add(listen);
-
 
         root = new CommandNode("/", ROOT, null);
 
