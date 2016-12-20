@@ -3,97 +3,125 @@
     <head>
         <meta charset="UTF-8">
         {{#FOR}}{{Template}}
-        <title>Template {{Tp_id}}</title>
+            <title>Template {{Tp_id}}</title>
         {{#END}}{{Template}}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <script>
+            function prepareView(){
+                if(document.getElementById("tasks").children.length <= 2){
+                document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
+                }
+                if(document.getElementById("checklists").children.length <= 2){
+                document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Template.</strong>"
+                }
+            }
+        </script>
     </head>
-    <body>
-        <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
-            <div class="container">
+    <body onload = "prepareView()">
+        <nav>
+            <div class="nav-wrapper">
                 {{#FOR}}{{Template}}
-                <h1 style="display:inline; margin-left:10px"><a href="/templates"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Template {{Tp_id}}</h1>
+                <a href="/templates" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
+                <span style="font-size: 24px;padding-left: 32px">Template {{Tp_id}}</span>
                 {{#END}}{{Template}}
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-5" style="padding-top: 50px;">
+        </nav>
+        <div class="row">
+            <div class="col s4" style="padding-top: 80px;">
+                <ul class="collection" style="border:0px">
                     {{#FOR}}{{Template}}
-                    <h1>Name : {{Tp_name}}</h1>
-                    <p><strong>Description</strong> : {{Tp_desc}}</p>
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">list</i>
+                        <span class="title">{{Tp_name}}</span>
+                        <p><strong>Description</strong> : {{Tp_desc}}</p>
+                    </li>
                     {{#END}}{{Template}}
-                </div>
-                <div class="col-xs-3" style="padding-top: 50px">
-                    <div class="billboard">
-                        <h3>Tasks:</h3>
-                        <ul>
-                            {{#FOR}}{{Template_Task}}
-                            {{#NOT_NULL}}<li>{{Tp_Task_name}}</li>
-                            {{#END}}{{Checklist_Task}}
-                        </ul>
-                        <br>
-                        <h3>Used in:</h3>
-                        <ul>
-                            {{#FOR}}{{Checklist}}
-                            {{#NOT_NULL}}<li><a href="/checklists/{{id}}">{{name}}</a></li>
-                            {{#END}}{{Checklist}}
-                        </ul>
+                </ul>
+            </div>
+            <div class="col s4" style="padding-top: 50px">
+                <ul class="collection with-header" id="tasks" style="border:0px">
+                    <li class="collection-header"><h4>Tasks</h4></li>
+                    {{#FOR}}{{Template_Task}}
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">list</i>
+                        <span class="title">{{Tp_Task_name}}</span>
+                    </li>
+                    {{#END}}{{Template_Task}}
+                    <p id="message_tasks" style="margin-top:30px;margin-left:25px"></p>
+                </ul>
+                <br>
+                <ul class="collection with-header" id="checklists" style="border:0px">
+                    <li class="collection-header"><h4>Checklists</h4></li>
+                    {{#FOR}}{{Checklist}}
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">list</i>
+                        <span class="title"><a href="/checklists/{{id}}">{{name}}</a></span>
+                    </li>
+                    {{#END}}{{Checklist}}
+                    <p id="message_checklists" style="margin-top:30px;margin-left:25px"></p>
+                </ul>
+            </div>
+            <div class="col s4" style="padding-top: 50px;padding-left: 20px; padding-right: 20px">
+                {{#FOR}}{{Template}}
+                <form action="/templates/{{Tp_id}}/tasks" method="post">
+                    {{#END}}{{Template}}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="">Add a task</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="input">
+                                <input type="text" class="form-control" name="name"
+                                required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                            </div>
+                            <br>
+                            <div class="input">
+                                <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                            </div>
+                            <br>
+                            <div>
+                                <center><button class="btn btn-primary" type="submit">Add</button></center>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="container" style="padding-top: 50px">
-                    <div class="col-md-3" style="float:right;padding-right: 25px">
-                        {{#FOR}}{{Template}}
-                        <form action="/templates/{{Tp_id}}/tasks" method="post">
-                            {{#END}}{{Template}}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="">Add a task</h3>
+                </form>
+                
+                <br>
+                {{#FOR}}{{Template}}
+                <form action="/templates/{{Tp_id}}/create" method="post">
+                    {{#END}}{{Template}}
+                    <div style="padding-left:10px;padding-right:10px">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="">Create Checklist</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="input">
+                                    <input type="text" class="form-control" name="name"
+                                    required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
-                                <div class="panel-body">
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="name"
-                                        required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
-                                    </div>
-                                    <br>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
-                                    </div>
-                                    <br>
-                                    <div>
-                                        <center><button class="btn btn-primary" type="submit">Add</button></center>
-                                    </div>
+                                <br>
+                                <div class="input">
+                                    <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                </div>
+                                <br>
+                                <div class="input">
+                                    <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
+                                </div>
+                                <br>
+                                <div>
+                                    <center><button class="btn btn-primary" type="submit">Create</button></center>
                                 </div>
                             </div>
-                        </form>
-                        {{#FOR}}{{Template}}
-                        <form action="/templates/{{Tp_id}}/create" method="post">
-                            {{#END}}{{Template}}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="">Create Checklist based on this template</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="name"
-                                        required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
-                                    </div>
-                                    <br>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
-                                    </div>
-                                    <br>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
-                                    </div>
-                                    <br>
-                                    <div>
-                                        <center><button class="btn btn-primary" type="submit">Create</button></center>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </body>

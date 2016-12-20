@@ -3,42 +3,32 @@
     <head>
         <meta charset="UTF-8">
         <title>Hello</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <style>
-            .image_left {
-                background: url(arrow.png) no-repeat;
-                width:32px; height:32px;
-                -webkit-transform: rotate(180deg);
-                -moz-transform: rotate(180deg);
-                -ms-transform: rotate(180deg);
-                -o-transform: rotate(180deg);
-                transform: rotate(180deg);
-            }
-
-        </style>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
-        <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
-            <nav>
-                <ul class="nav nav-pills pull-right" style="padding-top:35px;padding-right:20px">
-                    <li role="presentation"><a href="/about"><strong>About</strong></a></li>
+        <nav>
+            <div class="nav-wrapper">
+                <span style="font-size: 24px;padding-left: 16px">Welcome!</span>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="/about">About</a></li>
                 </ul>
-            </nav>
-            <div class="container">
-                <h1>Welcome!</h1>
             </div>
-        </div>
+        </nav>
         <div class="container">
             <a href="/checklists"><h3>Checklists:</h3></a>
             <div class="row">
                 {{#FOR}}{{Checklist}}
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="">{{name}}</h3>
+                <div class="grid-element-wrap col m5 l4">
+                    <div class="card-panel small yellow darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">{{name}}</span>
+                            <p>{{description}}</p>
                         </div>
-                        <div class="panel-body">{{description}}</div>
                     </div>
                 </div>
                 {{#END}}{{Checklist}}
@@ -48,12 +38,12 @@
             <a href="/templates"><h3>Templates:</h3></a>
             <div class="row">
                 {{#FOR}}{{Template}}
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="">{{Tp_name}}</h3>
+                <div class="grid-element-wrap col m5 l4">
+                    <div class="card-panel small yellow darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">{{Tp_name}}</span>
+                            <p>{{Tp_desc}}</p>
                         </div>
-                        <div class="panel-body">{{Tp_desc}}</div>
                     </div>
                 </div>
                 {{#END}}{{Template}}
@@ -63,12 +53,12 @@
             <a href="/tags"><h3>Tags:</h3></a>
             <div class="row">
                 {{#FOR}}{{Tag}}
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="">{{Tg_name}}</h3>
+                <div class="grid-element-wrap col m5 l4">
+                    <div class="card-panel small yellow darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">{{Tg_name}}</span>
+                            <p>{{Tg_color}}</p>
                         </div>
-                        <div class="panel-body">{{Tg_color}}</div>
                     </div>
                 </div>
                 {{#END}}{{Tag}}

@@ -5,122 +5,153 @@
         {{#FOR}}{{Checklist}}
         <title>Checklist {{id}}</title>
         {{#END}}{{Checklist}}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
         <script>
             function prepareView(){
-                let Tasks = document.getElementById("ul_Tasks").children
-                let numberChildrens = Tasks.length;
-                let checklistID = window.location.pathname.split("/")[2]
-        
-                for(let i = 0; i < numberChildrens; i++){
-                    let taskID = Tasks[i].children[0].getAttribute("id").split("_")[1]
-                    let state = Tasks[i].getAttribute("data")
-                    document.getElementById(Tasks[i].children[0].getAttribute("id")).action = "/checklists/" + checklistID + "/tasks/" + taskID
+                if(document.getElementById("ul_Tasks") != null){
 
-                    if((state === 'true')){
-                        document.getElementById(Tasks[i].children[0].children[0].children[0].getAttribute("id")).checked = true
+                    let Tasks = document.getElementById("ul_Tasks").children
+                    let numberChildrens = Tasks.length;
+                    let checklistID = window.location.pathname.split("/")[2]
+
+                    for(let i = 1; i < numberChildrens - 1; i++){
+                        let taskID = Tasks[i].getAttribute("id").split("_")[1]
+                        let state = Tasks[i].getAttribute("data")
+
+                        let form = Tasks[i].children[2]
+                        document.getElementById(form.getAttribute("id")).action = "/checklists/" + checklistID + "/tasks/" + taskID
+
+                        if((state === 'true')){
+                            document.getElementById(form.children[0].children[0].getAttribute("id")).checked = true
+                        }
                     }
+                }
+
+                if(document.getElementById("ul_Tags").children.length <= 2){
+
+                    document.getElementById("message_tags").innerHTML = "<strong>There aren't any Tags associated with this Checklist.</strong>"
+                }
+
+                if(document.getElementById("ul_Tasks").children.length <= 2){
+
+                    document.getElementById("message_task").innerHTML = "<strong>There aren't any Tasks associated with this Checklist.</strong>"
                 }
             }
         </script>
     </head>
-    <body onload = "prepareView()">
-        <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
-            <div class="container">
+    <body onload="prepareView()">
+        <nav>
+            <div class="nav-wrapper">
                 {{#FOR}}{{Checklist}}
-                <h1 style="display:inline; margin-left:10px"><a href="/checklists"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Checklist {{id}}</h1>
+                <a href="/checklists" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
+                <span style="font-size: 24px;padding-left: 32px">Checklist {{id}}</span>
                 {{#END}}{{Checklist}}
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-5" style="padding-top: 50px;">
+        </nav>
+        <div class="row">
+            <div class="col s4" style="padding-top: 80px;">
+                <ul class="collection" style="border:0px">
                     {{#FOR}}{{Checklist}}
-                    <h1>Name : {{name}}</h1>
-                    <p><strong>Description</strong> : {{description}}</p>
-                    {{#NOT_NULL}}<p><strong>Due</strong> : {{dueDate}}</p>
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">list</i>
+                        <span class="title">{{name}}</span>
+                        <p><strong>Description: </strong>{{description}}</p>
+                        {{#NOT_NULL}}<p><strong>Due Date: </strong>{{dueDate}}</p>
+                    </li>
                     {{#END}}{{Checklist}}
-                    {{#FOR}}{{Template}}
-                    <p><strong>Base template</strong> : <a href="/templates/{{Tp_id}}">{{Tp_name}}</a></p>
-                    {{#END}}{{Template}}
-                </div>
-                <div class="col-xs-3" style="padding-top: 50px">
-                    <div class="billboard">
-                        <h3>Tasks:</h3>
-                        <ul id = "ul_Tasks">
-                            {{#FOR}}{{Checklist_Task}}
-                            <li id = "li_{{Cl_Task_id}}" data="{{Cl_isClosed}}">
-                                {{Cl_Task_name}}
-                                <form id="form_{{Cl_Task_id}}" action="/" method="post">
-                                    <p>Closed:
-                                        <input id="checkbox_{{Cl_Task_id}}" type="checkbox" name="isClosed" onChange="this.form.submit()">
-                                    </p>
-                                </form>
-                            </li>
-                            {{#END}}{{Checklist_Task}}
-                        </ul>
-                        <br>
-                        <h3>Tags:</h3>
-                        <ul>
-                            {{#FOR}}{{Tag}}
-                            {{#NOT_NULL}}<li><a href="/tags/{{Tg_id}}">{{Tg_name}}</a> - <a href="/tags/{{Tg_id}}/checklists">Detailed</a></li>
-                            {{#END}}{{Tag}}
-                        </ul>
-                    </div>
-                </div>
-                <div class="container" style="padding-top: 50px">
-                    <div class="col-md-3" style="float:right;padding-right: 25px">
-                        {{#FOR}}{{Checklist}}
-                        <form action="/checklists/{{id}}/tasks" method="post">
-                            {{#END}}{{Checklist}}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="">Add a task</h3>
+                </ul>
+            </div>
+            <div class="col s4" style="padding-top: 50px">
+                <ul class="collection with-header" id="ul_Tasks" style="border:0px">
+                    <li class="collection-header"><h4>Tasks</h4></li>
+                    {{#FOR}}{{Checklist_Task}}
+                    <li class="collection-item avatar" id="li_{{Cl_Task_id}}" data="{{Cl_isClosed}}">
+                        <i class="material-icons circle">list</i>
+                        <span class="title">{{Cl_Task_name}}</span>
+                        <form id="form_{{Cl_Task_id}}" action="/" method="post">
+                            <p>Closed:
+                                <input type="checkbox" id="checkbox_{{Cl_Task_id}}" onChange="this.form.submit()"/>
+                                <label for="checkbox_{{Cl_Task_id}}"><!--c--></label>
+                            </p>
+                        </form>
+                    </li>
+                    {{#END}}{{Checklist_Task}}
+                    <li><p id="message_task" style="margin-top:30px;margin-left:25px"></p></li>
+                </ul>
+
+                <ul class="collection with-header" id="ul_Tags" style="border:0px">
+                    <li class="collection-header"><h4>Tags</h4></li>
+                    {{#FOR}}{{Tag}}
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">list</i>
+                        <span class="title"><a href="/tags/{{Tg_id}}">{{Tg_name}}</a> - <a href="/tags/{{Tg_id}}/checklists">Detailed</a></span>
+                    </li>
+                    {{#END}}{{Tag}}
+                    <li><p id="message_tags" style="margin-top:30px;margin-left:25px">""</p></li>
+                </ul>
+            </div>
+
+            <div class="col s4" style="padding-top: 50px;padding-left: 20px; padding-right: 20px">
+                <div style="padding-left:10px;padding-right:10px">
+                {{#FOR}}{{Checklist}}
+                    <form action="/checklists/{{id}}/tasks" method="post">
+                        {{#END}}{{Checklist}}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="">Add a task</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="input">
+                                    <input type="text" class="form-control" name="name"
+                                           required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
-                                <div class="panel-body">
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="name"
-                                        required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
-                                    </div>
-                                    <br>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
-                                    </div>
-                                    <br>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
-                                    </div>
-                                    <br>
-                                    <div>
-                                        <center><button class="btn btn-primary" type="submit">Add</button></center>
-                                    </div>
+                                <br>
+                                <div class="input">
+                                    <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                </div>
+                                <br>
+                                <div class="input">
+                                    <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
+                                </div>
+                                <br>
+                                <div>
+                                    <center><button class="btn btn-primary" type="submit">Add</button></center>
                                 </div>
                             </div>
-                        </form>
-                        {{#FOR}}{{Checklist}}
-                        <form action="/checklists/{{id}}/tags/create" method="post">
-                            {{#END}}{{Checklist}}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="">Add a Tag</h3>
+                        </div>
+                    </form>
+
+                    <br>
+                    {{#FOR}}{{Checklist}}
+                    <form action="/checklists/{{id}}/tags/create" method="post">
+                        {{#END}}{{Checklist}}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="">Add a Tag</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="input">
+                                    <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
-                                <div class="panel-body">
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
-                                    </div>
-                                    <p></p>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="color" required="required" pattern="[A-Za-z0-9]{1,10}" placeholder="Color">
-                                    </div>
-                                    <p></p>
-                                    <h2></h2>
-                                    <div >
-                                        <center><button class="btn btn-primary" type="submit">Add</button></center>
-                                    </div>
+                                <p></p>
+                                <div class="input">
+                                    <input type="text" class="form-control" name="color" required="required" pattern="[A-Za-z0-9]{1,10}" placeholder="Color">
+                                </div>
+                                <p></p>
+                                <h2></h2>
+                                <div >
+                                    <center><button class="btn btn-primary" type="submit">Add</button></center>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -3,48 +3,60 @@
     <head>
         <meta charset="UTF-8">
         <title>Templates</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
-        <div class="jumbotron" style="posistion:relative; z-index: 1; box-shadow: 0 4px 6px -6px black;">
-            <div class="container">
-                <h1 style="display:inline; margin-left:10px"><a href="/"><img src="https://maxcdn.icons8.com/Share/icon/Arrows//back1600.png" style="width:24px;height:24px;border:0;float:left;margin-top:25px;"></a>Templates</h1>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="/" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
+                <span style="font-size: 24px;padding-left: 32px">Templates</span>
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-9" style="padding-top: 50px;">
-                    {{#FOR}}{{self}}
-                    <h4>Name : <a href="/templates/{{Tp_id}}">{{Tp_name}}</a></h4>
-                    <p><strong>Description</strong> : {{Tp_desc}}</p>
-                    {{#REMOVE_ON_LAST}}<hr/>
-                    {{#END}}{{self}}
+        </nav>
+        <div class="row" >
+            <div class="col s8" style="padding-top: 50px;">
+                {{#FOR}}{{self}}
+                <div class="grid-element-wrap col m5 l4">
+                    <div class="card small yellow darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">{{Tp_name}}</span>
+                            <p><strong>Description: </strong>{{Tp_desc}}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="/templates/{{Tp_id}}">Details</a>
+                        </div>
+                    </div>
                 </div>
-                <div style="padding-top: 50px;">
-                    <form action="/templates" method="post">
-                        <div class="col-md-3" style="float:right;padding-right: 25px">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="">Create Template</h3>
+                {{#END}}{{self}}
+            </div>
+            <div class="col s4" style="padding-top: 50px;padding-left: 20px; padding-right: 20px">
+                <form action="/templates" method="post">
+                    <div class="col-md-3" style="padding-left:10px;padding-right:10px">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="">Create Template</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="input">
+                                    <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
-                                <div class="panel-body">
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
-                                    </div>
-                                    <p></p>
-                                    <div class="input">
-                                        <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
-                                    </div>
-                                    <p></p>
-                                    <h2></h2>
-                                    <div >
-                                        <center><button class="btn btn-primary" type="submit">Create</button></center>
-                                    </div>
+                                <p></p>
+                                <div class="input">
+                                    <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                </div>
+                                <p></p>
+                                <h2></h2>
+                                <div >
+                                    <center><button class="btn btn-primary" type="submit">Create</button></center>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </body>
