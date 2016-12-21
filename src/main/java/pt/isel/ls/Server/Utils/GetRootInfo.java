@@ -24,9 +24,9 @@ public class GetRootInfo extends Command {
         LinkedList<Template> templates = new LinkedList<>();
         LinkedList<Tag> tags = new LinkedList<>();
 
-        String s1 = "select top(3) * from checklist";
-        String s2 = "select top(3) * from template";
-        String s3 = "select top(3) * from tag";
+        String s1 = "select top(4) * from checklist";
+        String s2 = "select top(4) * from template";
+        String s3 = "select top(4) * from tag";
         PreparedStatement ps = con.prepareStatement(s1);
 
         ResultSet rs = ps.executeQuery();

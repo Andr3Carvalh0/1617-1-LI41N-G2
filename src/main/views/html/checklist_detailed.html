@@ -8,6 +8,7 @@
         
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
@@ -15,6 +16,10 @@
 
         <script>
             function prepareView(){
+                $(document).ready(function() {
+                    $('select').material_select();
+                });
+
                 if(document.getElementById("ul_Tasks") != null){
 
                     let Tasks = document.getElementById("ul_Tasks").children
@@ -56,20 +61,21 @@
             </div>
         </nav>
         <div class="row">
-            <div class="col s4" style="padding-top: 80px;">
-                <ul class="collection" style="border:0px">
+            <div class="col s3" style="padding-top: 80px;">
+                <ul class="collection" style="margin-left: 0px; border:0px">
                     {{#FOR}}{{Checklist}}
                     <li class="collection-item avatar">
                         <i class="material-icons circle">list</i>
                         <span class="title">{{name}}</span>
                         <p><strong>Description: </strong>{{description}}</p>
                         {{#NOT_NULL}}<p><strong>Due Date: </strong>{{dueDate}}</p>
+                        {{#NOT_NULL}}<p><strong>Based on: </strong><a href="/templates/{{Tp_id}}"> Template {{Tp_id}}</a></p>
                     </li>
                     {{#END}}{{Checklist}}
                 </ul>
             </div>
-            <div class="col s4" style="padding-top: 50px">
-                <ul class="collection with-header" id="ul_Tasks" style="border:0px">
+            <div class="col s5" style="border-left:1px solid #e0e0e0; height: 750px;margin-top: 50px;margin-bottom: 50px">
+                <ul class="collection with-header" id="ul_Tasks" style="border:0px;padding-left: 15px;padding-right: 15px">
                     <li class="collection-header"><h4>Tasks</h4></li>
                     {{#FOR}}{{Checklist_Task}}
                     <li class="collection-item avatar" id="li_{{Cl_Task_id}}" data="{{Cl_isClosed}}">
@@ -86,7 +92,7 @@
                     <li><p id="message_task" style="margin-top:30px;margin-left:25px"></p></li>
                 </ul>
 
-                <ul class="collection with-header" id="ul_Tags" style="border:0px">
+                <ul class="collection with-header" id="ul_Tags" style="border:0px;padding-left: 15px;padding-right: 15px">
                     <li class="collection-header"><h4>Tags</h4></li>
                     {{#FOR}}{{Tag}}
                     <li class="collection-item avatar">
@@ -98,7 +104,7 @@
                 </ul>
             </div>
 
-            <div class="col s4" style="padding-top: 50px;padding-left: 20px; padding-right: 20px">
+            <div class="col s4" style="padding-left: 20px; padding-right: 20px; border-left:1px solid #e0e0e0; height: 750px;margin-top: 50px;margin-bottom: 50px">
                 <div style="padding-left:10px;padding-right:10px">
                 {{#FOR}}{{Checklist}}
                     <form action="/checklists/{{id}}/tasks" method="post">
@@ -108,16 +114,16 @@
                                 <h3 class="">Add a task</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="input">
+                                <div class="input-field col s12"">
                                     <input type="text" class="form-control" name="name"
                                            required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
                                 <br>
-                                <div class="input">
+                                <div class="input-field col s12"">
                                     <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
                                 </div>
                                 <br>
-                                <div class="input">
+                                <div class="input-field col s12"">
                                     <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
                                 </div>
                                 <br>
@@ -127,7 +133,6 @@
                             </div>
                         </div>
                     </form>
-
                     <br>
                     {{#FOR}}{{Checklist}}
                     <form action="/checklists/{{id}}/tags/create" method="post">
@@ -137,15 +142,27 @@
                                 <h3 class="">Add a Tag</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="input">
+                                <div class="input-field col s12"">
                                     <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
-                                <p></p>
-                                <div class="input">
-                                    <input type="text" class="form-control" name="color" required="required" pattern="[A-Za-z0-9]{1,10}" placeholder="Color">
+                                <br>
+                                <div class="input-field col s12">
+                                    <select>
+                                        <option value="" disabled selected>Choose your option</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/f44336.png" class="left circle" value="red">Red</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/e91e63.png" class="left circle" value="pink">Pink</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/9c27b0.png" class="left circle" value="purple">Purple</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/3f51b5.png" class="left circle" value="indigo">Indigo</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/2196f3.png" class="left circle" value="blue">Blue</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/00bcd4.png" class="left circle" value="cyan">Cyan</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/009688.png" class="left circle" value="teal">Teal</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/4caf50.png" class="left circle" value="green">Green</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/ffeb3b.png" class="left circle" value="yellow">Yellow</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/ff9800.png" class="left circle" value="orange">Orange</option>
+                                    </select>
+                                    <label>Select a Color</label>
                                 </div>
-                                <p></p>
-                                <h2></h2>
+                                <br>
                                 <div >
                                     <center><button class="btn btn-primary" type="submit">Add</button></center>
                                 </div>

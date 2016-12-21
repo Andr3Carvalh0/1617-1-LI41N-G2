@@ -5,13 +5,21 @@
         <title>Tags</title>
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         
+        <script>
+            function prepareView(){
+                $(document).ready(function() {
+                    $('select').material_select();
+                });
+            }
+        </script>
     </head>
-    <body>
+    <body onload="prepareView()">
         <nav>
             <div class="nav-wrapper">
                 <a href="/" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
@@ -22,10 +30,9 @@
             <div class="col s8" style="padding-top: 50px">
                 {{#FOR}}{{self}}
                 <div class="grid-element-wrap col m5 l4">
-                    <div class="card small yellow darken-1">
+                    <div class="card small {{Tg_color}}" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
                             <span class="card-title">{{Tg_name}}</span>
-                            <p><strong>Color: </strong><button type="button" class="btn-floating btn-large waves-effect waves-light {{Tg_color}}" style="margin-bottom:2px; height:10px;width:10px"></button></p>
                         </div>
                         <div class="card-action">
                             <a href="/tags/{{Tg_id}}">Details</a>
@@ -42,15 +49,27 @@
                                 <h3 class="">Create Tag</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="input">
+                                <div class="input-field col s12">
                                     <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
-                                <p></p>
-                                <div class="input">
-                                    <input type="text" class="form-control" name="color" required="required" pattern="[A-Za-z0-9]{1,10}" placeholder="Color">
+                                <br>
+                                <div class="input-field col s12">
+                                    <select>
+                                        <option value="" disabled selected>Choose your option</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/f44336.png" class="left circle" value="red">Red</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/e91e63.png" class="left circle" value="pink">Pink</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/9c27b0.png" class="left circle" value="purple">Purple</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/3f51b5.png" class="left circle" value="indigo">Indigo</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/2196f3.png" class="left circle" value="blue">Blue</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/00bcd4.png" class="left circle" value="cyan">Cyan</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/009688.png" class="left circle" value="teal">Teal</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/4caf50.png" class="left circle" value="green">Green</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/ffeb3b.png" class="left circle" value="yellow">Yellow</option>
+                                        <option name="color" data-icon="http://www.colorhexa.com/ff9800.png" class="left circle" value="orange">Orange</option>
+                                    </select>
+                                    <label>Select a Color</label>
                                 </div>
-                                <p></p>
-                                <h2></h2>
+                                <br>
                                 <div >
                                     <center><button class="btn btn-primary" type="submit">Create</button></center>
                                 </div>
