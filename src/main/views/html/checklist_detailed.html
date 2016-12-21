@@ -33,8 +33,14 @@
                         let form = Tasks[i].children[2]
                         document.getElementById(form.getAttribute("id")).action = "/checklists/" + checklistID + "/tasks/" + taskID
 
+                        let checkboxID = form.getAttribute("id").split("_")[1]
+
                         if((state === 'true')){
-                            document.getElementById(form.children[0].children[0].getAttribute("id")).checked = true
+                            document.getElementById('checkbox_' + checkboxID + '_state').innerHTML = "Closed"
+                            document.getElementById('checkbox_' + checkboxID).checked = true
+
+                        }else{
+                            document.getElementById('checkbox_' + checkboxID + '_state').innerHTML = "Open"
                         }
                     }
                 }
@@ -81,11 +87,9 @@
                     <li class="collection-item avatar" id="li_{{Cl_Task_id}}" data="{{Cl_isClosed}}">
                         <i class="material-icons circle">list</i>
                         <span class="title">{{Cl_Task_name}}</span>
-                        <form id="form_{{Cl_Task_id}}" action="/" method="post">
-                            <p>Closed:
-                                <input type="checkbox" id="checkbox_{{Cl_Task_id}}" onChange="this.form.submit()"/>
-                                <label for="checkbox_{{Cl_Task_id}}"><!--c--></label>
-                            </p>
+                        <form id="form_{{Cl_Task_id}}" action="/" method="post" style="margin-top:5px">
+                            <input type="checkbox" id="checkbox_{{Cl_Task_id}}" onChange="this.form.submit()"/>
+                            <label for="checkbox_{{Cl_Task_id}}" id="checkbox_{{Cl_Task_id}}_state">null</label>
                         </form>
                     </li>
                     {{#END}}{{Checklist_Task}}
@@ -114,16 +118,16 @@
                                 <h3 class="">Add a task</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="input-field col s12"">
+                                <div class="input-field col s12">
                                     <input type="text" class="form-control" name="name"
                                            required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
                                 <br>
-                                <div class="input-field col s12"">
+                                <div class="input-field col s12">
                                     <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
                                 </div>
                                 <br>
-                                <div class="input-field col s12"">
+                                <div class="input-field col s12">
                                     <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
                                 </div>
                                 <br>
@@ -142,7 +146,7 @@
                                 <h3 class="">Add a Tag</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="input-field col s12"">
+                                <div class="input-field col s12">
                                     <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
                                 <br>
