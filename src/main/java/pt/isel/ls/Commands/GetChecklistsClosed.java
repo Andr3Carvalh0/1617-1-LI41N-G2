@@ -31,7 +31,20 @@ public class GetChecklistsClosed extends Command {
             boolean closed = rs.getBoolean(4);
             String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
             int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
-            list.add(new Checklist(id, nome, description, closed, dueDate, Tp_id));
+
+            String Tp_name = null;
+            if(Tp_id != -1) {
+                PreparedStatement ps1 = con.prepareStatement("select * from template where Tp_id = ?");
+                ps1.setInt(1, Tp_id);
+
+                ResultSet r1 = ps1.executeQuery();
+                while (r1.next()) {
+                    Tp_name = r1.getString(2);
+
+                }
+            }
+
+            list.add(new Checklist(id, nome, description, closed, dueDate, Tp_id, Tp_name));
         }
         return list;
     }

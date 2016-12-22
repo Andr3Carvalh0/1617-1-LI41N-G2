@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         {{#FOR}}{{Checklist}}
-        <title>Checklist {{id}}</title>
+        <title>Checklist "{{name}}"</title>
         {{#END}}{{Checklist}}
         
         <!-- Compiled and minified CSS -->
@@ -62,7 +62,7 @@
             <div class="nav-wrapper">
                 {{#FOR}}{{Checklist}}
                 <a href="/checklists" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
-                <span style="font-size: 24px;padding-left: 32px">Checklist {{id}}</span>
+                <span style="font-size: 24px;padding-left: 32px">Checklist "{{name}}"</span>
                 {{#END}}{{Checklist}}
             </div>
         </nav>
@@ -75,7 +75,7 @@
                         <span class="title">{{name}}</span>
                         <p><strong>Description: </strong>{{description}}</p>
                         {{#NOT_NULL}}<p><strong>Due Date: </strong>{{dueDate}}</p>
-                        {{#NOT_NULL}}<p><strong>Based on: </strong><a href="/templates/{{Tp_id}}"> Template {{Tp_id}}</a></p>
+                        {{#NOT_NULL}}<p><strong>Based on Template: </strong><a href="/templates/{{Tp_id}}"> {{Tp_name}}</a></p>
                     </li>
                     {{#END}}{{Checklist}}
                 </ul>

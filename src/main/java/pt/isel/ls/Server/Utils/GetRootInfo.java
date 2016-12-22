@@ -38,7 +38,7 @@ public class GetRootInfo extends Command {
             boolean closed = rs.getBoolean(4);
             String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
             int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
-            checklists.add(new Checklist(id, nome, description, closed, dueDate, Tp_id));
+            checklists.add(new Checklist(id, nome, description, closed, dueDate, Tp_id, null));
         }
 
         ps = con.prepareStatement(s2);

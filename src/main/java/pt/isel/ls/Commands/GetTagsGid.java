@@ -62,7 +62,22 @@ public class GetTagsGid extends Command {
                     boolean closed = rs1.getBoolean(4);
                     String dueDate = (rs1.getDate(5) != null) ? df.format(rs1.getDate(5)) : null;
                     int Tp_id = (rs1.getString(6) == null) ? -1 : rs1.getInt(6);
-                    checklists.add(new Checklist(ck_id, nome, description, closed, dueDate, Tp_id));
+
+
+                    String Tp_name = null;
+                    if(Tp_id != -1) {
+                        PreparedStatement ps2 = con.prepareStatement("select * from template where Tp_id = ?");
+                        ps1.setInt(1, Tp_id);
+
+                        ResultSet r1 = ps2.executeQuery();
+                        while (r1.next()) {
+                            Tp_name = r1.getString(2);
+
+                        }
+                    }
+
+
+                    checklists.add(new Checklist(ck_id, nome, description, closed, dueDate, Tp_id, Tp_name));
 
                 }
             }

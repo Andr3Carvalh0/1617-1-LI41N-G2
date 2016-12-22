@@ -31,8 +31,21 @@ public class GetChecklistsCid extends Command {
             throw new Exception("Checklist with id = " + params.get("{cid}") + " doesnt exist!");
         } else {
             String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
+            int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
+
+            String Tp_name = null;
+            if(Tp_id != -1){
+                PreparedStatement ps1 = con.prepareStatement("select * from template where Tp_id = ?");
+                ps1.setInt(1, Tp_id);
+
+                ResultSet r1 = ps1.executeQuery();
+                while (r1.next()){
+                    Tp_name = r1.getString(2);
+                }
+            }
+
             cl.add(new Checklist(rs.getInt(1), rs.getString(2), rs.getString(3),
-                    rs.getBoolean(4), dueDate, rs.getInt(6)));
+                    rs.getBoolean(4), dueDate, (rs.getString(6) == null) ? -1 : Tp_id, Tp_name));
             //Get tasks info
             query = "select * from checklist_task where Cl_id = ?";
             ps = con.prepareStatement(query);

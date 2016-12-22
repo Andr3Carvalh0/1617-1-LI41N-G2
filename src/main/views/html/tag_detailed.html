@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         {{#FOR}}{{Tag}}
-            <title>Tag {{Tg_id}}</title>
+            <title>Tag "{{Tg_name}}"</title>
         {{#END}}{{Tag}}
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
@@ -25,7 +25,7 @@
             <div class="nav-wrapper">
                 <a href="{{link}}" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
                 {{#FOR}}{{Tag}}
-                    <span style="font-size: 24px;padding-left: 32px">Tag {{Tg_id}}</span>
+                    <span style="font-size: 24px;padding-left: 32px">Tag "{{Tg_name}}"</span>
                 {{#END}}{{Tag}}
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a href="/tags/{{id}}/checklists"><strong>{{message}}</strong></a></li>

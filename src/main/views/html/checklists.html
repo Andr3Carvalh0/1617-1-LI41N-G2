@@ -49,7 +49,7 @@
                             <span class="card-title">{{name}}</span>
                             <p><strong>Description: </strong>{{description}}</p>
                             {{#NOT_NULL}}<p><strong>Due Date: </strong>{{dueDate}}</p>
-                            {{#NOT_NULL}}<p><strong>Based on: </strong><a href="/templates/{{Tp_id}}"> Template {{Tp_id}}</a></p>
+                            {{#NOT_NULL}}<p><strong>Based on Template: </strong><a href="/templates/{{Tp_id}}"> {{Tp_name}}</a></p>
                         </div>
                         <div class="card-action">
                             <a href="/checklists/{{id}}">Details</a>
