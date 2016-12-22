@@ -47,7 +47,7 @@ foreign key(Tp_id)REFERENCES template(Tp_id) on delete cascade
 create table tag(
 	Tg_id int identity (0, 1),
 	Tg_name varchar(80) NOT NULL,
-	Tg_color varchar(10) NOT NULL,
+	Tg_color varchar(30) NOT NULL,
 	primary key(Tg_id)
 )
 
