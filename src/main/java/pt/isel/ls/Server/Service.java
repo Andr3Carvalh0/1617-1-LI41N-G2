@@ -120,7 +120,7 @@ public class Service extends HttpServlet {
             //This is useless but you never know...
             map.put("file-name", req.getHeader("file-name"));
 
-            String params = formatParams(col);
+            String params = formatParams(col, req.getPathInfo());
             CommandParser cparser = new CommandParser(new String[]{req.getMethod(), req.getPathInfo(), params});
             Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
             Command c = r.Route();
@@ -134,10 +134,9 @@ public class Service extends HttpServlet {
 
                 } else {
                     System.out.println(obj);
-                    if(!req.getPathInfo().matches(".*\\d+.*")) {
+                    if (!req.getPathInfo().matches(".*\\d+.*")) {
                         resp.sendRedirect(req.getPathInfo() + "/" + obj);
-                    }
-                    else {
+                    } else {
                         resp.sendRedirect(rebuildURL(req.getPathInfo()));
                     }
                     return;
@@ -162,15 +161,34 @@ public class Service extends HttpServlet {
 
     private String rebuildURL(String pathInfo) {
         String[] p = pathInfo.split("/");
-        return "/"+p[1]+"/"+p[2]+"/";
+        return "/" + p[1] + "/" + p[2] + "/";
     }
 
-    private String formatParams(Map<String, String[]> col) {
+    private String formatParams(Map<String, String[]> col, String req) {
         String toReturn = "";
-        for (String key : col.keySet()) {
-            if(!col.get(key)[0].equals(""))
-            toReturn += key + "=" + col.get(key)[0].replace(' ', '+') + "&";
+
+        if (col.size() == 0 && checkIFTasksPost(req)) {
+            toReturn = "isClosed=false";
+
+        } else {
+            for (String key : col.keySet()) {
+                if (!col.get(key)[0].equals("")) {
+                    String value = col.get(key)[0].replace(' ', '+');
+
+                    if (key.equals("isClosed")) {
+                        value = "true";
+                    }
+
+                    toReturn += key + "=" + value + "&";
+                }
+            }
         }
         return toReturn.substring(0, toReturn.length() - 1);
+    }
+
+    private boolean checkIFTasksPost(String req) {
+        String[] res = req.split("/");
+        return res.length == 5 && (res[1].equals("checklists") && res[2].matches(".*\\d+.*") && res[3].equals("tasks") && res[4].matches(".*\\d+.*"));
+
     }
 }

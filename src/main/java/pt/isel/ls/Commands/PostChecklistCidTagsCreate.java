@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 
 public class PostChecklistCidTagsCreate extends Command{
-    private final String[] path = {"", "checklists", "{cid}", "tasks", "create"};
+    private final String[] path = {"", "checklists", "{cid}", "tags", "create"};
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
