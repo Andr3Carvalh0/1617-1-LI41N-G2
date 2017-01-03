@@ -31,12 +31,10 @@ function prepareChecklist_Detailed(){
     }
 
     if(document.getElementById("ul_Tags").children.length <= 2){
-
         document.getElementById("message_tags").innerHTML = "<strong>There aren't any Tags associated with this Checklist.</strong>"
     }
 
     if(document.getElementById("ul_Tasks").children.length <= 2){
-
         document.getElementById("message_task").innerHTML = "<strong>There aren't any Tasks associated with this Checklist.</strong>"
     }
 }
@@ -70,9 +68,37 @@ function prepareView_Tag(){
 
 function prepareTemplate_Detailed(){
     if(document.getElementById("tasks").children.length <= 2){
-    document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
+        document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
     }
     if(document.getElementById("checklists").children.length <= 2){
-    document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Template.</strong>"
+        document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Template.</strong>"
     }
+}
+
+
+function validateSubmission_Checklist(){
+/*
+    let x = document.getElementById("roll-input").value
+    if (x == "") {
+        alert("Enter a Valid Roll Number")
+        return false
+    };
+*/
+    return false
+
+}
+
+function validateSubmission_Template(){
+    return false
+
+}
+
+function validateSubmission_Tag(){
+    return false
+
+}
+
+function validateSubmission_Task(){
+    return false
+
 }
