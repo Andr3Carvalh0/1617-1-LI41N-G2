@@ -14,50 +14,9 @@
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-        <script>
-            function prepareView(){
-                $(document).ready(function() {
-                    $('select').material_select();
-                });
-
-                if(document.getElementById("ul_Tasks") != null){
-
-                    let Tasks = document.getElementById("ul_Tasks").children
-                    let numberChildrens = Tasks.length;
-                    let checklistID = window.location.pathname.split("/")[2]
-
-                    for(let i = 1; i < numberChildrens - 1; i++){
-                        let taskID = Tasks[i].getAttribute("id").split("_")[1]
-                        let state = Tasks[i].getAttribute("data")
-
-                        let form = Tasks[i].children[2]
-                        document.getElementById(form.getAttribute("id")).action = "/checklists/" + checklistID + "/tasks/" + taskID
-
-                        let checkboxID = form.getAttribute("id").split("_")[1]
-
-                        if((state === 'true')){
-                            document.getElementById('checkbox_' + checkboxID + '_state').innerHTML = "Closed"
-                            document.getElementById('checkbox_' + checkboxID).checked = true
-
-                        }else{
-                            document.getElementById('checkbox_' + checkboxID + '_state').innerHTML = "Open"
-                        }
-                    }
-                }
-
-                if(document.getElementById("ul_Tags").children.length <= 2){
-
-                    document.getElementById("message_tags").innerHTML = "<strong>There aren't any Tags associated with this Checklist.</strong>"
-                }
-
-                if(document.getElementById("ul_Tasks").children.length <= 2){
-
-                    document.getElementById("message_task").innerHTML = "<strong>There aren't any Tasks associated with this Checklist.</strong>"
-                }
-            }
-        </script>
+        <script src="/js/utils.js"></script>
     </head>
-    <body onload="prepareView()">
+    <body onload="prepareChecklist_Detailed()">
         <nav>
             <div class="nav-wrapper">
                 {{#FOR}}{{Checklist}}

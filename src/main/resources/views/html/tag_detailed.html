@@ -11,16 +11,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        
-        <script>
-            function prepareView(){
-                if(document.getElementById("checklists").children.length <= 2){
-                document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Template.</strong>"
-                }
-            }
-        </script>
+
+        <script src="/js/utils.js"></script>
     </head>
-    <body onload = "prepareView()">
+    <body onload = "prepareTag_Detailed()">
         <nav>
             <div class="nav-wrapper">
                 <a href="{{link}}" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>

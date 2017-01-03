@@ -10,16 +10,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        
-        <script>
-            function prepareView(){
-                $(document).ready(function() {
-                    $('select').material_select();
-                });
-            }
-        </script>
+
+        <script src="/js/utils.js"></script>
     </head>
-    <body onload="prepareView()">
+    <body onload="prepareView_Tag()">
         <nav>
             <div class="nav-wrapper">
                 <a href="/" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>

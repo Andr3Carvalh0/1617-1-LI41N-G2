@@ -1,5 +1,6 @@
 package pt.isel.ls.Server;
 
+import org.eclipse.jetty.spdy.api.Session;
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Router;
@@ -10,9 +11,12 @@ import pt.isel.ls.Utils.Output.CustomPrinter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +50,14 @@ public class Service extends HttpServlet {
                         con.close();
                     }
                 }
-            } else if (req.getPathInfo().equals("/about")) {
+            }else if(req.getPathInfo().contains("/js/")){
+                respBody = new String(Files.readAllBytes(Paths.get(Service.class.getClassLoader().getResource("." + req.getPathInfo()).getPath())));
+                respBodyBytes = respBody.getBytes(utf8);
+                resp.setStatus(200);
+            }
+
+
+            else if (req.getPathInfo().equals("/about")) {
                 respBody = cPrinter.print(req.getPathInfo(), map, req.getRequestURI());
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(200);
