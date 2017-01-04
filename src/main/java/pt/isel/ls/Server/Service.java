@@ -1,17 +1,14 @@
 package pt.isel.ls.Server;
 
-import org.eclipse.jetty.spdy.api.Session;
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Router;
 import pt.isel.ls.Server.Utils.GetRootInfo;
 import pt.isel.ls.Utils.GetConnection;
 import pt.isel.ls.Utils.Output.CustomPrinter;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -178,7 +175,7 @@ public class Service extends HttpServlet {
     private String formatParams(Map<String, String[]> col, String req) {
         String toReturn = "";
 
-        if (col.size() == 0 && checkIFTasksPost(req)) {
+        if (col.size() == 0 && checkIfTasksPost(req)) {
             toReturn = "isClosed=false";
 
         } else {
@@ -197,7 +194,7 @@ public class Service extends HttpServlet {
         return toReturn.substring(0, toReturn.length() - 1);
     }
 
-    private boolean checkIFTasksPost(String req) {
+    private boolean checkIfTasksPost(String req) {
         String[] res = req.split("/");
         return res.length == 5 && (res[1].equals("checklists") && res[2].matches(".*\\d+.*") && res[3].equals("tasks") && res[4].matches(".*\\d+.*"));
 

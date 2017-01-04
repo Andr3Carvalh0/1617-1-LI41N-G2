@@ -47,7 +47,7 @@
                         <i class="material-icons circle">list</i>
                         <span class="title">{{Cl_Task_name}}</span>
                         <form id="form_{{Cl_Task_id}}" action="/" method="post" style="margin-top:5px">
-                            <input type="checkbox" id="checkbox_{{Cl_Task_id}}" name="isClosed" onChange="this.form.submit()"/>
+                            <input type="checkbox" id="checkbox_{{Cl_Task_id}}" class="filled-in" name="isClosed" onChange="this.form.submit()"/>
                             <label for="checkbox_{{Cl_Task_id}}" id="checkbox_{{Cl_Task_id}}_state">null</label>
                         </form>
                     </li>
@@ -87,7 +87,7 @@
                                 </div>
                                 <br>
                                 <div class="input-field col s12">
-                                    <input type="text" class="form-control" name="dueDate" placeholder="[Optional] DueDate">
+                                    <input type="date" class="datepicker" name="dueDate" placeholder="DueDate">
                                 </div>
                                 <br>
                                 <div>

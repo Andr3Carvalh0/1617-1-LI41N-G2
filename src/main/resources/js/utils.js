@@ -2,8 +2,17 @@
 
 function prepareChecklist_Detailed(){
     $(document).ready(function() {
-        $('select').material_select();
+        $('select').material_select()
     });
+
+    let today = new Date()
+    let dd = today.getDate()
+    let mm = today.getMonth() + 1 //January is 0!
+
+    let yyyy = today.getFullYear()
+
+    $('.datepicker').pickadate({min: new Date(yyyy,mm,dd)})
+
 
     if(document.getElementById("ul_Tasks") != null){
 
@@ -41,6 +50,14 @@ function prepareChecklist_Detailed(){
 
 
 function prepareView_Checklist(){
+    let today = new Date()
+    let dd = today.getDate()
+    let mm = today.getMonth() + 1 //January is 0!
+
+    let yyyy = today.getFullYear()
+
+    $('.datepicker').pickadate({min: new Date(yyyy,mm,dd)})
+
     const currentPage = window.location.pathname
     const pages = ["/checklists", "/checklists/closed", "/checklists/open/sorted/duedate", "/checklists/open/sorted/noftasks"]
 
@@ -67,6 +84,14 @@ function prepareView_Tag(){
 }
 
 function prepareTemplate_Detailed(){
+    let today = new Date()
+    let dd = today.getDate()
+    let mm = today.getMonth() + 1 //January is 0!
+
+    let yyyy = today.getFullYear()
+
+    $('.datepicker').pickadate({min: new Date(yyyy,mm,dd)})
+
     if(document.getElementById("tasks").children.length <= 2){
         document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
     }
