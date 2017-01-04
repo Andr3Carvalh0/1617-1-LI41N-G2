@@ -7,7 +7,7 @@ function prepareChecklist_Detailed(){
 
     let today = new Date()
     let dd = today.getDate()
-    let mm = today.getMonth() + 1 //January is 0!
+    let mm = today.getMonth() //January is 0!
 
     let yyyy = today.getFullYear()
 
@@ -52,7 +52,7 @@ function prepareChecklist_Detailed(){
 function prepareView_Checklist(){
     let today = new Date()
     let dd = today.getDate()
-    let mm = today.getMonth() + 1 //January is 0!
+    let mm = today.getMonth() //January is 0!
 
     let yyyy = today.getFullYear()
 
@@ -86,7 +86,7 @@ function prepareView_Tag(){
 function prepareTemplate_Detailed(){
     let today = new Date()
     let dd = today.getDate()
-    let mm = today.getMonth() + 1 //January is 0!
+    let mm = today.getMonth() //January is 0!
 
     let yyyy = today.getFullYear()
 
