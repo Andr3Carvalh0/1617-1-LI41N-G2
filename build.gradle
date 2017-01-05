@@ -1,5 +1,6 @@
 apply plugin: 'java'
 import org.apache.tools.ant.taskdefs.condition.Os
+apply plugin: 'application'
 
 version = '1.0'
 
@@ -27,9 +28,12 @@ task initDb(type:Exec) {
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
-    copyTask
 }
 
 classes.dependsOn copyTask
+
+mainClassName = "pt.isel.ls.App"
+
+task stage(dependsOn: ['clean', 'installApp'])
 
 test.dependsOn initDb
