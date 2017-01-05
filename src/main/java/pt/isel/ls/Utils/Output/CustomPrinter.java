@@ -113,7 +113,7 @@ public class CustomPrinter {
         }
 
         System.out.println("OLA CARALHO!");
-        System.out.println(CustomPrinter.class.getClassLoader());
+        System.out.println(CustomPrinter.class.getClassLoader().getResource("./"));
         
         return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
     }
