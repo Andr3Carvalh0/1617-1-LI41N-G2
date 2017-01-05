@@ -3,7 +3,6 @@ package pt.isel.ls;
 
 import org.junit.Test;
 import pt.isel.ls.Commands.GetTemplates;
-import pt.isel.ls.Commands.GetTemplatesTidChecklistsSortedByOpentasksDesc;
 import pt.isel.ls.Commands.GetTemplatesTid;
 import pt.isel.ls.Commands.PostTemplates;
 import pt.isel.ls.Commands.PostTemplatesTidCreate;
@@ -93,12 +92,12 @@ public class TemplateTest {
         ps.execute();
     }
 
-    private void addChecklistFromTemplate(String Cl_name, String Cl_desc, int Tp_id, Connection con) throws SQLException {
+    private void addChecklistFromTemplate(int Tp_id, Connection con) throws SQLException {
         String s1 = "insert into checklist(Cl_name, Cl_desc, Cl_closed, Cl_duedate, Tp_id) values (?,?,?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(s1);
 
-        ps.setString(1, Cl_name);
-        ps.setString(2, Cl_desc);
+        ps.setString(1, "Check1");
+        ps.setString(2, "Desc");
         ps.setInt(3, 0);
         ps.setString(4, null);
         ps.setInt(5, Tp_id);
@@ -186,7 +185,7 @@ public class TemplateTest {
             }
 
             //Populate Checklist
-            addChecklistFromTemplate("Check1", "Desc", id, con);
+            addChecklistFromTemplate(id, con);
 
             DtoWrapper result = (DtoWrapper) new GetTemplatesTid().execute(map, con);
             assertEquals(id, ((Template)((LinkedList) result.getTemplate()).get(0)).getTp_id());
@@ -238,56 +237,6 @@ public class TemplateTest {
                     ps.execute();
                     con.close();
                 }
-            }
-        }
-    }
-
-    @Test
-    public void testGetTemplateTidChecklistsSortedByOpenTasksDesc() throws Exception {
-        int checklist_id1 = 0, checklist_id2 = 0;
-        try{
-            con = GetConnection.connect(true);
-            //Inserir template
-            addTemplate("Template", "Desc", con);
-            int template_id = getLastInsertedTemplate(con);
-
-            addChecklistFromTemplate("Check1", "Desc1", template_id, con);
-            checklist_id1 = getLastInsertedChecklist(con);
-
-            addChecklistFromTemplate("Check2", "Desc2", template_id, con);
-            checklist_id2 = getLastInsertedChecklist(con);
-
-            generateChecklist_Tasks(checklist_id1, con);
-
-            generateChecklist_Tasks(checklist_id1, con);
-
-            generateChecklist_Tasks(checklist_id2, con);
-
-
-            HashMap<String, String> map = new HashMap<>();
-            map.put("{tid}", template_id + "");
-
-            LinkedList LinkedList = (LinkedList) new GetTemplatesTidChecklistsSortedByOpentasksDesc().execute(map, con);
-            assertEquals(2, LinkedList.size());
-            assertEquals(checklist_id2, ((Checklist)LinkedList.get(1)).getId());
-
-
-        }
-        finally {
-            if (con != null) {
-                PreparedStatement dels;
-                dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
-                dels.setInt(1, checklist_id1);
-                dels.executeUpdate();
-
-                dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
-                dels.setInt(1, checklist_id2);
-                dels.executeUpdate();
-
-                dels = con.prepareStatement("DELETE from template where Tp_id = ?");
-                dels.setInt(1, getLastInsertedTemplate(con));
-                dels.executeUpdate();
-                con.close();
             }
         }
     }

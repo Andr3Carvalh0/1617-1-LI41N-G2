@@ -28,10 +28,10 @@
             </div>
         </nav>
         <div class="row" >
-            <div class="col s8" style="padding-top: 50px">
+            <div class="col s12" style="padding-top: 50px;padding-left:30px">
                 {{#FOR}}{{self}}
-                <div class="grid-element-wrap col m5 l4">
-                    <div class="card small yellow darken-1" style="height: 250px; width: 250px">
+                <div class="grid-element-wrap col m5 l3">
+                    <div class="card small yellow darken-1 hoverable" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
                             <span class="card-title">{{name}}</span>
                             <p><strong>Description: </strong>{{description}}</p>
@@ -39,40 +39,49 @@
                             {{#NOT_NULL}}<p><strong>Based on Template: </strong><a href="/templates/{{Tp_id}}"> {{Tp_name}}</a></p>
                         </div>
                         <div class="card-action">
-                            <a href="/checklists/{{id}}">Details</a>
+                            <a style="color:#f57f17" href="/checklists/{{id}}">Details</a>
                         </div>
                     </div>
                 </div>
                 {{#END}}{{self}}
             </div>
-            <div class="col s4" style="padding-top: 50px;padding-left: 20px; padding-right: 20px">
-                <form action="/checklists" method="post">
-                    <div class="col-xs-2" style="padding-left:10px;padding-right:10px">
+        </div>
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red tooltipped hoverable" data-position="left" data-delay="50" data-tooltip="Create Checklist" data-target="modal1"><i class="large material-icons">mode_edit</i></a>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id = "modal1" class='modal modal-fixed-footer'>
+            <div class="modal-content">
+                <br/>
+                <h4>Create Checklist</h4>
+                <br/>
+                <form id="checklist_submit" action="/checklists" method="post">
+                    <div class="col-md-3" style="padding-left:10px;padding-right:10px">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="">Create Checklist</h3>
-                            </div>
                             <div class="panel-body">
                                 <div class="input">
-                                    <input type="text" class="form-control" name="name"
-                                    required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                    <input type="text" id="checklist_name" class="form-control" name="name"
+                                           required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
                                 <br>
                                 <div class="input">
-                                    <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                    <input type="text" id="checklist_description" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
                                 </div>
                                 <br>
                                 <div class="input">
-                                    <input type="date" class="datepicker" name="dueDate" placeholder="DueDate">
+                                    <input type="date" id="checklist_duedate" class="datepicker" name="dueDate" placeholder="DueDate">
                                 </div>
-                                <br>
-                                <div>
-                                    <center><button class="btn btn-primary" type="submit" onClick="return validateSubmission_Checklist()">Create</button></center>
-                                </div>
+                                <br/>
                             </div>
                         </div>
                     </div>
                 </form>
+            </div>
+            <div class='modal-footer'>
+                <button class="btn btn-primary" onClick="return validateSubmission_Checklist()">Create</button>
+                <a href="" onclick="return false" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
             </div>
         </div>
     </body>

@@ -34,8 +34,9 @@ public class Service extends HttpServlet {
 
             map.put("accept", getContentType(req.getHeader("accept")));
 
-            //This is useless but you never know...
             map.put("file-name", req.getHeader("file-name"));
+
+            //Handles root view(/)
             if (req.getPathInfo().equals("/")) {
                 Connection con = GetConnection.connect(false);
                 try {
@@ -47,19 +48,21 @@ public class Service extends HttpServlet {
                         con.close();
                     }
                 }
-            }else if(req.getPathInfo().contains("/js/")){
-                respBody = new String(Files.readAllBytes(Paths.get(Service.class.getClassLoader().getResource("." + req.getPathInfo()).getPath())));
+            }
+            //Static files
+            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about")){
+                String path = "." + req.getPathInfo();
+
+                if(req.getPathInfo().equals("/about")){
+                    path ="./views/html/about.html";
+                }
+
+                respBody = new String(Files.readAllBytes(Paths.get(Service.class.getClassLoader().getResource(path).getPath())));
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(200);
             }
-
-
-            else if (req.getPathInfo().equals("/about")) {
-                respBody = cPrinter.print(req.getPathInfo(), map, req.getRequestURI());
-                respBodyBytes = respBody.getBytes(utf8);
-                resp.setStatus(200);
-
-            } else {
+            //The others...
+            else {
                 CommandParser cparser = new CommandParser(new String[]{req.getMethod(), req.getPathInfo(), getContentType(req.getHeader("accept"))});
                 Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
                 Command c = r.Route();

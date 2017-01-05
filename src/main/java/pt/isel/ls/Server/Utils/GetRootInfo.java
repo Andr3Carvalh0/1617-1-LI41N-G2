@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetRootInfo extends Command {
-    private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {
@@ -27,6 +27,7 @@ public class GetRootInfo extends Command {
         String s1 = "select top(4) * from checklist";
         String s2 = "select top(4) * from template";
         String s3 = "select top(4) * from tag";
+        String s4 = "select * from template where Tp_id = ?";
         PreparedStatement ps = con.prepareStatement(s1);
 
         ResultSet rs = ps.executeQuery();
@@ -38,7 +39,19 @@ public class GetRootInfo extends Command {
             boolean closed = rs.getBoolean(4);
             String dueDate = (rs.getDate(5) != null) ? df.format(rs.getDate(5)) : null;
             int Tp_id = (rs.getString(6) == null) ? -1 : rs.getInt(6);
-            checklists.add(new Checklist(id, nome, description, closed, dueDate, Tp_id, null));
+
+            String Tp_name = null;
+            if(Tp_id != -1){
+                PreparedStatement ps1 = con.prepareStatement(s4);
+                ps1.setInt(1, Tp_id);
+
+                ResultSet r1 = ps1.executeQuery();
+                while (r1.next()){
+                    Tp_name = r1.getString(2);
+                }
+            }
+
+            checklists.add(new Checklist(id, nome, description, closed, dueDate, Tp_id, Tp_name));
         }
 
         ps = con.prepareStatement(s2);

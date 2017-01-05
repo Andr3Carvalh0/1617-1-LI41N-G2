@@ -16,7 +16,7 @@ import java.util.LinkedList;
 public class GetTagsGid extends Command {
     private final String[] path = {"", "tags", "{gid}"};
 
-    private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
         int id = Integer.parseInt(params.get("{gid}"));

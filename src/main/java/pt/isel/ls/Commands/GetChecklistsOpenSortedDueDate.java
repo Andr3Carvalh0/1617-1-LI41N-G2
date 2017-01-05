@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetChecklistsOpenSortedDueDate extends Command {
-    private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
     private final String[] path = {"", "checklists", "open", "sorted", "duedate"};
 
     @Override

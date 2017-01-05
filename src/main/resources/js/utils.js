@@ -1,18 +1,16 @@
 "use strict"
 
 function prepareChecklist_Detailed(){
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+
     $(document).ready(function() {
         $('select').material_select()
     });
 
-    let today = new Date()
-    let dd = today.getDate()
-    let mm = today.getMonth() //January is 0!
-
-    let yyyy = today.getFullYear()
-
-    $('.datepicker').pickadate({min: new Date(yyyy,mm,dd)})
-
+    $('.datepicker').pickadate({min: new Date()})
 
     if(document.getElementById("ul_Tasks") != null){
 
@@ -50,13 +48,12 @@ function prepareChecklist_Detailed(){
 
 
 function prepareView_Checklist(){
-    let today = new Date()
-    let dd = today.getDate()
-    let mm = today.getMonth() //January is 0!
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
 
-    let yyyy = today.getFullYear()
-
-    $('.datepicker').pickadate({min: new Date(yyyy,mm,dd)})
+    $('.datepicker').pickadate({min: new Date(), dateFormat: 'yy-mm-dd' })
 
     const currentPage = window.location.pathname
     const pages = ["/checklists", "/checklists/closed", "/checklists/open/sorted/duedate", "/checklists/open/sorted/noftasks"]
@@ -72,25 +69,46 @@ function prepareView_Checklist(){
 }
 
 function prepareTag_Detailed(){
+
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+
     if(document.getElementById("checklists").children.length <= 2){
-        document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Template.</strong>"
+        document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Tag.</strong>"
     }
 }
 
 function prepareView_Tag(){
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+}
+
+function prepareView_Template(){
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+
     $(document).ready(function() {
         $('select').material_select();
     });
 }
 
 function prepareTemplate_Detailed(){
-    let today = new Date()
-    let dd = today.getDate()
-    let mm = today.getMonth() //January is 0!
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
 
-    let yyyy = today.getFullYear()
-
-    $('.datepicker').pickadate({min: new Date(yyyy,mm,dd)})
+    $('.datepicker').pickadate({min: new Date(), dateFormat: 'yy-mm-dd'})
 
     if(document.getElementById("tasks").children.length <= 2){
         document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
@@ -101,15 +119,39 @@ function prepareTemplate_Detailed(){
 }
 
 
+
+
 function validateSubmission_Checklist(){
-/*
-    let x = document.getElementById("roll-input").value
-    if (x == "") {
-        alert("Enter a Valid Roll Number")
+    let message = "You have to fill the following fields: "
+    let hasMessage = false
+
+    let form =  document.getElementById("checklist_submit")
+
+    let name = document.getElementById("checklist_name").value
+    let description = document.getElementById("checklist_description").value
+    let duedate = document.getElementById("checklist_duedate").value
+
+    if(!name || 0 === name.length){
+        message += "Name"
+
+        hasMessage = true
+    }
+
+    if(!description || 0 === description.length){
+        if(hasMessage)
+            message += ", "
+
+        message += "Description"
+        hasMessage = true
+    }
+
+    if(hasMessage){
+        alert(message)
         return false
-    };
-*/
+    }
+
     return false
+//    form.submit()
 
 }
 
@@ -125,5 +167,4 @@ function validateSubmission_Tag(){
 
 function validateSubmission_Task(){
     return false
-
 }

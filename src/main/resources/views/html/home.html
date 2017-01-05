@@ -19,51 +19,67 @@
                 </ul>
             </div>
         </nav>
-        <div class="container">
-            <a href="/checklists"><h3>Checklists:</h3></a>
-            <div class="row">
-                {{#FOR}}{{Checklist}}
-                <div class="grid-element-wrap col m3 m2">
-                    <div class="card-panel small yellow darken-1" style="height: 150px; width: 150px">
+        <br/>
+        <a href="/checklists"><h3 style="padding-left:15px">Checklists:</h3></a>
+        <div class="row">
+            <div class="col s12" style="padding-left:30px">
+            {{#FOR}}{{Checklist}}
+                <div class="grid-element-wrap col m5 l3">
+                    <div class="card small yellow darken-1 hoverable" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
                             <span class="card-title">{{name}}</span>
-                            <p>{{description}}</p>
+                            <p><strong>Description: </strong>{{description}}</p>
+                            {{#NOT_NULL}}<p><strong>Due Date: </strong>{{dueDate}}</p>
+                            {{#NOT_NULL}}<p><strong>Based on Template: </strong><a href="/templates/{{Tp_id}}"> {{Tp_name}}</a></p>
+                        </div>
+                        <div class="card-action">
+                            <a style="color:#f57f17" href="/checklists/{{id}}">Details</a>
                         </div>
                     </div>
                 </div>
                 {{#END}}{{Checklist}}
-                <p style="margin-top:30px;margin-left:25px"><strong>{{message_checklists}}</strong></p>
             </div>
-            <hr/>
-            <a href="/templates"><h3>Templates:</h3></a>
-            <div class="row">
+            <p style="margin-top:30px;margin-left:25px"><strong>{{message_checklists}}</strong></p>
+        </div>
+
+        <a href="/templates"><h3 style="padding-left:15px">Templates:</h3></a>
+        <div class="row">
+            <div class="col s12" style="padding-left:30px">
                 {{#FOR}}{{Template}}
-                <div class="grid-element-wrap col m3 m2">
-                    <div class="card-panel small yellow darken-1" style="height: 150px; width: 150px">
+                <div class="grid-element-wrap col m5 l3">
+                    <div class="card small yellow darken-1 hoverable" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
                             <span class="card-title">{{Tp_name}}</span>
-                            <p>{{Tp_desc}}</p>
+                            <p><strong>Description: </strong>{{Tp_desc}}</p>
+                        </div>
+                        <div class="card-action">
+                            <a style="color:#f57f17" href="/templates/{{Tp_id}}">Details</a>
                         </div>
                     </div>
                 </div>
                 {{#END}}{{Template}}
-                <p style="margin-top:30px;margin-left:25px"><strong>{{message_templates}}</strong></p>
             </div>
-            <hr/>
-            <a href="/tags"><h3>Tags:</h3></a>
-            <div class="row">
+            <p style="margin-top:30px;margin-left:25px"><strong>{{message_templates}}</strong></p>
+        </div>
+        <a href="/tags"><h3 style="padding-left:15px">Tags:</h3></a>
+        <div class="row">
+            <div class="col s12" style="padding-left:30px">
                 {{#FOR}}{{Tag}}
-                <div class="grid-element-wrap col m3 m2">
-                    <div class="card-panel small yellow darken-1" style="height: 150px; width: 150px">
+                <div class="grid-element-wrap col m5 l3">
+                    <div class="card small yellow darken-1 hoverable" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
                             <span class="card-title">{{Tg_name}}</span>
-                            <p><strong>Color: </strong><button type="button" class="btn-floating btn-large waves-effect waves-light {{Tg_color}}" style="margin-bottom:2px; height:10px;width:10px"></button></p>
+                            <p><strong>Color: </strong><button type="button" class="btn-floating btn-large waves-effect waves-light {{Tg_color}}" style="margin-bottom:3px; height:12px;width:12px"></button></p>
+                        </div>
+                        <div class="card-action" style="color:#FFFFFF">
+                            <a style="color:#f57f17" href="/tags/{{Tg_id}}">Details</a>
                         </div>
                     </div>
                 </div>
                 {{#END}}{{Tag}}
-                <p style="margin-top:30px;margin-left:25px"><strong>{{message_tags}}</strong></p>
             </div>
+            <p style="margin-top:30px;margin-left:25px"><strong>{{message_tags}}</strong></p>
         </div>
+
     </body>
 </html>

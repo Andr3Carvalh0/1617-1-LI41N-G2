@@ -88,6 +88,8 @@ select COUNT(*) from checklist_task where Cl_id = 17 and Cl_Task_closed = 0
 
 
 -- aux scripts --
+USE LS_Test
+GO
 select * from checklist
 select * from checklist_task
 select * from template_task
@@ -109,10 +111,10 @@ delete from template
 
 UPDATE checklist SET Cl_closed = 1 WHERE Cl_id = 0
 
-insert into checklist values('one', 'the one', 0, '2016-10-31',null)
-insert into checklist values('two', 'the second', 0, '2016-10-21',null)
-insert into checklist values('three', 'the third', 0, '2017-10-31',null)
-insert into checklist values('four', 'the fourth', 0, '2016-11-4',null)
+insert into checklist values('one', 'the one', 0, '31-10-2016',null)
+insert into checklist values('two', 'the second', 0, '21-10-2016',null)
+insert into checklist values('three', 'the third', 0, '31-10-2017',null)
+insert into checklist values('four', 'the fourth', 0, '4-11-2016',null)
 
 
 

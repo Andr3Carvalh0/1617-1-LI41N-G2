@@ -5,12 +5,15 @@
         <title>Templates</title>
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="/js/utils.js"></script>
     </head>
-    <body>
+    <body onload = "prepareView_Template()">
         <nav>
             <div class="nav-wrapper">
                 <a href="/" class="brand-logo" style="padding-left: 10px;"><i class="material-icons">chevron_left</i></a>
@@ -18,46 +21,54 @@
             </div>
         </nav>
         <div class="row" >
-            <div class="col s8" style="padding-top: 50px;">
+            <div class="col s12" style="padding-top: 50px;padding-left:30px">
                 {{#FOR}}{{self}}
-                <div class="grid-element-wrap col m5 l4">
-                    <div class="card small yellow darken-1" style="height: 250px; width: 250px">
+                <div class="grid-element-wrap col m5 l3">
+                    <div class="card small yellow darken-1 hoverable" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
                             <span class="card-title">{{Tp_name}}</span>
                             <p><strong>Description: </strong>{{Tp_desc}}</p>
                         </div>
                         <div class="card-action">
-                            <a href="/templates/{{Tp_id}}">Details</a>
+                            <a style="color:#f57f17" href="/templates/{{Tp_id}}">Details</a>
                         </div>
                     </div>
                 </div>
                 {{#END}}{{self}}
             </div>
-            <div class="col s4" style="padding-top: 50px;padding-left: 20px; padding-right: 20px">
+        </div>
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red tooltipped hoverable" data-position="left" data-delay="50" data-tooltip="Create Template" data-target="modal1"><i class="large material-icons">mode_edit</i></a>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <br/>
+                <h4>Create Template</h4>
+                <br/>
                 <form action="/templates" method="post">
                     <div class="col-md-3" style="padding-left:10px;padding-right:10px">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="">Create Template</h3>
-                            </div>
                             <div class="panel-body">
                                 <div class="input">
-                                    <input type="text" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                    <input type="text" id="template_name" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
                                 </div>
                                 <p></p>
                                 <div class="input">
-                                    <input type="text" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                    <input type="text" id="template_description" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
                                 </div>
-                                <p></p>
-                                <h2></h2>
-                                <div >
-                                    <center><button class="btn btn-primary" type="submit" onClick="return validateSubmission_Template()">Create</button></center>
-                                </div>
+                                <br/>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" onClick="return validateSubmission_Template()">Create</button>
+                        <a href="" onclick="return false" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+                    </div>
                 </form>
             </div>
-        </div>
+      </div>
     </body>
 </html>

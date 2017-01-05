@@ -7,6 +7,7 @@
         {{#END}}{{Tag}}
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
@@ -27,7 +28,7 @@
             </div>
         </nav>
         <div class="row">
-            <div class="col s4" style="padding-top: 80px;">
+            <div class="col s3" style="padding-top: 80px;">
                 <ul class="collection" style="border:0px">
                     {{#FOR}}{{Tag}}
                     <li class="collection-item avatar">
@@ -35,10 +36,10 @@
                         <span class="title">{{Tg_name}}</span>
                         <p><strong>Color: </strong><button type="button" class="btn-floating btn-large waves-effect waves-light {{Tg_color}}" style="margin-bottom:2px; height:10px;width:10px"></button></p>
                     </li>
-                    {{#END}}{{Template}}
+                    {{#END}}{{Tag}}
                 </ul>
             </div>
-            <div class="col s4" style="padding-top: 50px">
+            <div class="col s9" style="padding-left: 20px; padding-right: 20px; border-left:1px solid #e0e0e0; height: 570px;margin-top: 50px;margin-bottom: 50px">
                 <ul class="collection with-header" id="checklists" style="border:0px">
                     <li class="collection-header"><h4>Checklists</h4></li>
                     {{#FOR}}{{Checklist}}
@@ -47,7 +48,7 @@
                         <span class="title"><a href="/checklists/{{id}}">{{name}}</a></span>
                     </li>
                     {{#END}}{{Checklist}}
-                    <p id="message_checklists" style="margin-top:30px;margin-left:25px"></p>
+                    <center><p id="message_checklists" style="margin-top:30px"></p></center>
                 </ul>
             </div>
         </div>

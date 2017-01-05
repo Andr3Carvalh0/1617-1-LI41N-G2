@@ -21,8 +21,8 @@ public class ChecklistTest {
 
     private final String TEST_NAME = "SQLTest";
     private final String TEST_DESC = "DESCRIPTION";
-    private final String TEST_DATE = "06/10/2016";
-    private final String EXPECTED_DATE = "06-10-2016";
+    private final String TEST_DATE = "06-10-2022";
+    private final String EXPECTED_DATE = "06-10-2022";
 
     private int getLastInsertedChecklist(Connection con) throws SQLException {
         String s0 = "select max(Cl_id) from checklist";
@@ -251,15 +251,16 @@ public class ChecklistTest {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
-            String[] dates = {"2016-10-31", "2016-10-21", "2017-10-31", "2016-11-4"};
+            String[] dates = {"31-10-2018", "21-10-2017", "28-10-2017", "11-11-2017"};
             con = GetConnection.connect(true);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 4; i++) {
                 map.put("dueDate", dates[i]);
                 TestChecklistsIds[i] = (int) pc.execute(map, con);
+
             }
             LinkedList cl = (LinkedList) new GetChecklistsOpenSortedDueDate().execute(map, con);
-            int[] sortedIds = {1, 0, 3, 2};
+            int[] sortedIds = {1, 2, 3, 0};
             for (int i = 0; i < 4; i++) {
                 assertEquals(((Checklist)cl.get(i)).getId(), TestChecklistsIds[sortedIds[i]]);
                 assertEquals(((Checklist)cl.get(i)).isClosed(), false);
