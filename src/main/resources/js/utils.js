@@ -1,5 +1,6 @@
 "use strict"
 
+
 function prepareChecklist_Detailed(){
     $(document).ready(function(){
         // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
@@ -10,7 +11,7 @@ function prepareChecklist_Detailed(){
         $('select').material_select()
     });
 
-    $('.datepicker').pickadate({min: new Date()})
+    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy'})
 
     if(document.getElementById("ul_Tasks") != null){
 
@@ -53,7 +54,7 @@ function prepareView_Checklist(){
         $('.modal').modal();
     });
 
-    $('.datepicker').pickadate({min: new Date(), dateFormat: 'yy-mm-dd' })
+    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy' })
 
     const currentPage = window.location.pathname
     const pages = ["/checklists", "/checklists/closed", "/checklists/open/sorted/duedate", "/checklists/open/sorted/noftasks"]
@@ -108,7 +109,7 @@ function prepareTemplate_Detailed(){
         $('.modal').modal();
     });
 
-    $('.datepicker').pickadate({min: new Date(), dateFormat: 'yy-mm-dd'})
+    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy'})
 
     if(document.getElementById("tasks").children.length <= 2){
         document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
@@ -150,21 +151,103 @@ function validateSubmission_Checklist(){
         return false
     }
 
-    return false
-//    form.submit()
+    form.submit()
 
 }
 
 function validateSubmission_Template(){
-    return false
+    let message = "You have to fill the following fields: "
+    let hasMessage = false
 
+    let form =  document.getElementById("template_submit")
+
+    let name = document.getElementById("template_name").value
+    let description = document.getElementById("template_description").value
+
+    if(!name || 0 === name.length){
+        message += "Name"
+
+        hasMessage = true
+    }
+
+    if(!description || 0 === description.length){
+        if(hasMessage)
+            message += ", "
+
+        message += "Description"
+        hasMessage = true
+    }
+
+    if(hasMessage){
+        alert(message)
+        return false
+    }
+
+    form.submit()
 }
 
 function validateSubmission_Tag(){
-    return false
+    let message = "You have to fill the following fields: "
+    let hasMessage = false
+
+    let form =  document.getElementById("tag_submit")
+
+    let name = document.getElementById("tag_name").value
+    let color = document.getElementById("tag_color").value
+
+    console.log(color)
+
+    if(!name || 0 === name.length){
+        message += "Name"
+
+        hasMessage = true
+    }
+
+    if(!color || 0 === color.length){
+        if(hasMessage)
+            message += ", "
+
+        message += "Color"
+        hasMessage = true
+    }
+
+    if(hasMessage){
+        alert(message)
+        return false
+    }
+
+    form.submit()
 
 }
 
 function validateSubmission_Task(){
-    return false
+    let message = "You have to fill the following fields: "
+    let hasMessage = false
+
+    let form =  document.getElementById("task_submit")
+
+    let name = document.getElementById("task_name").value
+    let description = document.getElementById("task_description").value
+    let duedate = document.getElementById("task_duedate").value
+
+    if(!name || 0 === name.length){
+        message += "Name"
+
+        hasMessage = true
+    }
+
+    if(!description || 0 === description.length){
+        if(hasMessage)
+            message += ", "
+
+        message += "Description"
+        hasMessage = true
+    }
+
+    if(hasMessage){
+        alert(message)
+        return false
+    }
+
+    form.submit()
 }
