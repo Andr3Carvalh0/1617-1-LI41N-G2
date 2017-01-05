@@ -1,0 +1,1 @@
+web: java -cp build/classes/main;vendor/main/* pt.isel.ls.App LISTEN /
