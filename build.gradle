@@ -34,6 +34,6 @@ classes.dependsOn copyTask
 
 mainClassName = "pt.isel.ls.App"
 
-task stage(dependsOn: ['clean', 'installApp'])
+task stage(dependsOn: ['clean', 'installApp', 'copyTask'])
 
 test.dependsOn initDb
