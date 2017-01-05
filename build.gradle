@@ -4,8 +4,6 @@ apply plugin: 'application'
 
 version = '1.0'
 
-sourceSets.main.resources.srcDirs = ["src/main/views/"]
-
 task copyTask(type: Copy) {
 	from 'src/main/resources'
 	into 'build/classes/main/'
@@ -30,10 +28,18 @@ dependencies {
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
 
-classes.dependsOn copyTask
+
+task(ddd){
+println sourceSets.main.resources.dump()
+println sourceSets.main.output.resourcesDir
+
+}
+
+
+build.dependsOn ddd
 
 mainClassName = "pt.isel.ls.App"
 
-task stage(dependsOn: ['clean', 'installApp', 'copyTask'])
+task stage(dependsOn: ['clean', 'installApp'])
 
 test.dependsOn initDb

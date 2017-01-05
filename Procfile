@@ -1,1 +1,1 @@
-web: java -cp build/classes/main;vendor/main/* pt.isel.ls.App LISTEN /
+web: app/build/install/1617-1-LI41N-G2/bin/1617-1-LI41N-G2 LISTEN /

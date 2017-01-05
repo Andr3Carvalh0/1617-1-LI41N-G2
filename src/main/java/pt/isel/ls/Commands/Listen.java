@@ -9,7 +9,7 @@ public class Listen extends Command {
     private final String[] path = {"LISTEN", "/", "port"};
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {
-        int port = params.get("port") == null ? 8080 : Integer.parseInt(params.get("port"));
+        int port = params.get("port") == null ? Integer.parseInt(System.getenv("PORT")) : Integer.parseInt(params.get("port"));
 
         HTTPServer server = new HTTPServer(port);
         server.run();
