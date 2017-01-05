@@ -29,17 +29,8 @@ dependencies {
 }
 
 
-task(ddd){
-println sourceSets.main.resources.dump()
-println sourceSets.main.output.resourcesDir
-
-}
-
-
-build.dependsOn ddd
-
 mainClassName = "pt.isel.ls.App"
 
-task stage(dependsOn: ['clean', 'installApp'])
+task stage(dependsOn: ['clean', 'build', 'installApp'])
 
 test.dependsOn initDb
