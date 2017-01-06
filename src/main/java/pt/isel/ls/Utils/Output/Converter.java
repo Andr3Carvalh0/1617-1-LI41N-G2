@@ -45,7 +45,7 @@ class Converter {
             if (isPresentInCache(baseFile, file_cache)) {
                 message = file_cache.get(baseFile);
             } else {
-
+                System.out.println(ClassLoader.getSystemResources(baseFile));
                 io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
 
                 while (io.hasNextLine()) {
