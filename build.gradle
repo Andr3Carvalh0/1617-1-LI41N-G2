@@ -26,6 +26,6 @@ dependencies {
 
 mainClassName = "pt.isel.ls.App"
 
-task stage(dependsOn: ['clean', 'build', 'installApp'])
+task stage(dependsOn: ['clean','installApp'])
 
 test.dependsOn initDb
