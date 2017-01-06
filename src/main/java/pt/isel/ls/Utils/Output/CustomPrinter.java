@@ -6,6 +6,7 @@ import pt.isel.ls.Utils.Output.Dummies.WrapperJsonError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperServerError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperTagsDetailed;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -71,7 +72,7 @@ public class CustomPrinter {
             obj = new WrapperJsonError(executedCommand);
         }
 
-        return run(obj, file_location, false, CustomPrinter.class.getClassLoader().getResource(path + "json/" + file + ".json").getPath());
+        return run(obj, file_location, false, path + "json/" + file + ".json");
     }
 
     private String toHTML(Object obj, String file_location, String query) throws Exception {
@@ -112,10 +113,7 @@ public class CustomPrinter {
             }
         }
 
-        System.out.println("OLA CARALHO!");
-        System.out.println(CustomPrinter.class.getClassLoader().getResource("./"));
-        
-        return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
+        return run(obj, file_location, true, path + "html/" + file + ".html");
     }
 
     private String run(Object obj, String file_location, boolean isHTML, String template) throws Exception {

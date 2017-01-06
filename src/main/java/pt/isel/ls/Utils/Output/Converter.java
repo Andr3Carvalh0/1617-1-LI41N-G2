@@ -45,7 +45,8 @@ class Converter {
             if (isPresentInCache(baseFile, file_cache)) {
                 message = file_cache.get(baseFile);
             } else {
-                io = new Scanner(new File(baseFile));
+
+                io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
 
                 while (io.hasNextLine()) {
                     message.add(io.nextLine() + "\n");
@@ -53,9 +54,7 @@ class Converter {
 
                 file_cache.put(baseFile, message);
             }
-        } catch (FileNotFoundException e) {
-            throw new Exception("Cannot read the template file: " + baseFile);
-        } finally {
+        }finally {
             if (io != null) {
                 io.close();
             }

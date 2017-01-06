@@ -1,5 +1,6 @@
 package pt.isel.ls.Server;
 
+import com.google.common.io.ByteStreams;
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Router;
@@ -57,9 +58,12 @@ public class Service extends HttpServlet {
                     path ="./views/html/about.html";
                 }
 
-                respBody = new String(Files.readAllBytes(Paths.get(Service.class.getClassLoader().getResource(path).getPath())));
-                respBodyBytes = respBody.getBytes(utf8);
+                OutputStream os = resp.getOutputStream();
+                ByteStreams.copy(ClassLoader.getSystemResourceAsStream(path), os);
                 resp.setStatus(200);
+                os.close();
+                return;
+
             }
             //The others...
             else {
