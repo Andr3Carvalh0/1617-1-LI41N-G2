@@ -8,6 +8,7 @@ public class App {
     private static CustomPrinter cPrinter = new CustomPrinter();
 
     public static void main(String[] args) {
+        System.out.println("HAHA! https://media.tenor.co/images/aee72fd7530ce5deae7209ffe6df76c0/raw");
         try {
             if (args.length == 0) {
                 enterInteractiveMode();
