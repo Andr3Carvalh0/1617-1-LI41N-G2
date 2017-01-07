@@ -79,6 +79,8 @@ class Converter {
 
         allocate(baseFile);
 
+        System.out.println("Finalmente consegui ler a merda do ficheiro");
+
         message = replaceFOR(obj, message, marks, marker_begin, marker_end);
 
         message = replaceFlag(obj, message, marks, marker_begin, marker_end, false);
