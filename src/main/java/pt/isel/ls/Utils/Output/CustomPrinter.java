@@ -5,16 +5,14 @@ import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Utils.Output.Dummies.WrapperJsonError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperServerError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperTagsDetailed;
-
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings("ALL")
 public class CustomPrinter {
 
     private Converter converter = new Converter();
-    private final String path = "./views/";
+    private final String path = "views/";
     private String executedCommand;
 
     public String print(Object obj, HashMap<String, String> map, String query) throws Exception {
@@ -113,7 +111,6 @@ public class CustomPrinter {
             }
         }
 
-        System.out.println(path + "html/" + file + ".html");
         return run(obj, file_location, true, path + "html/" + file + ".html");
     }
 

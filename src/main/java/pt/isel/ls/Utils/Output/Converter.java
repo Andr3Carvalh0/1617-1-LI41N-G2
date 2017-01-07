@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -45,25 +47,18 @@ class Converter {
             if (isPresentInCache(baseFile, file_cache)) {
                 message = file_cache.get(baseFile);
             } else {
+                io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
 
-                    //To add support to Heroku
-                    if (ClassLoader.getSystemResource("/") == null) {
-                        ClassLoader cl = this.getClass().getClassLoader();
-                        io = new Scanner(new File(ClassLoader.getSystemResource(baseFile).getPath()));
-                    } else {
 
-                        io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
-                    }
+                while (io.hasNextLine()) {
+                    message.add(io.nextLine() + "\n");
+                }
 
-                    while (io.hasNextLine()) {
-                        message.add(io.nextLine() + "\n");
-                    }
-
-                    file_cache.put(baseFile, message);
+                file_cache.put(baseFile, message);
 
             }
         }catch (Exception e){
-            System.out.println("Nao consigo ler a merda od ficheiro");
+            System.out.println("Nao consigo ler a merda do ficheiro");
             System.out.println("-----------------------------------");
             e.printStackTrace();
         }
@@ -84,8 +79,6 @@ class Converter {
         String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
 
         allocate(baseFile);
-
-        System.out.println("Finalmente consegui ler a merda do ficheiro");
 
         message = replaceFOR(obj, message, marks, marker_begin, marker_end);
 
