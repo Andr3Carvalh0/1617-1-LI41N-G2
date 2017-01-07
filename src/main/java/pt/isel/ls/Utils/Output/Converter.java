@@ -37,7 +37,7 @@ class Converter {
     private static final String lookFor_end_JSON = ">>";
     private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>", "<<#NOT_NULL>>", "<<#REPLACE_NULL>>", "<<#COUNT>>", "<<#REMOVE_ON_LAST>>"};
 
-    private void allocate(String baseFile) throws Exception {
+    private void allocate(String baseFile){
         Scanner io = null;
         try {
             message = new LinkedList<>();
@@ -64,7 +64,13 @@ class Converter {
                     file_cache.put(baseFile, message);
 
             }
-        }finally {
+        }catch (Exception e){
+            System.out.println("Nao consigo ler a merda od ficheiro");
+            System.out.println("-----------------------------------");
+            e.printStackTrace();
+        }
+
+        finally {
             if (io != null) {
                 io.close();
             }
