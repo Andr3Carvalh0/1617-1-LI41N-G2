@@ -45,22 +45,24 @@ class Converter {
             if (isPresentInCache(baseFile, file_cache)) {
                 message = file_cache.get(baseFile);
             } else {
-                System.out.println(ClassLoader.getSystemResource("/").getFile());
 
-                //To add support to Heroku
-                if(ClassLoader.getSystemResource("/").getFile() == null){
-                    ClassLoader cl = this.getClass().getClassLoader();
-                    io = new Scanner(cl.getResourceAsStream(baseFile));
-                }else {
+                    System.out.println(ClassLoader.getSystemResource("/"));
 
-                    io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
-                }
+                    //To add support to Heroku
+                    if (ClassLoader.getSystemResource("/") == null) {
+                        ClassLoader cl = this.getClass().getClassLoader();
+                        io = new Scanner(cl.getResourceAsStream(baseFile));
+                    } else {
 
-                while (io.hasNextLine()) {
-                    message.add(io.nextLine() + "\n");
-                }
+                        io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
+                    }
 
-                file_cache.put(baseFile, message);
+                    while (io.hasNextLine()) {
+                        message.add(io.nextLine() + "\n");
+                    }
+
+                    file_cache.put(baseFile, message);
+
             }
         }finally {
             if (io != null) {
