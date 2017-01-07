@@ -46,12 +46,10 @@ class Converter {
                 message = file_cache.get(baseFile);
             } else {
 
-                    System.out.println(ClassLoader.getSystemResource("/"));
-
                     //To add support to Heroku
                     if (ClassLoader.getSystemResource("/") == null) {
                         ClassLoader cl = this.getClass().getClassLoader();
-                        io = new Scanner(cl.getResourceAsStream(baseFile));
+                        io = new Scanner(new File(ClassLoader.getSystemResource(baseFile).getPath()));
                     } else {
 
                         io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
