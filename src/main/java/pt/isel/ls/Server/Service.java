@@ -52,7 +52,7 @@ public class Service extends HttpServlet {
             }
             //Static files
             else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about")){
-                String path = req.getPathInfo();
+                String path = "js/utils.js";
 
                 if(req.getPathInfo().equals("/about")){
                     path ="views/html/about.html";
