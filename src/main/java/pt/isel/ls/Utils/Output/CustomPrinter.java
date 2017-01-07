@@ -113,7 +113,7 @@ public class CustomPrinter {
             }
         }
 
-        
+        System.out.println(file_location);
         System.out.println(path + "html/" + file + ".html");
         return run(obj, file_location, true, path + "html/" + file + ".html");
     }
