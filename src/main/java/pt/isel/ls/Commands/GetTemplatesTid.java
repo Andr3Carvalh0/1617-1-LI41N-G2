@@ -16,7 +16,7 @@ import java.util.LinkedList;
 public class GetTemplatesTid extends Command {
     private final String[] path = {"", "templates", "{tid}"};
 
-    private static final DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws Exception {

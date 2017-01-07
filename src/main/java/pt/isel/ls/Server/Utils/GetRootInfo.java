@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetRootInfo extends Command {
-    private static final DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
     public Object execute(HashMap<String, String> params, Connection con) throws SQLException {

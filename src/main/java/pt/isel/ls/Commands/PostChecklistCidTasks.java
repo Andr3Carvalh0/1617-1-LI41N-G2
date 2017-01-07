@@ -32,7 +32,7 @@ public class PostChecklistCidTasks extends Command {
 
                 if(date != null){
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-MM");
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 
                     Date checklist_date = sdf.parse(date);
                     Date inserted = sdf1.parse( params.get("dueDate"));

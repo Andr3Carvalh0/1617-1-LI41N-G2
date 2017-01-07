@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetChecklists extends Command {
-    private static final DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
     private final String[] path = {"", "checklists"};
 
     @Override
