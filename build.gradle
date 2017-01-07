@@ -28,6 +28,7 @@ mainClassName = "pt.isel.ls.App"
 
 task stage(dependsOn: ['clean','installApp', 'copyTask', 'startScripts'])
 
+//Heroku related
 task copyTask(type: Copy) {
 	dependsOn installApp
 	from 'src/main/resources'
