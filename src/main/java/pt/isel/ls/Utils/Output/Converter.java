@@ -46,7 +46,15 @@ class Converter {
                 message = file_cache.get(baseFile);
             } else {
                 System.out.println(ClassLoader.getSystemResource("/").getFile());
-                io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
+
+                //To add support to Heroku
+                if(ClassLoader.getSystemResource("/").getFile() == null){
+                    ClassLoader cl = this.getClass().getClassLoader();
+                    io = new Scanner(cl.getResourceAsStream(baseFile));
+                }else {
+
+                    io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
+                }
 
                 while (io.hasNextLine()) {
                     message.add(io.nextLine() + "\n");
