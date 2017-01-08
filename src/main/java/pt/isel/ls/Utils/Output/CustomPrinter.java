@@ -52,7 +52,7 @@ public class CustomPrinter {
                     file = "empty";
                 }
                 else{
-                    String[] req = query.split("/");
+                    String[] req = query.split("/|\\s");
                     file = req[1];
                 }
             } else {
