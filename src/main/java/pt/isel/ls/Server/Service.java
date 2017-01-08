@@ -39,6 +39,7 @@ public class Service extends HttpServlet {
 
             map.put("file-name", req.getHeader("file-name"));
 
+            System.out.println(req.getPathInfo());
             //Handles root view(/)
             if (req.getPathInfo().equals("/")) {
                 Connection con = GetConnection.connect(false);
@@ -53,7 +54,8 @@ public class Service extends HttpServlet {
                 }
             }
             //Static files
-            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about") || req.getPathInfo().contains("/images/") || req.getPathInfo().contains("favicon.ico")){
+
+            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about") || req.getPathInfo().contains("/images/")){
                 String path = req.getPathInfo().substring(1, req.getPathInfo().length());
 
                 System.out.printf(path);
