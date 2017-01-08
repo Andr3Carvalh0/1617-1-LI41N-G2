@@ -1,17 +1,8 @@
 "use strict"
-
+const message_template = "You have to fill the following fields: "
 
 function prepareChecklist_Detailed(){
-    $(document).ready(function(){
-        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
-
-    $(document).ready(function() {
-        $('select').material_select()
-    });
-
-    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy'})
+    prepareMaterialCSS()
 
     if(document.getElementById("ul_Tasks") != null){
 
@@ -49,12 +40,7 @@ function prepareChecklist_Detailed(){
 
 
 function prepareView_Checklist(){
-    $(document).ready(function(){
-        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
-
-    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy' })
+    prepareMaterialCSS()
 
     const currentPage = window.location.pathname
     const pages = ["/checklists", "/checklists/closed", "/checklists/open/sorted/duedate", "/checklists/open/sorted/noftasks"]
@@ -70,11 +56,7 @@ function prepareView_Checklist(){
 }
 
 function prepareTag_Detailed(){
-
-    $(document).ready(function(){
-        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
+    prepareMaterialCSS()
 
     if(document.getElementById("checklists").children.length <= 2){
         document.getElementById("message_checklists").innerHTML = "<strong>There aren't any Checklists associated with this Tag.</strong>"
@@ -82,34 +64,15 @@ function prepareTag_Detailed(){
 }
 
 function prepareView_Tag(){
-    $(document).ready(function(){
-        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
-
-    $(document).ready(function() {
-        $('select').material_select();
-    });
+    prepareMaterialCSS()
 }
 
 function prepareView_Template(){
-    $(document).ready(function(){
-        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
-
-    $(document).ready(function() {
-        $('select').material_select();
-    });
+    prepareMaterialCSS()
 }
 
 function prepareTemplate_Detailed(){
-    $(document).ready(function(){
-        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
-
-    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy'})
+    prepareMaterialCSS()
 
     if(document.getElementById("tasks").children.length <= 2){
         document.getElementById("message_tasks").innerHTML = "<strong>There aren't any Tasks associated with this Template.</strong>"
@@ -119,11 +82,22 @@ function prepareTemplate_Detailed(){
     }
 }
 
+function prepareMaterialCSS(){
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
 
+    $('.datepicker').pickadate({min: new Date(), format: 'dd-mm-yyyy', container: 'body'})
+
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+}
 
 
 function validateSubmission_Checklist(){
-    let message = "You have to fill the following fields: "
+    let message = message_template
     let hasMessage = false
 
     let form =  document.getElementById("checklist_submit")
@@ -147,7 +121,7 @@ function validateSubmission_Checklist(){
     }
 
     if(hasMessage){
-        alert(message)
+        Materialize.toast(message, 4000)
         return false
     }
 
@@ -156,7 +130,7 @@ function validateSubmission_Checklist(){
 }
 
 function validateSubmission_Template(){
-    let message = "You have to fill the following fields: "
+    let message = message_template
     let hasMessage = false
 
     let form =  document.getElementById("template_submit")
@@ -179,7 +153,7 @@ function validateSubmission_Template(){
     }
 
     if(hasMessage){
-        alert(message)
+        Materialize.toast(message, 4000)
         return false
     }
 
@@ -187,7 +161,7 @@ function validateSubmission_Template(){
 }
 
 function validateSubmission_Tag(){
-    let message = "You have to fill the following fields: "
+    let message = message_template
     let hasMessage = false
 
     let form =  document.getElementById("tag_submit")
@@ -212,7 +186,7 @@ function validateSubmission_Tag(){
     }
 
     if(hasMessage){
-        alert(message)
+        Materialize.toast(message, 4000)
         return false
     }
 
@@ -221,7 +195,7 @@ function validateSubmission_Tag(){
 }
 
 function validateSubmission_Task(){
-    let message = "You have to fill the following fields: "
+    let message = message_template
     let hasMessage = false
 
     let form =  document.getElementById("task_submit")
@@ -245,7 +219,7 @@ function validateSubmission_Task(){
     }
 
     if(hasMessage){
-        alert(message)
+        Materialize.toast(message, 4000)
         return false
     }
 

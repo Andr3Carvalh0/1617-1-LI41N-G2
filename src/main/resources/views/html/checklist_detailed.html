@@ -5,7 +5,7 @@
         {{#FOR}}{{Checklist}}
         <title>Checklist "{{name}}"</title>
         {{#END}}{{Checklist}}
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
@@ -90,7 +90,7 @@
                     <form id="tag_submit" action="/checklists/{{id}}/tags/create" method="post">
                         {{#END}}{{Checklist}}
                         <div class="input-field">
-                            <input type="text" id="tag_name" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                            <input type="text" id="tag_name" class="form-control" name="name" placeholder="Name">
                         </div>
                         <br>
                         <div class="input-field">
@@ -135,12 +135,11 @@
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="input">
-                                        <input type="text" id="task_name" class="form-control" name="name"
-                                               required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                        <input type="text" id="task_name" class="form-control" name="name" placeholder="Name">
                                     </div>
                                     <br>
                                     <div class="input">
-                                        <input type="text" id="task_description" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                        <input type="text" id="task_description" class="form-control" name="description" placeholder="Description">
                                     </div>
                                     <br>
                                     <div class="input">
