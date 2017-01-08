@@ -53,9 +53,10 @@ public class Service extends HttpServlet {
                 }
             }
             //Static files
-            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about") || req.getPathInfo().contains("/images/") ){
+            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about") || req.getPathInfo().contains("/images/") || req.getPathInfo().contains("favicon.ico")){
                 String path = req.getPathInfo().substring(1, req.getPathInfo().length());
 
+                System.out.printf(path);
                 if(req.getPathInfo().equals("/about")){
                     path ="views/html/about.html";
                 }
