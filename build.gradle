@@ -27,9 +27,8 @@ task initDb(type:Exec) {
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
-    copyTask
 }
 
-classes.dependsOn copyTask
+//classes.dependsOn copyTask
 
 test.dependsOn initDb

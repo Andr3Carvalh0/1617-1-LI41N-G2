@@ -1,5 +1,6 @@
 package pt.isel.ls.Server;
 
+import com.google.common.io.ByteStreams;
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Router;
@@ -28,7 +29,7 @@ public class Service extends HttpServlet {
 
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
 
-            String respBody;
+            String respBody = "";
             byte[] respBodyBytes;
             HashMap<String, String> map = new HashMap<>();
 
@@ -56,10 +57,13 @@ public class Service extends HttpServlet {
                 if(req.getPathInfo().equals("/about")){
                     path ="./views/html/about.html";
                 }
-
-                respBody = new String(Files.readAllBytes(Paths.get(Service.class.getClassLoader().getResource(path).getPath())));
+                OutputStream os = resp.getOutputStream();
+                ByteStreams.copy(Service.class.getClassLoader().getResourceAsStream(path), os);
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(200);
+                os.write(respBodyBytes);
+                os.close();
+                return;
             }
             //The others...
             else {
