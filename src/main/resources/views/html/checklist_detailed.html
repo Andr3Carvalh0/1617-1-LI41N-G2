@@ -5,14 +5,14 @@
         {{#FOR}}{{Checklist}}
         <title>Checklist "{{name}}"</title>
         {{#END}}{{Checklist}}
-        
+        <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <!--Import Google Icon Font-->
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <script src="/js/utils.js"></script>
     </head>
@@ -63,6 +63,7 @@
                     <li class="collection-item avatar">
                         <i class="material-icons circle">list</i>
                         <span class="title"><a href="/tags/{{Tg_id}}">{{Tg_name}}</a> - <a href="/tags/{{Tg_id}}/checklists">Detailed</a></span>
+                         <p><strong>Color: </strong><button type="button" class="btn-floating btn-large waves-effect waves-light {{Tg_color}}" style="margin-bottom:3px; height:12px;width:12px"></button></p>
                     </li>
                     {{#END}}{{Tag}}
                     <li><p id="message_tags" style="margin-top:30px;margin-left:25px"></p></li>
@@ -89,27 +90,27 @@
                     <form id="tag_submit" action="/checklists/{{id}}/tags/create" method="post">
                         {{#END}}{{Checklist}}
                         <div class="input-field">
-                            <input type="text" id="tag_name" class="form-control" name="name" required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                            <input type="text" id="tag_name" class="form-control" name="name" placeholder="Name">
                         </div>
                         <br>
                         <div class="input-field">
                             <select name ="color" id="tag_color">
                                 <option value="" disabled selected>Choose your option</option>
-                                <option data-icon="http://www.colorhexa.com/f44336.png" class="left circle" value="red">Red</option>
-                                <option data-icon="http://www.colorhexa.com/e91e63.png" class="left circle" value="pink">Pink</option>
-                                <option data-icon="http://www.colorhexa.com/9c27b0.png" class="left circle" value="purple">Purple</option>
-                                <option data-icon="http://www.colorhexa.com/3f51b5.png" class="left circle" value="indigo">Indigo</option>
-                                <option data-icon="http://www.colorhexa.com/2196f3.png" class="left circle" value="blue">Blue</option>
-                                <option data-icon="http://www.colorhexa.com/00bcd4.png" class="left circle" value="cyan">Cyan</option>
-                                <option data-icon="http://www.colorhexa.com/009688.png" class="left circle" value="teal">Teal</option>
-                                <option data-icon="http://www.colorhexa.com/4caf50.png" class="left circle" value="green">Green</option>
-                                <option data-icon="http://www.colorhexa.com/ffeb3b.png" class="left circle" value="yellow">Yellow</option>
-                                <option data-icon="http://www.colorhexa.com/ffc107.png" class="left circle" value="amber">Amber</option>
-                                <option data-icon="http://www.colorhexa.com/ff9800.png" class="left circle" value="orange">Orange</option>
-                                <option data-icon="http://www.colorhexa.com/ff5722.png" class="left circle" value="deep-orange">Deep Orange</option>
-                                <option data-icon="http://www.colorhexa.com/795548.png" class="left circle" value="brown">Brown</option>
-                                <option data-icon="http://www.colorhexa.com/9e9e9e.png" class="left circle" value="grey">Grey</option>
-                                <option data-icon="http://www.colorhexa.com/607d8b.png" class="left circle" value="blue-grey">Blue Grey</option>
+                                <option data-icon="/images/f44336.png" class="left circle" value="red">Red</option>
+                                <option data-icon="/images/e91e63.png" class="left circle" value="pink">Pink</option>
+                                <option data-icon="/images/9c27b0.png" class="left circle" value="purple">Purple</option>
+                                <option data-icon="/images/3f51b5.png" class="left circle" value="indigo">Indigo</option>
+                                <option data-icon="/images/2196f3.png" class="left circle" value="blue">Blue</option>
+                                <option data-icon="/images/00bcd4.png" class="left circle" value="cyan">Cyan</option>
+                                <option data-icon="/images/009688.png" class="left circle" value="teal">Teal</option>
+                                <option data-icon="/images/4caf50.png" class="left circle" value="green">Green</option>
+                                <option data-icon="/images/ffeb3b.png" class="left circle" value="yellow">Yellow</option>
+                                <option data-icon="/images/ffc107.png" class="left circle" value="amber">Amber</option>
+                                <option data-icon="/images/ff9800.png" class="left circle" value="orange">Orange</option>
+                                <option data-icon="/images/ff5722.png" class="left circle" value="deep-orange">Deep Orange</option>
+                                <option data-icon="/images/795548.png" class="left circle" value="brown">Brown</option>
+                                <option data-icon="/images/9e9e9e.png" class="left circle" value="grey">Grey</option>
+                                <option data-icon="/images/607d8b.png" class="left circle" value="blue-grey">Blue Grey</option>
                             </select>
                             <label>Select a Color</label>
                         </div>
@@ -134,12 +135,11 @@
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="input">
-                                        <input type="text" id="task_name" class="form-control" name="name"
-                                               required="required" pattern="[A-Za-z0-9]{1,80}" placeholder="Name">
+                                        <input type="text" id="task_name" class="form-control" name="name" placeholder="Name">
                                     </div>
                                     <br>
                                     <div class="input">
-                                        <input type="text" id="task_description" class="form-control" name="description" required="required" pattern="[A-Za-z0-9]{1,4000}" placeholder="Description">
+                                        <input type="text" id="task_description" class="form-control" name="description" placeholder="Description">
                                     </div>
                                     <br>
                                     <div class="input">

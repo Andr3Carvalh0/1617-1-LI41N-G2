@@ -7,6 +7,8 @@ import pt.isel.ls.Router;
 import pt.isel.ls.Server.Utils.GetRootInfo;
 import pt.isel.ls.Utils.GetConnection;
 import pt.isel.ls.Utils.Output.CustomPrinter;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,7 @@ public class Service extends HttpServlet {
 
             map.put("file-name", req.getHeader("file-name"));
 
+            System.out.println(req.getPathInfo());
             //Handles root view(/)
             if (req.getPathInfo().equals("/")) {
                 Connection con = GetConnection.connect(false);
@@ -51,17 +54,25 @@ public class Service extends HttpServlet {
                 }
             }
             //Static files
-            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about")){
-                String path = "." + req.getPathInfo();
+            else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about") || req.getPathInfo().contains("/images/")){
+                String path = req.getPathInfo().substring(1, req.getPathInfo().length());
 
+                System.out.println(path);
                 if(req.getPathInfo().equals("/about")){
-                    path ="./views/html/about.html";
-                }
+                    path ="views/html/about.html";
+                }                        /*
                 OutputStream os = resp.getOutputStream();
                 ByteStreams.copy(Service.class.getClassLoader().getResourceAsStream(path), os);
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(200);
                 os.write(respBodyBytes);
+                os.close();
+                return;
+*/
+
+                OutputStream os = resp.getOutputStream();
+                ByteStreams.copy(ClassLoader.getSystemResourceAsStream(path), os);
+                resp.setStatus(200);
                 os.close();
                 return;
             }
@@ -172,6 +183,13 @@ public class Service extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doDelete(req, resp);
+        //Maybe add support for deletion if we have
     }
 
     private String rebuildURL(String pathInfo) {

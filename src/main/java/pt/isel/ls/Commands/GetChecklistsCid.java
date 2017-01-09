@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GetChecklistsCid extends Command {
-    private static final DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
+    private static final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
     private final String[] path = {"", "checklists", "{cid}"};
 
     @Override

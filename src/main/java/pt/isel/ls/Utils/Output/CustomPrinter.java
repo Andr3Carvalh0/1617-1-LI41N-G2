@@ -5,15 +5,14 @@ import pt.isel.ls.Dtos.Tag;
 import pt.isel.ls.Utils.Output.Dummies.WrapperJsonError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperServerError;
 import pt.isel.ls.Utils.Output.Dummies.WrapperTagsDetailed;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings("ALL")
 public class CustomPrinter {
 
     private Converter converter = new Converter();
-    private final String path = "./views/";
+    private final String path = "views/";
     private String executedCommand;
 
     public String print(Object obj, HashMap<String, String> map, String query) throws Exception {
@@ -53,7 +52,7 @@ public class CustomPrinter {
                     file = "empty";
                 }
                 else{
-                    String[] req = query.split("/");
+                    String[] req = query.split("/|\\s");
                     file = req[1];
                 }
             } else {
@@ -71,7 +70,7 @@ public class CustomPrinter {
             obj = new WrapperJsonError(executedCommand);
         }
 
-        return run(obj, file_location, false, CustomPrinter.class.getClassLoader().getResource(path + "json/" + file + ".json").getPath());
+        return run(obj, file_location, false, path + "json/" + file + ".json");
     }
 
     private String toHTML(Object obj, String file_location, String query) throws Exception {
@@ -111,7 +110,8 @@ public class CustomPrinter {
                 }
             }
         }
-        return run(obj, file_location, true, CustomPrinter.class.getClassLoader().getResource(path + "html/" + file + ".html").getPath());
+
+        return run(obj, file_location, true, path + "html/" + file + ".html");
     }
 
     private String run(Object obj, String file_location, boolean isHTML, String template) throws Exception {

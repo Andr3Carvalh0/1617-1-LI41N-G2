@@ -8,7 +8,7 @@ public class WrapperServerError {
     private String query;
     private String message;
 
-    private final String[] messages = {"Blame the stupid SQL", "Blame the idiots on Group 2", "Try again", "Just go take a break, and try later"};
+    private final String[] messages = {"Blame the stupid SQL", "Blame the idiots on Group 2", "Try again", "Just take a break, and try later"};
 
     public WrapperServerError(String query){
         this.query = query;

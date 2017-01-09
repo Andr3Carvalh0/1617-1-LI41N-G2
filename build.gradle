@@ -1,14 +1,8 @@
 apply plugin: 'java'
 import org.apache.tools.ant.taskdefs.condition.Os
+apply plugin: 'application'
 
 version = '1.0'
-
-sourceSets.main.resources.srcDirs = ["src/main/views/"]
-
-task copyTask(type: Copy) {
-	from 'src/main/resources'
-	into 'build/classes/main/'
-}
 
 task initDb(type:Exec) {
 	if (Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -18,7 +12,7 @@ task initDb(type:Exec) {
 			credentials.putAt(i, varsArray[i].split("=")[1])
 		}
 
-		commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./Table_Creation_Script.sql"
+		commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./scripts/Table_Creation_Script.sql"
 	}else{
 		commandLine "echo", "The current OS can´t exexute the setup command to execute initDB.Please do it yourself!"
 	}
@@ -29,6 +23,24 @@ dependencies {
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
 
-//classes.dependsOn copyTask
+mainClassName = "pt.isel.ls.App"
+
+task stage(dependsOn: ['clean','installApp', 'copyTask', 'startScripts'])
+
+//Heroku related
+task copyTask(type: Copy) {
+	dependsOn installApp
+	from 'src/main/resources'
+	into 'build/install/1617-1-LI41N-G2/lib/resources'
+}
+
+startScripts {
+  doLast {
+    def windowsScriptFile = file getWindowsScript()
+    def unixScriptFile    = file getUnixScript()
+    windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\1617-1-LI41N-G2-1.0.jar', '%APP_HOME%\\lib\\1617-1-LI41N-G2-1.0.jar:%APP_HOME%\\lib\\resources\\main')
+    unixScriptFile.text  = unixScriptFile.text.replace('$APP_HOME/lib/1617-1-LI41N-G2-1.0.jar', '$APP_HOME/lib/1617-1-LI41N-G2-1.0.jar:%APP_HOME%/lib/resources/main')
+  }
+}
 
 test.dependsOn initDb

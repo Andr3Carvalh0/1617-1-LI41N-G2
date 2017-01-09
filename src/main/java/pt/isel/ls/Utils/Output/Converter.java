@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -37,7 +39,7 @@ class Converter {
     private static final String lookFor_end_JSON = ">>";
     private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>", "<<#NOT_NULL>>", "<<#REPLACE_NULL>>", "<<#COUNT>>", "<<#REMOVE_ON_LAST>>"};
 
-    private void allocate(String baseFile) throws Exception {
+    private void allocate(String baseFile){
         Scanner io = null;
         try {
             message = new LinkedList<>();
@@ -45,17 +47,23 @@ class Converter {
             if (isPresentInCache(baseFile, file_cache)) {
                 message = file_cache.get(baseFile);
             } else {
-                io = new Scanner(new File(baseFile));
+                io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
+
 
                 while (io.hasNextLine()) {
                     message.add(io.nextLine() + "\n");
                 }
 
                 file_cache.put(baseFile, message);
+
             }
-        } catch (FileNotFoundException e) {
-            throw new Exception("Cannot read the template file: " + baseFile);
-        } finally {
+        }catch (Exception e){
+            System.out.println("Nao consigo ler a merda do ficheiro");
+            System.out.println("-----------------------------------");
+            e.printStackTrace();
+        }
+
+        finally {
             if (io != null) {
                 io.close();
             }
