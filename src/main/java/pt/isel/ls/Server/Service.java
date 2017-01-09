@@ -1,6 +1,8 @@
 package pt.isel.ls.Server;
 
 import com.google.common.io.ByteStreams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pt.isel.ls.CommandParser;
 import pt.isel.ls.Commands.Command;
 import pt.isel.ls.Router;
@@ -15,21 +17,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Service extends HttpServlet {
     private static CustomPrinter cPrinter = new CustomPrinter();
+    private Logger logger = LoggerFactory.getLogger(Service.class);
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            logger.info("GET: request to: " + req.getPathInfo());
             Charset utf8 = Charset.forName("utf-8");
 
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
+            logger.info("GET: The request will be in the following format: " + resp.getContentType());
 
             String respBody = "";
             byte[] respBodyBytes;
@@ -41,6 +44,7 @@ public class Service extends HttpServlet {
 
             //Handles root view(/)
             if (req.getPathInfo().equals("/")) {
+                logger.info("GET: Attempting to access main view!");
                 Connection con = GetConnection.connect(false);
                 try {
                     respBody = cPrinter.print(new GetRootInfo().execute(null, con), map, req.getRequestURI());
@@ -54,12 +58,14 @@ public class Service extends HttpServlet {
             }
             //Static files
             else if(req.getPathInfo().contains("/js/") || req.getPathInfo().equals("/about") || req.getPathInfo().contains("/images/")){
+                logger.info("GET: Attempting to access static file!");
                 String path = req.getPathInfo().substring(1, req.getPathInfo().length());
 
                 if(req.getPathInfo().equals("/about")){
                     path ="views/html/about.html";
                 }
 
+                logger.info("GET: The static file have this path: " + path);
                 OutputStream os = resp.getOutputStream();
                 ByteStreams.copy(ClassLoader.getSystemResourceAsStream(path), os);
                 resp.setStatus(200);
@@ -68,23 +74,28 @@ public class Service extends HttpServlet {
             }
             //The others...
             else {
+                logger.info("GET: Attempting to access dynamic file!");
                 CommandParser cparser = new CommandParser(new String[]{req.getMethod(), req.getPathInfo(), getContentType(req.getHeader("accept"))});
                 Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
                 Command c = r.Route();
+                logger.info("Command to run: " + c);
                 try {
                     Object obj = r.run(c);
                     if (c == null) {
                         respBody = cPrinter.print("not_found", map, req.getRequestURI());
-
+                        logger.info("GET: The path provider isnt valid.404 Error!");
                         respBodyBytes = respBody.getBytes(utf8);
                         resp.setStatus(404);
 
                     } else {
+
+                        logger.info("GET: Attempting to construct the file, with the info from the DB!");
                         respBody = cPrinter.print(obj, map, req.getRequestURI());
                         respBodyBytes = respBody.getBytes(utf8);
                         resp.setStatus(200);
                     }
                 } catch (Exception e) {
+                    logger.info("GET: Server Error: " + e.getMessage());
                     respBody = cPrinter.print(null, map, req.getRequestURI());
 
                     respBodyBytes = respBody.getBytes(utf8);
@@ -99,12 +110,14 @@ public class Service extends HttpServlet {
             os.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("GET: Something went wrong: " + e.getMessage());
         }
 
     }
 
     private String getContentType(String accept) {
+
+
         if (accept.contains("text/html"))
             return "text/html";
 
@@ -120,10 +133,12 @@ public class Service extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            logger.info("POST request to: " + req.getPathInfo());
             Map<String, String[]> col = req.getParameterMap();
             Charset utf8 = Charset.forName("utf-8");
 
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
+            logger.info("POST: The request will be in the following format: " + resp.getContentType());
 
             String respBody;
             byte[] respBodyBytes;
@@ -138,16 +153,17 @@ public class Service extends HttpServlet {
             CommandParser cparser = new CommandParser(new String[]{req.getMethod(), req.getPathInfo(), params});
             Router r = new Router(cparser.getMethod(), cparser.getPath(), cparser.getParams());
             Command c = r.Route();
+            logger.info("Command to run: " + c);
             try {
                 Object obj = r.run(c);
                 if (c == null) {
                     respBody = cPrinter.print("not_found", map, req.getRequestURI());
-
+                    logger.info("POST: The path provider isnt valid.404 Error!");
                     respBodyBytes = respBody.getBytes(utf8);
                     resp.setStatus(404);
 
                 } else {
-                    System.out.println(obj);
+                    logger.info("POST: result from executing the command: " + obj);
                     if (!req.getPathInfo().matches(".*\\d+.*")) {
                         resp.sendRedirect(req.getPathInfo() + "/" + obj);
                     } else {
@@ -157,7 +173,7 @@ public class Service extends HttpServlet {
                 }
             } catch (Exception e) {
                 respBody = cPrinter.print(null, map, req.getRequestURI());
-
+                logger.info("POST: Server Error: " + e.getMessage());
                 respBodyBytes = respBody.getBytes(utf8);
                 resp.setStatus(500);
 
@@ -169,7 +185,7 @@ public class Service extends HttpServlet {
             os.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("POST: Something went wrong: " + e.getMessage());
         }
     }
 
