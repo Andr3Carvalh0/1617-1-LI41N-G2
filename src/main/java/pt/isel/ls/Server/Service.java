@@ -19,11 +19,13 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class Service extends HttpServlet {
     private static CustomPrinter cPrinter = new CustomPrinter();
     private Logger logger = LoggerFactory.getLogger(Service.class);
+    private HashMap<String, String> file_cache = new HashMap<>();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -188,7 +190,6 @@ public class Service extends HttpServlet {
             logger.info("POST: Something went wrong: " + e.getMessage());
         }
     }
-
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

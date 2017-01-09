@@ -1,12 +1,13 @@
 package pt.isel.ls.Utils.Output;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -22,6 +23,8 @@ import java.util.Scanner;
 class Converter {
     private LinkedList<String> message = new LinkedList<>();
     private static final String privateKey = "self";
+
+    private Logger logger = LoggerFactory.getLogger(Converter.class);
 
     private boolean isHTML;
 
@@ -58,9 +61,7 @@ class Converter {
 
             }
         }catch (Exception e){
-            System.out.println("Nao consigo ler a merda do ficheiro");
-            System.out.println("-----------------------------------");
-            e.printStackTrace();
+            logger.info("Cannot read file.Please make sure that the files are in the classpath");
         }
 
         finally {
