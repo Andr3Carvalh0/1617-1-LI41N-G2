@@ -17,6 +17,7 @@ public class PostChecklistCidTasks extends Command {
 
         String s2 = "select max(Cl_Task_id) from checklist_task";
         String s3 = "select Cl_duedate from checklist where Cl_id = ?";
+        String s4 = "update checklist set Cl_closed = 0 where Cl_id = ?";
 
 
         PreparedStatement ps = con.prepareStatement(s3);
@@ -27,23 +28,31 @@ public class PostChecklistCidTasks extends Command {
             throw new Exception("There isnt any checklist with ID:" + params.get("{cid}"));
         } else {
 
-            if(validDate(params.get("dueDate"))){
-                String date = rs.getString(1);
+            String taskDueDateString = params.get("dueDate");
+            if(validDate(taskDueDateString)){
+                String checklistDueDateString = rs.getString(1);
 
-                if(date != null){
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-MM");
+                if(checklistDueDateString != null){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 
-                    Date checklist_date = sdf.parse(date);
-                    Date inserted = sdf1.parse( params.get("dueDate"));
+                    Date checklistDueDate = sdf.parse(checklistDueDateString);
+                    Date taskDueDate;
+                    if(taskDueDateString != null)
+                        taskDueDate = sdf1.parse(taskDueDateString);
+                    else
+                        taskDueDate = checklistDueDate;
 
-                    if(!inserted.after(checklist_date)){
+                    if(!taskDueDate.after(checklistDueDate)){
                         ps = con.prepareStatement(s1);
                         ps.setString(1, params.get("{cid}"));
                         ps.setInt(2, 0);
                         ps.setString(3, params.get("name"));
                         ps.setString(4, params.get("description"));
-                        ps.setString(5, formatDate(params.get("dueDate")));
+                        if(taskDueDateString != null)
+                            ps.setString(5, formatDate(taskDueDateString));
+                        else
+                            ps.setString(5, checklistDueDateString);
 
                         ps.execute();
 
@@ -53,6 +62,12 @@ public class PostChecklistCidTasks extends Command {
 
                         rs.next();
                         System.out.print("Checklist Task created with ID: ");
+
+                        // / Reopen the checklist when a new task is added
+                        ps = con.prepareStatement(s4);
+                        ps.setString(1, params.get("{cid}"));
+                        ps.execute();
+
                         return rs.getInt(1);
                     }
                     throw new Exception("Its not possible for the task dueDate be greater that Checklist dueDate");
@@ -72,6 +87,12 @@ public class PostChecklistCidTasks extends Command {
 
                     rs.next();
                     System.out.print("Checklist Task created with ID: ");
+
+                    // / Reopen the checklist when a new task is added
+                    ps = con.prepareStatement(s4);
+                    ps.setString(1, params.get("{cid}"));
+                    ps.execute();
+
                     return rs.getInt(1);
                 }
             }

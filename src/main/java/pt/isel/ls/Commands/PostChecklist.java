@@ -14,13 +14,11 @@ public class PostChecklist extends Command {
         String s1 = "insert into checklist(Cl_name, Cl_desc, Cl_duedate) values (? , ?, CAST(? as datetime))";
         String s2 = "select max(Cl_id) from checklist";
 
-        System.out.println(params.get("dueDate"));
         if(validDate(params.get("dueDate"))){
             PreparedStatement ps = con.prepareStatement(s1);
 
             ps.setString(1, params.get("name"));
             ps.setString(2, params.get("description"));
-            System.out.println(formatDate(params.get("dueDate")));
             ps.setString(3, formatDate(params.get("dueDate")));
 
             ps.execute();

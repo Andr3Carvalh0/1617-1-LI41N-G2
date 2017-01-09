@@ -21,8 +21,8 @@ public class ChecklistTest {
 
     private final String TEST_NAME = "SQLTest";
     private final String TEST_DESC = "DESCRIPTION";
-    private final String TEST_DATE = "06-10-2022";
-    private final String EXPECTED_DATE = "06-10-2022";
+    private final String TEST_DATE = "10-06-2022";
+    private final String EXPECTED_DATE = "10-06-2022";
 
     private int getLastInsertedChecklist(Connection con) throws SQLException {
         String s0 = "select max(Cl_id) from checklist";
@@ -35,16 +35,12 @@ public class ChecklistTest {
 
     }
 
-    private void addChecklist(Connection con, String name, String desc, String date) throws SQLException {
-        String s1 = "insert into checklist(Cl_name,  Cl_desc, Cl_duedate) values (?, ?, CAST(? as datetime))";
-        PreparedStatement ps = con.prepareStatement(s1);
-
-        ps.setString(1, name);
-        ps.setString(2, desc);
-        ps.setString(3, date);
-
-        ps.execute();
-
+    private void addChecklist(Connection con, String name, String desc, String date) throws Exception {
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("name", name);
+        map.put("description", desc);
+        map.put("dueDate", date);
+        new PostChecklist().execute(map, con);
     }
 
     private int getLastInsertedCL_Task(Connection con) throws SQLException {
