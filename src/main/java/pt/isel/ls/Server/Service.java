@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class Service extends HttpServlet {
@@ -36,7 +35,7 @@ public class Service extends HttpServlet {
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
             logger.info("GET: The request will be in the following format: " + resp.getContentType());
 
-            String respBody = "";
+            String respBody;
             byte[] respBodyBytes;
             HashMap<String, String> map = new HashMap<>();
 
@@ -229,4 +228,5 @@ public class Service extends HttpServlet {
         return res.length == 5 && (res[1].equals("checklists") && res[2].matches(".*\\d+.*") && res[3].equals("tasks") && res[4].matches(".*\\d+.*"));
 
     }
+
 }
