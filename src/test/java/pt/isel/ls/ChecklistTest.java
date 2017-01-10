@@ -36,7 +36,7 @@ public class ChecklistTest {
     }
 
     private void addChecklist(Connection con, String name, String desc, String date) throws Exception {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         map.put("name", name);
         map.put("description", desc);
         map.put("dueDate", date);
@@ -75,10 +75,18 @@ public class ChecklistTest {
 
     }
 
+    private boolean getTaskIsClosedById(String cid, String lid, Connection con) throws SQLException {
+        PreparedStatement ps = con.prepareStatement("select Cl_Task_Closed from checklist_task where Cl_id = " + cid + " and Cl_Task_id = " + lid);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1) == 1;
+    }
+
     @Test
     public void testGetChecklist() throws Exception {
         try {
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             addChecklist(con, TEST_NAME, TEST_DESC, TEST_DATE);
 
             LinkedList result = (LinkedList) new GetChecklists().execute(null, con);
@@ -90,13 +98,7 @@ public class ChecklistTest {
 
         } finally {
             if (con != null) {
-                int id = getLastInsertedChecklist(con);
-
-                //Delete the test entry
-                String s1 = "delete from checklist where Cl_id = ?";
-                PreparedStatement ps = con.prepareStatement(s1);
-                ps.setInt(1, id);
-                ps.execute();
+                con.rollback();
                 con.close();
             }
         }
@@ -112,20 +114,13 @@ public class ChecklistTest {
             map.put("dueDate", TEST_DATE);
 
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             int result = (int) new PostChecklist().execute(map, con);
             assertEquals(getLastInsertedChecklist(con), result);
 
         } finally {
             if (con != null) {
-
-                int id = getLastInsertedChecklist(con);
-
-                //Delete the test entry
-                String s1 = "delete from checklist where Cl_id = ?";
-                PreparedStatement ps = con.prepareStatement(s1);
-                ps.setInt(1, id);
-
-                ps.execute();
+                con.rollback();
                 con.close();
             }
         }
@@ -135,6 +130,7 @@ public class ChecklistTest {
     public void testPostChecklistsCidTasksLid() throws Exception {
         try {
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
 
             addChecklist(con, TEST_NAME, TEST_DESC, TEST_DATE);
             String cid = getLastInsertedChecklist(con) + "";
@@ -151,22 +147,11 @@ public class ChecklistTest {
             assertEquals(true, getTaskIsClosedById(cid, lid, con));
         } finally {
             if (con != null) {
-                //2º - Apagar checklist criada.
-                String s = "delete from checklist where cl_id = " + getLastInsertedChecklist(con);
-                PreparedStatement ps = con.prepareStatement(s);
-                ps.execute();
-
+                con.rollback();
                 //3º - Fechar connecção.
                 con.close();
             }
         }
-    }
-
-    private boolean getTaskIsClosedById(String cid, String lid, Connection con) throws SQLException {
-        PreparedStatement ps = con.prepareStatement("select Cl_Task_Closed from checklist_task where Cl_id = " + cid + " and Cl_Task_id = " + lid);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        return rs.getInt(1) == 1;
     }
 
     @Test
@@ -178,6 +163,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             int cid = (int) new PostChecklist().execute(map, con);
 
             // Then add checklist task
@@ -192,10 +178,7 @@ public class ChecklistTest {
 
         } finally {
             if (con != null) {
-                String s1 = "delete from checklist where Cl_id = " + getLastInsertedChecklist(con);
-                PreparedStatement ps = con.prepareStatement(s1);
-                ps.execute();
-
+                con.rollback();
                 con.close();
             }
         }
@@ -212,6 +195,7 @@ public class ChecklistTest {
             map.put("dueDate", TEST_DATE);
 
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 3; i++) {
                 TestChecklistsIds[i] = (int) pc.execute(map, con);
@@ -229,12 +213,7 @@ public class ChecklistTest {
             }
         } finally {
             if (con != null) {
-                PreparedStatement dels;
-                for (int i = 0; i < 3; i++) {
-                    dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
-                    dels.setInt(1, TestChecklistsIds[i]);
-                    dels.executeUpdate();
-                }
+                con.rollback();
                 con.close();
             }
         }
@@ -249,6 +228,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             String[] dates = {"31-10-2018", "21-10-2017", "28-10-2017", "11-11-2017"};
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             PostChecklist pc = new PostChecklist();
             for (int i = 0; i < 4; i++) {
                 map.put("dueDate", dates[i]);
@@ -264,12 +244,7 @@ public class ChecklistTest {
             assertEquals(cl.size(), 4);
         } finally {
             if (con != null) {
-                PreparedStatement dels;
-                for (int i = 0; i < 4; i++) {
-                    dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
-                    dels.setInt(1, TestChecklistsIds[i]);
-                    dels.executeUpdate();
-                }
+                con.rollback();
                 con.close();
             }
         }
@@ -277,7 +252,7 @@ public class ChecklistTest {
 
     @Test
     public void testGetChecklistsCidNoTemplate() throws Exception {
-        int TestChecklistId = -1;
+        int TestChecklistId;
         int[] TestTasksId = {-1, -1};
         try {
             HashMap<String, String> map = new HashMap<>();
@@ -285,6 +260,7 @@ public class ChecklistTest {
             map.put("description", TEST_DESC);
             map.put("dueDate", TEST_DATE);
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             //Create Checklist
             TestChecklistId = (int) new PostChecklist().execute(map, con);
             map.put("{cid}", Integer.toString(TestChecklistId));
@@ -302,11 +278,7 @@ public class ChecklistTest {
             assertEquals(((Checklist_Task)((LinkedList) dw.getChecklist_Task()).get(1)).getCl_Task_id(), TestTasksId[1]);
         } finally {
             if (con != null) {
-                PreparedStatement dels;
-
-                dels = con.prepareStatement("DELETE from checklist where Cl_id = ?");
-                dels.setInt(1, TestChecklistId);
-                dels.executeUpdate();
+                con.rollback();
                 con.close();
             }
         }
@@ -316,6 +288,7 @@ public class ChecklistTest {
     public void testChecklistsOpenSortedNofTasks() throws Exception {
         try {
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             addChecklist(con, "TESTE1", TEST_DESC, TEST_DATE);
             int checklist1 = getLastInsertedChecklist(con);
             addChecklist(con, "TESTE2",  TEST_DESC, TEST_DATE);
@@ -332,16 +305,7 @@ public class ChecklistTest {
             }
         }finally {
             if (con != null) {
-                String s1 = "DELETE from checklist where Cl_id = ?";
-
-                PreparedStatement ps = con.prepareStatement(s1);
-
-                for (int i = 0; i < 2; i++) {
-                    ps.setString(1, getLastInsertedChecklist(con) + "");
-                    ps.execute();
-                }
-
-
+                con.rollback();
                 con.close();
             }
         }

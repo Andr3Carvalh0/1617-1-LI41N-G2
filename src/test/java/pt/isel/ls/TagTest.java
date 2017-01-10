@@ -64,9 +64,10 @@ public class TagTest {
 
     @Test
     public void TestpostAndDeleteTag() throws Exception {
-        int result = -1;
+        int result;
         try {
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TAG_NAME);
             map.put("color", TAG_COLOR);
@@ -97,9 +98,7 @@ public class TagTest {
         }
         finally {
             if (con != null){
-                if (result != -1) {
-                    deleteTag(result,con);
-                }
+                con.rollback();
                 con.close();
             }
         }
@@ -107,13 +106,14 @@ public class TagTest {
 
     @Test
     public void TestPostChecklistsCidTagsAndThenDeletes() throws Exception {
-        int cid = -1;
-        int gid = -1;
+        int cid;
+        int gid;
         try{
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TAG_NAME);
             map.put("color", TAG_COLOR);
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             String CHECKLIST_DATE = "06-10-2016";
             String CHECKLIST_DESCRIPTION = "I_am_a_test_checklist";
             String CHECKLIST_NAME = "I_am_a_test_checklist";
@@ -146,19 +146,7 @@ public class TagTest {
         }
         finally {
             if(con!=null){
-                if(cid != -1){
-                    String s = "delete from tag_checklist where Tg_id = ? and Cl_id = ?";
-                    PreparedStatement ps = con.prepareStatement(s);
-                    ps.setInt(1,gid);
-                    ps.setInt(2,cid);
-                    ps.execute();
-
-                    s = "delete from checklist where Cl_id = ?";
-                    ps = con.prepareStatement(s);
-                    ps.setInt(1,cid);
-                    ps.execute();
-                    deleteTag(gid,con);
-                }
+                con.rollback();
                 con.close();
             }
         }
@@ -170,6 +158,7 @@ public class TagTest {
         try {
             HashMap<String, String> map = new HashMap<>();
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             for(int i = 0; i<gid.length; i++)
                 gid[i] = addTag(con, TAG_NAME+i,TAG_COLOR+i);
 
@@ -180,9 +169,7 @@ public class TagTest {
         }
         finally {
             if(con!=null) {
-                if (gid[0] != -1) {
-                    for (int aGid : gid) deleteTag(aGid, con);
-                }
+                con.rollback();
                 con.close();
             }
         }
@@ -190,9 +177,10 @@ public class TagTest {
 
     @Test
     public void TestGetTagGid() throws Exception {
-        int gid = -1;
+        int gid;
         try {
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             addTag(con, "Tag1", "Blue");
             HashMap<String, String> map = new HashMap<>();
             gid = getLastInsertedTag(con);
@@ -202,7 +190,7 @@ public class TagTest {
         }
         finally {
             if(con!=null) {
-                deleteTag(gid, con);
+                con.rollback();
                 con.close();
             }
         }

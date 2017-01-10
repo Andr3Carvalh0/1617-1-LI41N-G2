@@ -110,7 +110,7 @@ public class TemplateTest {
     public void testPostTemplates() throws Exception {
         try {
             con = GetConnection.connect(true);
-
+            con.setAutoCommit(false);
             HashMap<String, String> map = new HashMap<>();
             map.put("name", TEST_NAME);
             map.put("description", TEST_DESC);
@@ -120,14 +120,7 @@ public class TemplateTest {
 
         } finally {
             if (con != null) {
-
-                int id = getLastInsertedTemplate(con);
-
-                //Delete the test entry
-                String s1 = "delete from template where Tp_id = ?";
-                PreparedStatement ps = con.prepareStatement(s1);
-                ps.setInt(1, id);
-                ps.execute();
+                con.rollback();
                 con.close();
             }
         }
@@ -135,13 +128,13 @@ public class TemplateTest {
 
     @Test
     public void testPostTemplatesTidCreate() throws Exception {
-        int tid = -1, cid;
+        int tid, cid;
         String s;
         PreparedStatement ps;
         ResultSet rs;
         try {
             con = GetConnection.connect(true);
-
+            con.setAutoCommit(false);
             addTemplate("TEST_TEMPLATE", "This is a test", con);
             tid = getLastInsertedTemplate(con);
             HashMap<String, String> map = new HashMap<>();
@@ -158,9 +151,7 @@ public class TemplateTest {
             assertEquals(rs.getInt(1), tid);
         } finally {
             if (con != null) {
-                s = "delete from template where Tp_id = " + tid;
-                ps = con.prepareStatement(s);
-                ps.execute();
+                con.rollback();
 
                 con.close();
             }
@@ -171,7 +162,7 @@ public class TemplateTest {
     public void testGetTemplatesTid() throws Exception {
         try {
             con = GetConnection.connect(true);
-
+            con.setAutoCommit(false);
             //Populate - Template
             addTemplate("Template1", "Desc", con);
 
@@ -193,14 +184,7 @@ public class TemplateTest {
             assertEquals("Check1", (((Checklist)((LinkedList) result.getChecklist()).get(0)).getName()));
         } finally {
             if (con != null) {
-
-                int id = getLastInsertedTemplate(con);
-
-                //Delete the test entry
-                String s1 = "delete from template where Tp_id = ?";
-                PreparedStatement ps = con.prepareStatement(s1);
-                ps.setInt(1, id);
-                ps.execute();
+                con.rollback();
                 con.close();
             }
         }
@@ -208,10 +192,11 @@ public class TemplateTest {
 
     @Test
     public void testGetTemplates() throws Exception {
-        int tid1 = -1, tid2 = -1;
+        int tid1, tid2;
         try {
             // 1 - Populate templates.
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             addTemplate("TEST_TEMPLATE_1","This is the first test", con);
             tid1 = getLastInsertedTemplate(con);
             addTemplate("TEST_TEMPLATE_2", "This is the second test", con);
@@ -227,16 +212,9 @@ public class TemplateTest {
             }
             assertEquals(2, testTemplatesFound);
         } finally {
-            {
-                if (con != null) {
-                    // Delete test templates from database.
-                    PreparedStatement ps = con.prepareStatement("delete from template where Tp_id = ?");
-                    ps.setInt(1, tid1);
-                    ps.execute();
-                    ps.setInt(1, tid2);
-                    ps.execute();
-                    con.close();
-                }
+            if (con != null) {
+                con.rollback();
+                con.close();
             }
         }
     }
@@ -249,6 +227,7 @@ public class TemplateTest {
         try {
 
             con = GetConnection.connect(true);
+            con.setAutoCommit(false);
             addTemplate("template", "template", con);
 
             tp_id = getLastInsertedTemplate(con);
@@ -272,10 +251,7 @@ public class TemplateTest {
             assertEquals(tt.getTp_Task_desc(), rs.getString(4));
         } finally {
             if (con != null) {
-                int id = getLastInsertedTemplate(con);
-                PreparedStatement dels = con.prepareStatement("DELETE from template where Tp_id = ?");
-                dels.setInt(1, id);
-                dels.execute();
+                con.rollback();
                 con.close();
             }
         }
