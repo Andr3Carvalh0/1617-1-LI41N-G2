@@ -1,6 +1,7 @@
 "use strict"
 const message_template = "You have to fill the following fields: "
 
+//The following functions handle everything related with UI, and view "validations"(Eg: if we dont have any task in the checklist we show a message alerting the user)
 function prepareChecklist_Detailed(){
     prepareMaterialCSS()
 
@@ -37,7 +38,6 @@ function prepareChecklist_Detailed(){
         document.getElementById("message_task").innerHTML = "<strong>There aren't any Tasks associated with this Checklist.</strong>"
     }
 }
-
 
 function prepareView_Checklist(){
     prepareMaterialCSS()
@@ -95,7 +95,8 @@ function prepareMaterialCSS(){
     });
 }
 
-
+//Validations
+//The following functions validate the data from the submission forms
 function validateSubmission_Checklist(){
     let message = message_template
     let hasMessage = false
@@ -224,4 +225,63 @@ function validateSubmission_Task(){
     }
 
     form.submit()
+}
+
+
+
+//Deletions
+function deleteChecklist(id){
+
+}
+
+function deleteTemplate(id){
+
+}
+
+function deleteTag(id){
+
+}
+
+//Checklists related
+function deleteTagChecklist(tag, checklist){
+
+}
+
+function deleteTaskChecklist(task, checklist){
+
+}
+
+//Templates related
+function deleteChecklistTemplate(checklist, template){
+
+}
+
+function deleteTaskTemplate(task, template){
+    
+}
+
+//Tags related
+function deleteChecklistTag(checklist, tag){
+
+}
+
+//AJAX - Make request to the server.Used in the deletions
+function ajaxRequest(meth, path, data) {
+    const promise = new Promise((resolve, reject) => {
+        const xmlhttp = new XMLHttpRequest()
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+                if (xmlhttp.status == 200) {
+                    resolve(xmlhttp.responseText)
+                }
+                else {
+                    reject(new Error(xmlhttp.statusText))
+                }
+            }
+        }    
+        xmlhttp.open(meth, path, true)
+        xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        xmlhttp.send(data)
+    })
+    return promise
 }

@@ -29,18 +29,19 @@
             </div>
         </nav>
         <div class="row" >
-            <div class="col s12" style="padding-top: 50px;padding-left:30px">
+            <div class="col s12" id="body_content" style="padding-top: 50px;padding-left:30px">
                 {{#FOR}}{{self}}
                 <div class="grid-element-wrap col m5 l3">
                     <div class="card small yellow darken-1 hoverable" style="height: 250px; width: 250px">
                         <div class="card-content white-text">
-                            <span class="card-title">{{name}}</span>
+                            <span class="card-title">{{name}}<i class="material-icons tooltipped" style="float:right;color:#757575" data-position="bottom" data-delay="50" data-tooltip="Delete">close</i></span>
                             <p><strong>Description: </strong>{{description}}</p>
                             {{#NOT_NULL}}<p><strong>Due Date: </strong>{{dueDate}}</p>
                             {{#NOT_NULL}}<p><strong>Based on Template: </strong><a href="/templates/{{Tp_id}}"> {{Tp_name}}</a></p>
                         </div>
                         <div class="card-action">
                             <a style="color:#f57f17" href="/checklists/{{id}}">Details</a>
+                            <i class="material-icons tooltipped" style="float:right;color:#757575" data-position="bottom" data-delay="50" data-tooltip="Delete">delete</i>
                         </div>
                     </div>
                 </div>
@@ -53,7 +54,7 @@
         </div>
 
         <!-- Modal Structure -->
-        <div id = "modal1" class='modal modal-fixed-footer'>
+        <div id="modal1" class='modal modal-fixed-footer'>
             <div class="modal-content">
                 <br/>
                 <h4>Create Checklist</h4>
