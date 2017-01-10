@@ -50,6 +50,7 @@
                             <input type="checkbox" id="checkbox_{{Cl_Task_id}}" class="filled-in" name="isClosed" onChange="this.form.submit()"/>
                             <label for="checkbox_{{Cl_Task_id}}" id="checkbox_{{Cl_Task_id}}_state">null</label>
                         </form>
+                        {{#NOT_NULL}}<p><strong>Due Date: </strong>{{Cl_Task_dueDate}}</p>
                     </li>
                     {{#END}}{{Checklist_Task}}
                     <li><p id="message_task" style="margin-top:30px;margin-left:25px"></p></li>
