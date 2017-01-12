@@ -24,23 +24,26 @@ dependencies {
 }
 
 mainClassName = "pt.isel.ls.App"
-
-task stage(dependsOn: ['clean','installApp', 'copyTask', 'startScripts'])
+// 'copyTask', 'startScripts'
+task stage(dependsOn: ['clean','installApp'])
 
 //Heroku related
+/*
 task copyTask(type: Copy) {
 	dependsOn installApp
 	from 'src/main/resources'
 	into 'build/install/1617-1-LI41N-G2/lib/resources'
 }
-
+*/
+/*
 startScripts {
   doLast {
+  		printf buildscript.sourceFile.getParent()
     def windowsScriptFile = file getWindowsScript()
     def unixScriptFile    = file getUnixScript()
     windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\1617-1-LI41N-G2-1.0.jar', '%APP_HOME%\\lib\\1617-1-LI41N-G2-1.0.jar:%APP_HOME%\\lib\\resources\\main')
     unixScriptFile.text  = unixScriptFile.text.replace('$APP_HOME/lib/1617-1-LI41N-G2-1.0.jar', '$APP_HOME/lib/1617-1-LI41N-G2-1.0.jar:%APP_HOME%/lib/resources/main')
   }
 }
-
+*/
 test.dependsOn initDb
