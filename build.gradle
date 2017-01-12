@@ -12,7 +12,7 @@ task initDb(type:Exec) {
 			credentials.putAt(i, varsArray[i].split("=")[1])
 		}
 
-		commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "./scripts/Table_Creation_Script.sql"
+		commandLine "sqlcmd", "-S", credentials[0], "-U", credentials[2], "-P", credentials[3], "-d", credentials[1], "-i", "scripts\\Table_Creation_Script.sql"
 	}else{
 		commandLine "echo", "The current OS can´t exexute the setup command to execute initDB.Please do it yourself!"
 	}
