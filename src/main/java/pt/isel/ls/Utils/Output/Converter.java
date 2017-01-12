@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
 *
@@ -29,10 +30,10 @@ class Converter {
     private boolean isHTML;
 
     //Cache for the objects fields.
-    private HashMap<String, HashMap<String, Field>> cache = new HashMap<>();
+    private ConcurrentHashMap<String, HashMap<String, Field>> cache = new ConcurrentHashMap<>();
 
     //Cache the files that we use as template
-    private HashMap<String, LinkedList<String>> file_cache = new HashMap<>();
+    private ConcurrentHashMap<String, LinkedList<String>> file_cache = new ConcurrentHashMap<>();
 
     private static final String lookFor_begin_HTML = "{{";
     private static final String lookFor_end_HTML = "}}";
@@ -42,33 +43,20 @@ class Converter {
     private static final String lookFor_end_JSON = ">>";
     private static final String[] SUPPORTED_MARKERS_JSON = {"<<#FOR>>", "<<#END>>", "<<#NOT_NULL>>", "<<#REPLACE_NULL>>", "<<#COUNT>>", "<<#REMOVE_ON_LAST>>"};
 
-    private void allocate(String baseFile){
-        Scanner io = null;
-        try {
-            message = new LinkedList<>();
+    private LinkedList<String> allocate(String baseFile){
 
-            if (isPresentInCache(baseFile, file_cache)) {
-                message = file_cache.get(baseFile);
-            } else {
-                io = new Scanner(ClassLoader.getSystemResourceAsStream(baseFile));
+        return file_cache.computeIfAbsent(baseFile, s ->{
+            LinkedList<String> msg = new LinkedList<>();
 
+            Scanner io = new Scanner(ClassLoader.getSystemResourceAsStream(s));
 
-                while (io.hasNextLine()) {
-                    message.add(io.nextLine() + "\n");
-                }
-
-                file_cache.put(baseFile, message);
-
+            while (io.hasNextLine()) {
+                msg.add(io.nextLine() + "\n");
             }
-        }catch (Exception e){
-            logger.info("Cannot read file.Please make sure that the files are in the classpath");
-        }
 
-        finally {
-            if (io != null) {
-                io.close();
-            }
-        }
+            return msg;
+
+        });
     }
 
     void compile(Object obj, boolean isHTML, String baseFile) throws Exception {
@@ -79,7 +67,7 @@ class Converter {
         String marker_begin = isHTML ? lookFor_begin_HTML : lookFor_begin_JSON;
         String marker_end = isHTML ? lookFor_end_HTML : lookFor_end_JSON;
 
-        allocate(baseFile);
+        message = allocate(baseFile);
 
         message = replaceFOR(obj, message, marks, marker_begin, marker_end);
 
@@ -145,11 +133,17 @@ class Converter {
                     }
                 } else {
                     try {
-                        if (!isPresentInCache(obj.getClass().getName(), cache)) {
-                            addToCache(obj);
-                        }
+                        HashMap<String, Field> currentOBJ = cache.computeIfAbsent(obj.getClass().getName(), s ->{
+                            HashMap<String, Field> objFields = new HashMap<>();
 
-                        HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                            for (Field f : obj.getClass().getDeclaredFields()) {
+                                objFields.put(f.getName(), f);
+                            }
+
+                            return  objFields;
+
+                        });
+
                         Field field = currentOBJ.get(object);
                         field.setAccessible(true);
                         Object value = field.get(obj);
@@ -197,10 +191,17 @@ class Converter {
                 if (count_for_object.equals(privateKey)) {
                     result.add(line.replace(leftDelimiter + count_for_object + rightDelimiter, ((LinkedList) obj).size() + ""));
                 } else {
-                    if (!isPresentInCache(obj.getClass().getName(), cache)) {
-                        addToCache(obj);
-                    }
-                    HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                    HashMap<String, Field> currentOBJ = cache.computeIfAbsent(obj.getClass().getName(), s ->{
+                        HashMap<String, Field> objFields = new HashMap<>();
+
+                        for (Field f : obj.getClass().getDeclaredFields()) {
+                            objFields.put(f.getName(), f);
+                        }
+
+                        return  objFields;
+
+                    });
+
                     Field field = currentOBJ.get(count_for_object);
                     field.setAccessible(true);
                     try {
@@ -237,10 +238,16 @@ class Converter {
                     if (line.contains(leftDelimiter) && line.contains(rightDelimiter)) {
                         String key = line.substring(line.indexOf(leftDelimiter) + 2, line.indexOf(rightDelimiter));
 
-                        if (!isPresentInCache(obj.getClass().getName(), cache)) {
-                            addToCache(obj);
-                        }
-                        HashMap<String, Field> currentOBJ = cache.get(obj.getClass().getName());
+                        HashMap<String, Field> currentOBJ = cache.computeIfAbsent(obj.getClass().getName(), s ->{
+                            HashMap<String, Field> objFields = new HashMap<>();
+
+                            for (Field f : obj.getClass().getDeclaredFields()) {
+                                objFields.put(f.getName(), f);
+                            }
+
+                            return  objFields;
+
+                        });
                         Field field = currentOBJ.get(key);
                         field.setAccessible(true);
                         Object value = field.get(obj);
@@ -299,20 +306,6 @@ class Converter {
             }
             result.addAll(tmp);
         }
-    }
-
-    private void addToCache(Object obj) {
-        HashMap<String, Field> objFields = new HashMap<>();
-
-        for (Field f : obj.getClass().getDeclaredFields()) {
-            objFields.put(f.getName(), f);
-        }
-
-        cache.put(obj.getClass().getName(), objFields);
-    }
-
-    private boolean isPresentInCache(String obj, HashMap<String, ?> map) {
-        return (map.get(obj) != null);
     }
 
     private void removeNotUsedMarkers(String mark) {

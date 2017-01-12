@@ -1,6 +1,5 @@
 package pt.isel.ls.Server;
 
-import com.google.common.io.ByteStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pt.isel.ls.CommandParser;
@@ -20,11 +19,14 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.google.common.io.ByteStreams.toByteArray;
 
 public class Service extends HttpServlet {
     private static CustomPrinter cPrinter = new CustomPrinter();
     private Logger logger = LoggerFactory.getLogger(Service.class);
-    private HashMap<String, String> file_cache = new HashMap<>();
+    private ConcurrentHashMap<String, byte[]> file_cache = new ConcurrentHashMap<>();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -33,7 +35,6 @@ public class Service extends HttpServlet {
             Charset utf8 = Charset.forName("utf-8");
 
             resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
-            logger.info("GET: The request will be in the following format: " + resp.getContentType());
 
             String respBody;
             byte[] respBodyBytes;
@@ -66,12 +67,26 @@ public class Service extends HttpServlet {
                     path ="views/html/about.html";
                 }
 
+                if(req.getPathInfo().contains("/images/")){
+                    resp.setContentType("image/" + path.split("\\.")[1]);
+                }else if(req.getPathInfo().contains("/js/")){
+                    resp.setContentType("application/javascript");
+                }
+                else{
+                    resp.setContentType(String.format(getContentType(req.getHeader("accept")) + "; charset=%s", utf8.name()));
+                }
+
                 logger.info("GET: The static file have this path: " + path);
-                OutputStream os = resp.getOutputStream();
-                ByteStreams.copy(ClassLoader.getSystemResourceAsStream(path), os);
-                resp.setStatus(200);
-                os.close();
-                return;
+
+                respBodyBytes = file_cache.computeIfAbsent(path, s -> {
+                    try {
+                        return toByteArray(ClassLoader.getSystemResourceAsStream(s));
+                    } catch (IOException e) {
+                        return null;
+                    }
+                });
+
+
             }
             //The others...
             else {
@@ -105,6 +120,7 @@ public class Service extends HttpServlet {
                 }
             }
 
+            logger.info("GET: The request will be in the following format: " + resp.getContentType());
             resp.setContentLength(respBodyBytes.length);
             OutputStream os = resp.getOutputStream();
             os.write(respBodyBytes);
@@ -186,7 +202,7 @@ public class Service extends HttpServlet {
             os.close();
 
         } catch (Exception e) {
-            logger.info("POST: Something went wrong: " + e.getMessage());
+            logger.info("POST: Couldn't send the response: " + e.getMessage());
         }
     }
 
@@ -228,5 +244,4 @@ public class Service extends HttpServlet {
         return res.length == 5 && (res[1].equals("checklists") && res[2].matches(".*\\d+.*") && res[3].equals("tasks") && res[4].matches(".*\\d+.*"));
 
     }
-
 }

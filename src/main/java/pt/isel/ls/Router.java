@@ -1,6 +1,9 @@
 package pt.isel.ls;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pt.isel.ls.Commands.Command;
+import pt.isel.ls.Server.Service;
 import pt.isel.ls.Utils.GetConnection;
 import pt.isel.ls.Utils.Routing.CommandNode;
 import pt.isel.ls.Utils.Routing.TreeCommands;
@@ -13,6 +16,8 @@ public class Router {
     private String method;
     private String[] path;
     private HashMap<String, String> params;
+
+    private Logger logger = LoggerFactory.getLogger(Router.class);
 
     public Router(String method, String[] path, HashMap<String, String> params) {
         this.method = method;
@@ -75,17 +80,21 @@ public class Router {
             if (c != null) {
                 obj = c.execute(params, con);
                 con.commit();
+                logger.info("The" + c + "was committed!");
             }
         } catch (SQLException e) {
+            logger.info("The" + c + "exit with error: " + e.getMessage());
+            logger.info("Rolling back...");
             con.rollback();
-            e.printStackTrace();
+
         } finally {
             try {
                 if (!con.isClosed()) {
                     con.close();
+                    logger.info("Connection closed!");
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.info("There was an error when closing the connection");
             }
         }
         return obj;
