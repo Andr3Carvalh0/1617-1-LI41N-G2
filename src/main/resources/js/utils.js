@@ -53,6 +53,25 @@ function prepareView_Checklist(){
     const id = "nav_" + pageID
 
     document.getElementById(id).className = "active";
+
+    //if we dont have any checklist
+    let body = document.getElementById("body_content")
+    if(body.children.length == 0){
+        switch (pageID){
+            case 0:
+                body.innerHTML = "<center><strong><p style='margin-top: 20%'>You don't have any checklists created.Click on <i class='material-icons'>mode_edit</i> to get started!</p></strong></center>"
+                break
+            case 1:
+                body.innerHTML = "<center><strong><p style='margin-top: 20%'>You don't have any closed checklists!</p></strong></center>"
+                break
+            case 2:
+                body.innerHTML = "<center><strong><p style='margin-top: 20%'>You don't have any checklists with a dueDate created.Click on <i class='material-icons'>mode_edit</i> to get started!</p></strong></center>"
+                break
+            case 3:
+                body.innerHTML = "<center><strong><p style='margin-top: 20%'>You don't have any checklists that contains any task!</p></strong></center>"
+                break
+        }
+    }
 }
 
 function prepareTag_Detailed(){
@@ -65,10 +84,20 @@ function prepareTag_Detailed(){
 
 function prepareView_Tag(){
     prepareMaterialCSS()
+
+    let body = document.getElementById("body_content")
+    if(body.children.length == 0){
+        body.innerHTML = "<center><strong><p style='margin-top: 20%'>You don't have any tags created.Click on <i class='material-icons'> mode_edit</i>to get started!</p></strong></center>"
+    }
 }
 
 function prepareView_Template(){
     prepareMaterialCSS()
+
+    let body = document.getElementById("body_content")
+    if(body.children.length == 0){
+        body.innerHTML = "<center><strong><p style='margin-top: 20%'>You don't have any templates created.Click on <i class='material-icons'> mode_edit</i>to get started!</p></strong></center>"
+    }
 }
 
 function prepareTemplate_Detailed(){
