@@ -23,6 +23,8 @@ let tags_to_checklists_links = {}
 //The following functions handle everything related with UI, and view "validations"(Eg: if we dont have any task in the checklist we show a message alerting the user)
 function prepareChecklist_Detailed(){
     prepareMaterialCSS()
+    $('#loading').modal({dismissible:false})
+    $('#loading').modal('open')
 
 
     ajaxRequest("GET", "/tags",)
@@ -41,7 +43,7 @@ function prepareChecklist_Detailed(){
         popup.innerHTML = value
 
         prepareMaterialCSS()
-        console.log("Done getting tags")
+        $('#loading').modal('close')
     })
 
     if(document.getElementById("ul_Tasks") != null){
@@ -274,7 +276,30 @@ function validateAssociation_Tag(){
 
     let data = tags_to_checklists_links[selected_tag].fields[0].name + "=" + tags_to_checklists_links[selected_tag].fields[0].value
     ajaxRequest(tags_to_checklists_links[selected_tag].method, tags_to_checklists_links[selected_tag].href.replace("{cid}", id), data)
-    .then(window.location.reload(true))
+    .then(() => {
+            ajaxRequest('GET', "/checklists/" + id)
+            .then(data =>{
+                let resp = JSON.parse(data)
+
+                let body = '<li class="collection-header"><h4>Tags</h4></li>'
+
+                for(let i = 0; i < resp.entities.length; i++){
+                    console.log(resp.entities[i].properties)
+
+                    if(resp.entities[i].properties.id != null){
+
+                        body += '<li class="collection-item avatar"><i class="material-icons circle">list</i>' +
+                                '<span class="title"><a href="/tags/' + resp.entities[i].properties.id +'">' + resp.entities[i].properties.name + '</a> - <a href="/tags/'+resp.entities[i].properties.id+'/checklists">Detailed</a></span>' +
+                                '<p><strong>Color: </strong><button type="button" class="btn-floating btn-large waves-effect waves-light '+ resp.entities[i].properties.color +'" style="margin-bottom:3px; height:12px;width:12px"></button></p></li>'
+                    }
+                }
+                document.getElementById("ul_Tags").innerHTML = body
+
+            })
+        })
+
+     Materialize.toast("Processing your request!", 3000)
+     $('#modal1').modal('close')
 
     return false
 
