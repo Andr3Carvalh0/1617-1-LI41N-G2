@@ -1,9 +1,48 @@
 "use strict"
 const message_template = "You have to fill the following fields: "
+const color_map = {}
+color_map["red"] = "/images/f44336.png"
+color_map["pink"] = "/images/e91e63.png"
+color_map["purple"] = "/images/9c27b0.png"
+color_map["indigo"] = "/images/3f51b5.png"
+color_map["blue"] = "/images/2196f3.png"
+color_map["cyan"] = "/images/00bcd4.png"
+color_map["teal"] = "/images/009688.png"
+color_map["green"] = "/images/4caf50.png"
+color_map["yellow"] = "/images/ffeb3b.png"
+color_map["amber"] = "/images/ffc107.png"
+color_map["orange"] = "/images/ff9800.png"
+color_map["deep-orange"] = "/images/ff5722.png"
+color_map["brown"] = "/images/795548.png"
+color_map["grey"] = "/images/9e9e9e.png"
+color_map["blue-grey"] = "/images/607d8b.png"
+
+
+let tags_to_checklists_links = {}
 
 //The following functions handle everything related with UI, and view "validations"(Eg: if we dont have any task in the checklist we show a message alerting the user)
 function prepareChecklist_Detailed(){
     prepareMaterialCSS()
+
+
+    ajaxRequest("GET", "/tags",)
+    .then(data =>{
+        let resp = JSON.parse(data)
+        let popup = document.getElementById("tag_menu")
+
+        let value = '<option value="" disabled selected>Choose your option</option>'
+
+        for(let i = 0; i < resp.entities.length; i++){
+            tags_to_checklists_links[resp.entities[i].actions[0].fields[0].value] = resp.entities[i].actions[0]
+
+             value += '<option data-icon="' + color_map[resp.entities[i].properties.color] + '"class="left circle" value="' + resp.entities[i].actions[0].fields[0].value + '">' + resp.entities[i].properties.name + '</option>'
+        }
+
+        popup.innerHTML = value
+
+        prepareMaterialCSS()
+        console.log("Done getting tags")
+    })
 
     if(document.getElementById("ul_Tasks") != null){
 
@@ -37,6 +76,10 @@ function prepareChecklist_Detailed(){
     if(document.getElementById("ul_Tasks").children.length <= 2){
         document.getElementById("message_task").innerHTML = "<strong>There aren't any Tasks associated with this Checklist.</strong>"
     }
+
+
+
+
 }
 
 function prepareView_Checklist(){
@@ -224,6 +267,19 @@ function validateSubmission_Tag(){
 
 }
 
+function validateAssociation_Tag(){
+    let selected_tag = document.getElementById("tag_menu").value
+    let tmp = window.location.href.split('/')
+    let id = tmp[tmp.length -1]
+
+    let data = tags_to_checklists_links[selected_tag].fields[0].name + "=" + tags_to_checklists_links[selected_tag].fields[0].value
+    ajaxRequest(tags_to_checklists_links[selected_tag].method, tags_to_checklists_links[selected_tag].href.replace("{cid}", id), data)
+    .then(window.location.reload(true))
+
+    return false
+
+}
+
 function validateSubmission_Task(){
     let message = message_template
     let hasMessage = false
@@ -310,6 +366,7 @@ function ajaxRequest(meth, path, data) {
         }    
         xmlhttp.open(meth, path, true)
         xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        xmlhttp.setRequestHeader('accept', 'application/json')
         xmlhttp.send(data)
     })
     return promise

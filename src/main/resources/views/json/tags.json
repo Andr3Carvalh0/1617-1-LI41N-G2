@@ -10,7 +10,18 @@
       "properties": {
         "name": "<<Tg_name>>",
         "color": "<<Tg_color>>"
-      }
+      },
+      "actions": [
+        {
+          "title": "Add to checklist",
+          "method": "POST",
+          "href": "/checklists/{cid}/tags",
+          "type": "application/x-www-form-urlencoded",
+          "fields": [
+            { "name": "gid", "type": "hidden", "value": "<<Tg_id>>" }
+          ]
+        }
+      ]
     },
     <<#END>><<self>>
   ]
