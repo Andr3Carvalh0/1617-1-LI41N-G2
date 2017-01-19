@@ -27,7 +27,7 @@ function prepareChecklist_Detailed(){
     $('#loading').modal('open')
 
 
-    ajaxRequest("GET", "/tags",)
+    ajaxRequest("GET", "/tags")
     .then(data =>{
         let resp = JSON.parse(data)
         let popup = document.getElementById("tag_menu")

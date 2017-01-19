@@ -67,7 +67,7 @@ public class GetTagsGid extends Command {
                     String Tp_name = null;
                     if(Tp_id != -1) {
                         PreparedStatement ps2 = con.prepareStatement("select * from template where Tp_id = ?");
-                        ps1.setInt(1, Tp_id);
+                        ps2.setInt(1, Tp_id);
 
                         ResultSet r1 = ps2.executeQuery();
                         while (r1.next()) {
